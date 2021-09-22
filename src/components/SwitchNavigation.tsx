@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Lauding from './../screens/Lauding';
 import Home from './../screens/Home';
 import Cart from '../screens/Cart';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Account from './../screens/Account';
 import Categories from '../screens/Categories';
 
@@ -16,20 +16,20 @@ const COLORS ={
    backgroundActive:'white'
 }
 const DIMENS = {
-    iconSize : 31,
-    fontsize: 18
+    iconSize : 30,
+    fontNameCategory: 15
 }
 const switchNavigator = createSwitchNavigator({
-    // landingStack: {
-    //     screen: createStackNavigator({
-    //         Landing: Lauding,
-    //     }, {
-    //         defaultNavigationOptions: {
-    //             headerShown: false
-    //         }
-    //     }),
+    landingStack: {
+        screen: createStackNavigator({
+            Landing: Lauding,
+        }, {
+            defaultNavigationOptions: {
+                headerShown: false
+            }
+        }),
 
-    // },
+    },
     
     homeStack: createBottomTabNavigator({
         // Home tab Icon
@@ -44,7 +44,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Icon name="home" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Icon name="home-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
                     return icon;
                 },
                 tabBarLabel: "Home"
@@ -62,7 +62,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Icon name="apps-sharp" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Icon name="apps-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
                     return icon;
                 },
                 tabBarLabel: "Categories"
@@ -80,7 +80,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Icon name="cart" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Icon name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
                     return icon;
                 },
                 tabBarLabel: "Cart"
@@ -98,7 +98,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Icon name="person" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Icon name="person-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
                     return icon;
                 },
                 tabBarLabel: "Account"
@@ -111,12 +111,12 @@ const switchNavigator = createSwitchNavigator({
             inactiveTintColor :COLORS.colorInit,
             activeBackgroundColor : COLORS.backgroundActive,
             labelStyle:{
-                fontSize:DIMENS.fontsize,
+                fontSize:DIMENS.fontNameCategory,
                 fontWeight:'600'
             },
             style: {
                 padding:8,
-                height: 65,
+                height: 60,
             },
             allowFontScaling: true
         }          
