@@ -29,6 +29,18 @@ const tmp = {
   "status": 1
 };
 
+const comment_tmp = {
+  "comment_id": 2,
+  "comment_rating": 5,
+  "comment_date": "2021-09-18T17:00:00.000Z",
+  "comment_content": "cái này là comment",
+  "product_id": 2,
+  "user": {
+    "user_name": "Natswar",
+    "user_avatar": "https://firebasestorage.googleapis.com/v0/b/alien-marking-317003.appspot.com/o/1.png?alt=media&token=cf84f08d-b73e-40b2-9789-409ebb225250"
+  }
+};
+
 function Categories() {
 
   const [categories, setCategory] = useState([tmp]);
@@ -194,6 +206,91 @@ function Products() {
   );
 }
 
+function Comment() {
+
+  const [comments, setComment] = useState([comment_tmp]);
+
+  useEffect(() => {
+    // axios.get(`http://192.168.1.4:3001/api/product/get/2/1/e4611a028c71342a5b083d2cbf59c494`)
+    axios.get(`http://192.168.1.4:3001/api/comment/all/2/e4611a028c71342a5b083d2cbf59c494`)
+      .then(res => {
+        const { data } = res.data;
+        setComment(data);
+      })
+      .catch(error => console.log(error));
+  }, []);
+
+  return (
+    <ScrollView style={{ marginTop: 200, marginBottom: 200 }}>
+      <FlatList
+        data={comments}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <View>
+            <Text>comment_id: {item.comment_id}</Text>
+            <Text>comment_rating: {item.comment_rating}</Text>
+            <Text>comment_date:
+              {
+                String(((new Date(item.comment_date)).getDate())).padStart(2, '0')
+              }/
+              {
+                String(((new Date(item.comment_date)).getMonth() + 1)).padStart(2, '0')
+              }/
+              {
+                String(((new Date(item.comment_date)).getFullYear()))
+              }
+            </Text>
+            <Text>comment_content: {item.comment_content}</Text>
+            <Text>product_id: {item.product_id}</Text>
+
+            <Text>user_name: {item.user.user_name}</Text>
+            <Image
+              source={{ uri: String(item.user.user_avatar) }}
+              style={{
+                width: 180,
+                height: 220,
+                borderRadius: 10,
+                resizeMode: "contain",
+                margin: 6,
+              }}
+            />
+
+          </View>
+        )}
+        keyExtractor={item => item}
+      />
+    </ScrollView>
+  );
+}
+
+// function InsertComment() {
+
+//   // const [comments, setComment] = useState([comment_tmp]);
+//   let comment = {
+//     "user_id": 1,
+//     "comment_content": "thêm comment",
+//     "product_id": 2,
+//     "comment_rating": 5
+//   }
+
+//   useEffect(() => {
+//     // axios.get(`http://192.168.1.4:3001/api/product/get/2/1/e4611a028c71342a5b083d2cbf59c494`)
+//     // axios.create({ baseURL: 'http://192.168.1.4:3001' });
+//     axios.post(`http://192.168.1.4:3001/api/comment/insert/e4611a028c71342a5b083d2cbf59c494`, comment )
+//       .then(res => {
+//         // let {status} = res.status;
+//         console.log("run");
+//       })
+//       .catch(error => console.log(error));
+//   },[]);
+
+//   return (
+//     <ScrollView style={{ marginTop: 200, marginBottom: 200 }}>
+
+//     </ScrollView>
+//   );
+// }
+
 export default function App() {
   const [img, setImg] = useState('');
 
@@ -206,13 +303,15 @@ export default function App() {
       .catch(error => console.log(error));
   }, []);
 
-  console.log("run");
 
   return (
-    <View style={styles.container}>
+    <View>
       {/* <Product /> */}
       {/* <Categories/> */}
-      <Products />
+      {/* <Products /> */}
+      {/* <Comment />
+       */}
+      {/* <InsertComment /> */}
     </View>
   );
 }
