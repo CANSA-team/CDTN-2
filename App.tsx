@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { Image, StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList, TextInput } from 'react-native';
 import axios from 'axios';
+import { Rating, SearchBar, SocialIcon } from 'react-native-elements';
 
 const temp = {
   "product_id": 1,
@@ -263,55 +264,85 @@ function Comment() {
   );
 }
 
-// function InsertComment() {
+function InsertComment() {
 
-//   // const [comments, setComment] = useState([comment_tmp]);
-//   let comment = {
-//     "user_id": 1,
-//     "comment_content": "thêm comment",
-//     "product_id": 2,
-//     "comment_rating": 5
-//   }
-
-//   useEffect(() => {
-//     // axios.get(`http://192.168.1.4:3001/api/product/get/2/1/e4611a028c71342a5b083d2cbf59c494`)
-//     // axios.create({ baseURL: 'http://192.168.1.4:3001' });
-//     axios.post(`http://192.168.1.4:3001/api/comment/insert/e4611a028c71342a5b083d2cbf59c494`, comment )
-//       .then(res => {
-//         // let {status} = res.status;
-//         console.log("run");
-//       })
-//       .catch(error => console.log(error));
-//   },[]);
-
-//   return (
-//     <ScrollView style={{ marginTop: 200, marginBottom: 200 }}>
-
-//     </ScrollView>
-//   );
-// }
-
-export default function App() {
-  const [img, setImg] = useState('');
+  // const [comments, setComment] = useState([comment_tmp]);
+  let comment = {
+    "user_id": 1,
+    "comment_content": "thêm comment",
+    "product_id": 2,
+    "comment_rating": 5
+  }
 
   useEffect(() => {
-    axios.get(`http://192.168.1.4:3001/api/product/search/16/1/e4611a028c71342a5b083d2cbf59c494`)
+    // axios.get(`http://192.168.1.4:3001/api/product/get/2/1/e4611a028c71342a5b083d2cbf59c494`)
+    // axios.create({ baseURL: 'http://192.168.1.4:3001' });
+    axios.post(`http://192.168.1.4:3001/api/comment/insert/e4611a028c71342a5b083d2cbf59c494`, comment)
       .then(res => {
-        const { data } = res.data;
-        setImg(data);
+        // let {status} = res.status;
+        console.log("run");
       })
       .catch(error => console.log(error));
   }, []);
 
-
   return (
-    <View>
-      {/* <Product /> */}
-      {/* <Categories/> */}
-      {/* <Products /> */}
-      {/* <Comment />
-       */}
-      {/* <InsertComment /> */}
+    <ScrollView style={{ marginTop: 200, marginBottom: 200 }}>
+
+    </ScrollView>
+  );
+}
+// export default class App extends React.Component {
+//   // state = {
+//   //   search: '',
+//   // };
+
+//   // updateSearch = (search:string) => {
+//   //   this.setState({ search });
+//   // };
+
+//   render() {
+//     const { search } = this.state;
+//     const [abc,setABc] = useState('');
+//     return (
+//       <View style={{ marginTop: 200}}>
+//         {/* <SearchBar
+//           placeholder="Type Here..."
+//           onChangeText={this.updateSearch}
+//           value={search}
+//         />
+//         <Text>{search}</Text> */}
+//         <TextInput>
+
+//         </TextInput>
+//         <Text>{abc}</Text>
+//       </View>
+//     );
+//   }
+// }
+
+export default function App() {
+  const [img, setImg] = useState('');
+  const [inp, setInp] = useState('');
+  const [stl, setStyle] = useState({ color: 'black', borderWight: 1, borderStyle: 'solid',borderColor: 'black' });
+  
+  function updateSearch(text: string) {
+    setImg(text)
+  };
+  return (
+    <View style={styles.container}>
+      <TextInput
+        onChangeText={(text: string) => {
+          setInp(text);
+          if (text != 'abc') {
+            setImg('nhap sai');
+            setStyle({ color: 'red' });
+          } else {
+            setImg('');
+            setStyle({ color: 'black' });
+          }
+        }}
+        style={stl}></TextInput>
+      <Text style={{ color: 'red' }}>{img}</Text>
     </View>
   );
 }
