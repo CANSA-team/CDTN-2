@@ -8,7 +8,7 @@ export default function Lauding() {
     useEffect(()=>{
         setTimeout(() =>{
             navigate('homeStack')
-        }, 5000)
+        }, 1000)
     });
 
     return (

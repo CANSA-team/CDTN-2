@@ -8,13 +8,10 @@ import Cart from '../screens/Cart';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Account from './../screens/Account';
 import Categories from '../screens/Categories';
+import COLORS from '../consts/Colors';
 
 
-const COLORS ={
-   colorActive:'teal',
-   colorInit:'gray',
-   backgroundActive:'white'
-}
+
 const DIMENS = {
     iconSize : 30,
     fontNameCategory: 15
@@ -44,7 +41,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
                 tabBarLabel: "Home"
@@ -62,7 +59,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
                 tabBarLabel: "Categories"
@@ -80,7 +77,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
                 tabBarLabel: "Cart"
@@ -98,7 +95,7 @@ const switchNavigator = createSwitchNavigator({
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.colorActive}/> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorInit}/>
+                    let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
                 tabBarLabel: "Account"
@@ -107,9 +104,8 @@ const switchNavigator = createSwitchNavigator({
         },
     },{
         tabBarOptions:{
-            activeTintColor: COLORS.colorActive,
-            inactiveTintColor :COLORS.colorInit,
-            activeBackgroundColor : COLORS.backgroundActive,
+            activeTintColor: COLORS.primary,
+            inactiveTintColor :COLORS.colorFontInit,
             labelStyle:{
                 fontSize:DIMENS.fontNameCategory,
                 fontWeight:'600'
