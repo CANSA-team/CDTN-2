@@ -31,7 +31,7 @@ const tmp = {
 };
 
 const comment_tmp = {
-  "comment_id": 2,
+  "comment_id": 0,
   "comment_rating": 5,
   "comment_date": "2021-09-18T17:00:00.000Z",
   "comment_content": "cái này là comment",
@@ -147,9 +147,9 @@ function Products() {
   const [products, setProduct] = useState([temp]);
 
   useEffect(() => {
-    // axios.get(`http://192.168.1.4:3001/api/product/all/1/e4611a028c71342a5b083d2cbf59c494`)
-    // axios.get(`http://192.168.1.4:3001/api/product/search/16/1/e4611a028c71342a5b083d2cbf59c494`)
-    axios.get(`http://192.168.1.4:3001/api/category/get/1/1/e4611a028c71342a5b083d2cbf59c494`)
+    axios.get(`http://192.168.1.7:3001/api/product/all/1/e4611a028c71342a5b083d2cbf59c494`)
+      // axios.get(`http://192.168.1.4:3001/api/product/search/16/1/e4611a028c71342a5b083d2cbf59c494`)
+      // axios.get(`http://192.168.1.4:3001/api/category/get/1/1/e4611a028c71342a5b083d2cbf59c494`)
       .then(res => {
         const { data } = res.data;
         setProduct(data);
@@ -157,53 +157,57 @@ function Products() {
       .catch(error => console.log(error));
   }, []);
 
+  let test = async () => {
+    setProduct(products.concat(temp))
+  }
+
   return (
-    <ScrollView style={{ marginTop: 200, marginBottom: 200 }}>
-      {
-        products.map((product) => {
-          return (
-            <SafeAreaView key={product.product_id} style={styles.container}>
-              <Text>product_id: {product.product_id}</Text>
-              <Text>shop_id: {product.shop_id}</Text>
-              <Text>product_quantity: {product.product_quantity}</Text>
-              <Text>product_view: {product.product_view}</Text>
-              <Text>product_price: {product.product_price}</Text>
-              <Text>product_title: {product.product_title}</Text>
-              <Text>product_description: {product.product_description}</Text>
-              <Text>last_update: {product.last_update}</Text>
-              <Text>status: {product.status}</Text>
+
+    <FlatList
+      data={products}
+      renderItem={({ item }) => (
+        <SafeAreaView key={item.product_id} style={styles.container}>
+          <Text>product_id: {item.product_id}</Text>
+          <Text>shop_id: {item.shop_id}</Text>
+          <Text>product_quantity: {item.product_quantity}</Text>
+          <Text>product_view: {item.product_view}</Text>
+          <Text>product_price: {item.product_price}</Text>
+          <Text>product_title: {item.product_title}</Text>
+          <Text>product_description: {item.product_description}</Text>
+          <Text>last_update: {item.last_update}</Text>
+          <Text>status: {item.status}</Text>
+          <Image
+            source={{
+              uri: String(item.product_avatar),
+            }}
+            style={{
+              height: 200,
+              width: 200,
+              borderRadius: 10,
+            }} />
+          <FlatList
+            data={item.product_image}
+            numColumns={2}
+            renderItem={({ item }) => (
               <Image
-                source={{
-                  uri: String(product.product_avatar),
-                }}
+                source={{ uri: String(item) }}
                 style={{
-                  height: 200,
-                  width: 200,
+                  width: 180,
+                  height: 220,
                   borderRadius: 10,
-                }} />
-              <FlatList
-                data={product.product_image}
-                numColumns={2}
-                renderItem={({ item }) => (
-                  <Image
-                    source={{ uri: String(item) }}
-                    style={{
-                      width: 180,
-                      height: 220,
-                      borderRadius: 10,
-                      resizeMode: "contain",
-                      margin: 6,
-                    }}
-                  />
-                )}
-                keyExtractor={item => item}
+                  resizeMode: "contain",
+                  margin: 6,
+                }}
               />
-              <StatusBar style="auto" />
-            </SafeAreaView>
-          )
-        })
-      }
-    </ScrollView>
+            )}
+            keyExtractor={item => item}
+          />
+          <StatusBar style="auto" />
+        </SafeAreaView>
+      )}
+      onEndReached={test}
+      onEndReachedThreshold={0}
+    />
   );
 }
 
@@ -213,9 +217,10 @@ function Comment() {
 
   useEffect(() => {
     // axios.get(`http://192.168.1.4:3001/api/product/get/2/1/e4611a028c71342a5b083d2cbf59c494`)
-    axios.get(`http://192.168.1.4:3001/api/comment/all/2/e4611a028c71342a5b083d2cbf59c494`)
+    axios.get(`http://192.168.1.7:3001/api/comment/all/1/e4611a028c71342a5b083d2cbf59c494`)
       .then(res => {
         const { data } = res.data;
+        console.log(data);
         setComment(data);
       })
       .catch(error => console.log(error));
@@ -225,7 +230,7 @@ function Comment() {
     <ScrollView style={{ marginTop: 200, marginBottom: 200 }}>
       <FlatList
         data={comments}
-        numColumns={2}
+        keyExtractor={item => Number(item.comment_id)}
         renderItem={({ item }) => (
           <View>
             <Text>comment_id: {item.comment_id}</Text>
@@ -258,7 +263,6 @@ function Comment() {
 
           </View>
         )}
-        keyExtractor={item => item}
       />
     </ScrollView>
   );
@@ -291,60 +295,15 @@ function InsertComment() {
     </ScrollView>
   );
 }
-// export default class App extends React.Component {
-//   // state = {
-//   //   search: '',
-//   // };
+export default class App extends React.Component {
 
-//   // updateSearch = (search:string) => {
-//   //   this.setState({ search });
-//   // };
-
-//   render() {
-//     const { search } = this.state;
-//     const [abc,setABc] = useState('');
-//     return (
-//       <View style={{ marginTop: 200}}>
-//         {/* <SearchBar
-//           placeholder="Type Here..."
-//           onChangeText={this.updateSearch}
-//           value={search}
-//         />
-//         <Text>{search}</Text> */}
-//         <TextInput>
-
-//         </TextInput>
-//         <Text>{abc}</Text>
-//       </View>
-//     );
-//   }
-// }
-
-export default function App() {
-  const [img, setImg] = useState('');
-  const [inp, setInp] = useState('');
-  const [stl, setStyle] = useState({ color: 'black', borderWight: 1, borderStyle: 'solid',borderColor: 'black' });
-  
-  function updateSearch(text: string) {
-    setImg(text)
-  };
-  return (
-    <View style={styles.container}>
-      <TextInput
-        onChangeText={(text: string) => {
-          setInp(text);
-          if (text != 'abc') {
-            setImg('nhap sai');
-            setStyle({ color: 'red' });
-          } else {
-            setImg('');
-            setStyle({ color: 'black' });
-          }
-        }}
-        style={stl}></TextInput>
-      <Text style={{ color: 'red' }}>{img}</Text>
-    </View>
-  );
+  render() {
+    return (
+      <View style={{ margin: 10 }}>
+        <Products />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
