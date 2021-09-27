@@ -7,10 +7,14 @@ const HEIGHT = Dimensions.get('window').height;
 const WIDTH = Dimensions.get('window').width ;
 
 export default function Carousel(props:any) {
-    const {images} = props;
+    const {images,auto} = props;
     return (    
         <View style={styles.container}>
-            <Swiper loop autoplay width={WIDTH} height={HEIGHT / 3.4} 
+            <Swiper 
+                loop
+                autoplay = {auto}
+                width={WIDTH} 
+                height={HEIGHT / 2.6} 
                 dot={<View style={styles.dot}></View>}
                 activeDot={<View style={styles.activeDot}></View>}>
                     {
@@ -24,7 +28,6 @@ export default function Carousel(props:any) {
 }
 const styles = StyleSheet.create({
     container:{
-        marginTop:20,
         flex: 1 
     },
     activeDot:{

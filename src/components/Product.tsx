@@ -5,7 +5,7 @@ import COLORS from './../consts/Colors';
 
 const WIDTH = Dimensions.get('window').width/2 -30 ;
 export default function Product(props:any) {
-    const {item,type} = props;
+    const {item,type, onTap} = props;
     let Top;
     switch (type) {
         case 'HOT':
@@ -34,13 +34,15 @@ export default function Product(props:any) {
     return (
         <View style={styles.container}>
             {Top}
-            <View style={styles.imgContainer}>
-                <Image style={styles.img} source={{uri: item.img}} />
-            </View>
-            <Text style={styles.txtTitle}>{SlugStr(item.name,18)}</Text>
-            <View style={styles.priceContainer}>
-                <Text style={styles.txtPrice}>$ {item.price}</Text>
-            </View>
+            <TouchableOpacity onPress={onTap}>   
+                <View style={styles.imgContainer}>
+                    <Image style={styles.img} source={{uri: item.img}} />
+                </View>
+                <Text style={styles.txtTitle}>{SlugStr(item.name,25)}</Text>
+                <View style={styles.priceContainer}>
+                    <Text style={styles.txtPrice}>$ {item.price}</Text>
+                </View>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.btnAddContainer}>
                 <Text style={styles.btnAddTitle}>Add</Text>
             </TouchableOpacity>
@@ -49,7 +51,7 @@ export default function Product(props:any) {
 }
 const styles = StyleSheet.create({
     container:{
-        height: 225,
+        height: 250,
         backgroundColor:'white',
         width: WIDTH,     
         borderRadius:10,
@@ -61,7 +63,10 @@ const styles = StyleSheet.create({
         top:0,
         right:0,
         zIndex:2,
-        padding:6,
+        paddingLeft:8,
+        paddingRight:8,
+        paddingTop:5,
+        paddingBottom:5,
         borderTopRightRadius:15
     },
     imgContainer:{
@@ -91,14 +96,18 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     btnAddContainer:{
-        flex:1,
+        position: 'absolute',
+        height: 35,
+        bottom: 10,
+        left: 10,
+        right: 10,
         backgroundColor:COLORS.primary,
-        borderRadius:5,
+        borderRadius:10,
         justifyContent:'center',
         alignItems:'center'
     },
     btnAddTitle:{
-        fontSize:12,
+        fontSize:14,
         color:'white',
         fontWeight:'bold'
     }

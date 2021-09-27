@@ -1,22 +1,140 @@
 import React from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View,StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Carousel from './../components/Carousel';
+import COLORS from '../consts/Colors';
+import { ScrollView } from 'react-native-gesture-handler';
+import { border, paddingTop, style } from 'styled-system';
+import Rating from './../components/Rating';
+import Comment from '../components/Comment';
+const dummyData =
+        [{
+                title: 'ƯU ĐÃI MỚI -  GIẢM TỚI 30%', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
+                description: "Khi mua hàng theo mùa",
+                id: 1
+
+        },
+        {
+                title: 'Food inside a Bowl', url: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
+                description: "Khi mua hàng theo mùa",
+                id: 2
+        },
+        {
+                title: 'Vegatable Salad', url: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
+                description: "Khi mua hàng theo mùa",
+                id: 3
+        },
+        {
+            title: 'Anise a Aroma Art Bazar', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
+            description: "Khi mua hàng theo mùa",
+            id: 4
+
+    }]
 export default function ProductDetail(props:any) {
     const {navigation,route} = props;
     return (
-        <SafeAreaView style={{flex:1,backgroundColor:'white'}}>
-            <View style={styles.header}>
-                <MaterialIcons name="arrow-back" size={28}/>
-            </View>
+        <SafeAreaView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.header}>
+                    <TouchableOpacity>
+                        <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={()=>navigation.goBack()}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <MaterialIcons style={styles.headerIcon} name="shopping-cart" color="white" size={30}/>
+                    </TouchableOpacity>
+                </View>
+                <View >
+                    <Carousel images ={dummyData} auto={false}/>
+                </View>
+                <View style={styles.detailContainer}>
+                    <Text style={styles.title}>Potted Plant Potted Plant Potted Plant</Text>
+                    <View style={{display:'flex',flexDirection:'row'}}>
+                        <View style={{ flex:1,flexDirection:'column',alignItems:'flex-start'}}>
+                            <Text style={{marginBottom:10,color:'red',fontSize:26}}>200.000đ</Text>
+                            <Text style={{textDecorationLine: 'line-through',color:'gray',fontSize:23}}>400.000đ</Text>
+                        </View>
+                        <View style={{ flex:1,flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                            <TouchableOpacity>    
+                               <Text style={styles.btnBuy}>Add Cart</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                               <Text style={styles.btnBuy}>Buy</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+               
+                    <Text style={styles.headerTitle}>Mô tả sản phẩm :</Text>
+                    <Text style={styles.desc}>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor voluptate unde laboriosam, voluptatem nesciunt rem perferendis, a temporibus cum nisi officia magni. Fugiat veniam repellendus molestiae eveniet nisi voluptates ducimus!
+                    </Text>
+
+                    <Text style={styles.headerTitle}>Đánh giá & nhận xét :</Text>
+
+                    <Rating />
+
+                    <Comment />
+                    <Comment />
+                </View>
+            </ScrollView>
+            
         </SafeAreaView>
     )
 }
 const styles = StyleSheet.create({
-    header: {
-      paddingHorizontal:20,
-      marginTop:20,
-      flexDirection:'row',
-      justifyContent:'space-between'
+    container:{
+        flex:1,
+        backgroundColor:'white',
+        marginTop:50
     },
+    header: {
+      flexDirection:'row',
+      justifyContent:'space-between',
+      padding: 5,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex:2
+    },
+    headerIcon:{
+        backgroundColor:'rgba(0, 0, 0, 0.6)',
+        borderRadius:50,
+        padding:5
+    },
+    detailContainer:{
+        flex: 0.55,
+        marginHorizontal:7,
+        borderRadius:20,
+        padding: 5,
+        backgroundColor:'white'
+    },
+    title:{
+        fontSize:30,
+        fontWeight:'bold',
+        color:COLORS.primary,
+        marginBottom:20
+    },
+    headerTitle:{
+        fontSize:22,
+        fontWeight:'bold',
+        color:'#111'
+    },
+    desc:{
+        fontSize:18,
+        lineHeight:25,
+        color:'#111',
+        padding:2
+    },
+    btnBuy:{
+        backgroundColor:'#00FF7F',
+        padding:7,
+        width:150,
+        borderRadius:20,
+        marginBottom:10,
+        fontSize:18,
+        textAlign:'center',
+        fontWeight:'700',
+        color:'#222'
+    }
 });

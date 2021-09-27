@@ -9,6 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Account from './../screens/Account';
 import Categories from '../screens/Categories';
 import COLORS from '../consts/Colors';
+import ProductDetail from './../screens/ProductDetail';
 
 
 
@@ -33,6 +34,7 @@ const switchNavigator = createSwitchNavigator({
         home: {
             screen: createStackNavigator({
                 Home: Home,
+                ProductDetail: ProductDetail
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

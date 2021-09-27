@@ -1,10 +1,12 @@
-import React from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HeaderBar from '../components/HeaderBar';
+import COLORS from '../consts/Colors';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
+import { useNavigation } from './../utils/useNavigation';
 
 const dummyData =
         [{
@@ -32,7 +34,7 @@ const dummyData =
     const plants = [
         {
           id: 1,
-          name: 'Succulent Plant bbj',
+          name: 'Dragon Plant',
           price: '39.99',
           like: true,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
@@ -69,12 +71,18 @@ const dummyData =
             'Potted Plant Ravenea Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
         },
       ];
-      
+const categories = ['POPULAR', 'ORGANIC', 'INDOORS', 'SYNTHETIC'];     
 const HEIGHT = Dimensions.get('window').height*0.3;
 const WIDTH = Dimensions.get('window').width ;
 
 export default function Home() {
-    
+    const [catergoryIndex, setCategoryIndex] = useState(0);
+    const { navigate } = useNavigation();
+
+    const onTapDetail = () => {    
+        navigate('ProductDetail')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView  showsVerticalScrollIndicator={false} >
@@ -82,15 +90,42 @@ export default function Home() {
                 <HeaderBar />
 
                 {/* Slider */}
-                <Carousel images ={dummyData} />
-
+                <View style={{marginTop:20}}>
+                    <Carousel images ={dummyData} auto={true}/>
+                </View>
+                {/* Category */}
+                <View style={{flexDirection:'row',marginBottom:20}}>      
+                    {
+                        categories.map((item,index)=>
+                        <TouchableOpacity
+                            style={{marginLeft:20}}
+                            key={index}
+                            activeOpacity={0.8}
+                            onPress={() => setCategoryIndex(index)}>
+                            <Text
+                            style={[
+                                styles.categoryText,
+                                catergoryIndex === index && styles.categoryTextSelected,
+                            ]}>
+                            {item}
+                            </Text>
+                        </TouchableOpacity>
+                        )
+                    }
+                    
+                </View>
+                <View style={styles.productList}>
+                    {
+                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="HOT" />)
+                    }
+                </View>
                 {/* San pham moi nhat */}
                 <View style={styles.productContainer}>
                      <Text style={styles.productsTitle}>SẢN PHẨM MỚI </Text>
                 </View>
                 <View style={styles.productList}>
                     {
-                        plants.map((item,index)=> <Product key={index} item={item} type="HOT" />)
+                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="HOT" />)
                     }
                 </View>
                 
@@ -100,7 +135,7 @@ export default function Home() {
                 </View>
                 <View style={styles.productList}>
                     {
-                        plants.map((item,index)=> <Product key={index} item={item} type="NEW"/>)
+                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="NEW"/>)
                     }
                 </View>
                
@@ -133,6 +168,17 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         flexWrap:'wrap',
         justifyContent:'space-around'
-    }
+    } ,
+    categoryText:{
+        fontSize: 17,
+        color: '#574a4a',
+        fontWeight: 'bold'
+    },
+    categoryTextSelected: {
+        color: COLORS.primary,
+        paddingBottom: 5,
+        borderBottomWidth: 2,
+        borderColor: COLORS.primary,
+    },
 });
   
