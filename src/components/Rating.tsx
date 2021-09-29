@@ -1,6 +1,5 @@
 import React,{useState} from 'react'
-import { View, TouchableOpacity,StyleSheet,Text } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { View, TouchableOpacity,StyleSheet,Text,TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function Rating() {

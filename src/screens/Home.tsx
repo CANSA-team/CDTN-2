@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet, Dimensions, Image,SafeAreaView,ScrollView } from 'react-native';
+import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
-import COLORS from '../consts/Colors';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
+import COLORS from './../consts/Colors';
 
 const dummyData =
         [{
@@ -71,10 +70,12 @@ const dummyData =
             'Potted Plant Ravenea Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
         },
       ];
-const categories = ['POPULAR', 'ORGANIC', 'INDOORS', 'SYNTHETIC'];     
-const HEIGHT = Dimensions.get('window').height*0.3;
-const WIDTH = Dimensions.get('window').width ;
-
+const categories = [
+    {name:'POPULAR',img:'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg'},
+    {name:'ORGANIC',img:'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg'},
+    {name:'INDOORS',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'},
+    {name:'SYNTHETIC',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'}];     
+const WIDTH = Dimensions.get('window').width;
 export default function Home() {
     const [catergoryIndex, setCategoryIndex] = useState(0);
     const { navigate } = useNavigation();
@@ -87,8 +88,9 @@ export default function Home() {
         <SafeAreaView style={styles.container}>
             <ScrollView  showsVerticalScrollIndicator={false} >
                 {/* Header */}
-                <HeaderBar />
-
+                <View style={{marginTop:40}}>
+                     <HeaderBar />
+                </View>
                 {/* Slider */}
                 <View style={{marginTop:20}}>
                     <Carousel images ={dummyData} auto={true}/>
@@ -97,31 +99,21 @@ export default function Home() {
                 <View style={{flexDirection:'row',marginBottom:20}}>      
                     {
                         categories.map((item,index)=>
-                        <TouchableOpacity
-                            style={{marginLeft:20}}
-                            key={index}
-                            activeOpacity={0.8}
-                            onPress={() => setCategoryIndex(index)}>
-                            <Text
-                            style={[
-                                styles.categoryText,
-                                catergoryIndex === index && styles.categoryTextSelected,
-                            ]}>
-                            {item}
-                            </Text>
-                        </TouchableOpacity>
+                            <View key={index} style={{marginLeft:20}}>
+                                <Category item={item} index ={index} catergoryIndex={catergoryIndex} onTap={()=>setCategoryIndex(index)}/>
+                            </View>
                         )
                     }
                     
                 </View>
                 <View style={styles.productList}>
                     {
-                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="HOT" />)
+                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="NONE" />)
                     }
                 </View>
                 {/* San pham moi nhat */}
                 <View style={styles.productContainer}>
-                     <Text style={styles.productsTitle}>SẢN PHẨM MỚI </Text>
+                     <Image style={{height:70,width:WIDTH}} source={require('../images/productnew.png')} />
                 </View>
                 <View style={styles.productList}>
                     {
@@ -131,7 +123,7 @@ export default function Home() {
                 
                 {/* San pham moi nhat */}
                 <View style={styles.productContainer}>
-                    <Text style={styles.productsTitle}>SẢN PHẨM ĐƯỢC QUAN TÂM</Text>
+                    <Image style={{height:70,width:WIDTH}} source={require('../images/producthot.png')} />
                 </View>
                 <View style={styles.productList}>
                     {
@@ -148,7 +140,6 @@ const styles = StyleSheet.create({
     container: {
        flex: 1,
        backgroundColor: '#E5E5E5',
-       marginTop:10
     },
     productContainer:{
         flex:1,
@@ -168,17 +159,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         flexWrap:'wrap',
         justifyContent:'space-around'
-    } ,
-    categoryText:{
-        fontSize: 17,
-        color: '#574a4a',
-        fontWeight: 'bold'
-    },
-    categoryTextSelected: {
-        color: COLORS.primary,
-        paddingBottom: 5,
-        borderBottomWidth: 2,
-        borderColor: COLORS.primary,
-    },
+    }
 });
   

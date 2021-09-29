@@ -1,11 +1,9 @@
 import React from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity,ScrollView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
-import { ScrollView } from 'react-native-gesture-handler';
-import { border, paddingTop, style } from 'styled-system';
 import Rating from './../components/Rating';
 import Comment from '../components/Comment';
 const dummyData =
@@ -85,7 +83,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:'white',
-        marginTop:50
+        marginTop:35
     },
     header: {
       flexDirection:'row',

@@ -2,7 +2,7 @@ import React from 'react'
 import { Dimensions, Image, Text, View, StyleSheet } from 'react-native'
 
 const HEIGHT = Dimensions.get('window').height;
-const WIDTH = Dimensions.get('window').width ;
+const WIDTH = Dimensions.get('window').width;
 
 export default function SlideItem(props:any) {
     const {item} = props;
