@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet,FlatList, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Category from '../components/Category';
+import CategorySub from '../components/CategorySub';
 import SearchBarTop from '../components/SearchBarTop';
 import COLORS from './../consts/Colors';
 
 const categories1 = [
     {id:1,name:'POPULAR',img:'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg'},
-    {id:2,name:'ORGAN ICASA ASAas asasa asasas',img:'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg'},
+    {id:2,name:'ORGAN',img:'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg'},
     {id:3,name:'INDOORS',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'},
     {id:4,name:'SYNTHETIC',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'},
     {id:5,name:'POPULAR',img:'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg'}];  
@@ -19,12 +20,13 @@ export default function Categories() {
     }
     return (
         <SafeAreaView style={styles.container}>
+            
             <View style={styles.searchContainer}>
                 <SearchBarTop />
             </View>
             
-            <View style={{flexDirection:'row',flex:1,marginTop:20,borderTopColor:'#ccc',borderTopWidth:1}}>  
-                <SafeAreaView style={{flex:1,padding:5,flexDirection:'row',justifyContent:'flex-start',backgroundColor: '#e7f0ee',borderRightColor:'#ccc',borderRightWidth:1}}>                
+            <View style={styles.categories}>  
+                <SafeAreaView style={styles.categoriesRight}>                
                     <FlatList
                         data={categories1}
                         numColumns={1}
@@ -36,12 +38,12 @@ export default function Categories() {
                         onEndReachedThreshold={0}
                     />  
                 </SafeAreaView>  
-                <SafeAreaView style={{flex:3,backgroundColor:'white',padding:10}}>
+                <SafeAreaView style={styles.categoriesLeft}>
                     <FlatList
                         data={categories1}
                         numColumns={3}
                         renderItem={({item,index})=>  <View key={item.id} style={{marginBottom:30,flex:1,marginLeft:5,padding:2}}>
-                                                    <Category item={item} index ={index} catergoryIndex={catergoryIndex} onTap={()=>setCategoryIndex(index)}/>
+                                                    <CategorySub item={item} />
                                                 </View>}
                         keyExtractor={(item) => `${item.id}`}
                         onEndReached={loadMore}
@@ -58,7 +60,28 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
     },
     searchContainer:{
-        marginTop:50
+        marginTop:30
+    },
+    categories:{
+        flexDirection:'row',
+        flex:1,
+        marginTop:20,
+        borderTopColor:'#ccc',
+        borderTopWidth:1
+    },
+    categoriesRight:{
+        flex:1,
+        padding:5,
+        flexDirection:'row',
+        justifyContent:'flex-start',
+        backgroundColor: '#e7f0ee',
+        borderRightColor:'#ccc',
+        borderRightWidth:1
+    },
+    categoriesLeft:{
+        flex:3,
+        backgroundColor:'white',
+        padding:10
     }
 });
   

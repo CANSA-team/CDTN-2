@@ -34,7 +34,7 @@ const switchNavigator = createSwitchNavigator({
         home: {
             screen: createStackNavigator({
                 Home: Home,
-                ProductDetail: ProductDetail
+                ProductDetail: ProductDetail,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

@@ -38,20 +38,20 @@ export default function Product(props:any) {
                 <View style={styles.imgContainer}>
                     <Image style={styles.img} source={{uri: item.img}} />
                 </View>
-                <Text style={styles.txtTitle}>{SlugStr(item.name,25)}</Text>
-                <View style={styles.priceContainer}>
-                    <Text style={styles.txtPrice}>$ {item.price}</Text>
+                <Text style={styles.txtTitle}>{SlugStr(item.name,30)}</Text>
+                <View style={{ flex:1,flexDirection:'column',alignItems:'flex-start',marginTop:10}}>
+                    <Text style={{textDecorationLine: 'line-through',color:'gray',fontSize:19}}>100.000đ</Text>
+                    <Text style={{marginBottom:10,color:'#bd3e3e',fontSize:22}}>{item.price}đ</Text>
                 </View>
+                
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnAddContainer}>
-                <Text style={styles.btnAddTitle}>Add</Text>
-            </TouchableOpacity>
+            
         </View>
     )
 }
 const styles = StyleSheet.create({
     container:{
-        height: 250,
+        height: 240,
         backgroundColor:'white',
         width: WIDTH,     
         borderRadius:10,
@@ -82,8 +82,9 @@ const styles = StyleSheet.create({
     },
     txtTitle:{
         fontWeight:'bold',
-        fontSize:17,
-        marginTop:10
+        fontSize:16,
+        marginTop:10,
+        color: COLORS.primary
     },
     priceContainer:{
         flexDirection:'row',

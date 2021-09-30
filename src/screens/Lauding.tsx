@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet,Image } from 'react-native';
 import { useNavigation } from '../utils/useNavigation';
+import COLORS from './../consts/Colors';
 
 export default function Lauding() {
     const { navigate } = useNavigation();
@@ -13,12 +14,10 @@ export default function Lauding() {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../images/loading_icon.png')} style={styles.deliveryIcon} />
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>Waiting ...</Text>
-                <Text></Text>
-            </View>
-           
+            <View style={{flexDirection:'column'}}>
+                <Text style={{fontWeight:'bold',fontSize:35}}>Welcome to .</Text>
+                <Text style={{fontWeight:'bold',fontSize:50,color:COLORS.primary}}>CANSA SHOP</Text>
+            </View>         
         </View>
     )
 }
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
         height:120,
     },
     titleContainer:{
-        marginTop:30,
+        marginTop:20,
     },
     title:{  
         fontSize: 40,
