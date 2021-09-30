@@ -6,6 +6,7 @@ import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
 import Rating from './../components/Rating';
 import Comment from '../components/Comment';
+import { useNavigation } from './../utils/useNavigation';
 const dummyData =
         [{
                 title: 'ƯU ĐÃI MỚI -  GIẢM TỚI 30%', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
@@ -30,6 +31,7 @@ const dummyData =
 
     }]
 export default function ProductDetail(props:any) {
+    const { navigate } = useNavigation();
     const {navigation,route} = props;
     return (
         <SafeAreaView style={styles.container}>
@@ -39,7 +41,7 @@ export default function ProductDetail(props:any) {
                         <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={()=>navigation.goBack()}/>
                     </TouchableOpacity>
                     <TouchableOpacity>
-                        <MaterialIcons style={styles.headerIcon} name="shopping-cart" color="white" size={30}/>
+                        <MaterialIcons onPress={()=>navigate('cart')} style={styles.headerIcon} name="shopping-cart" color="white" size={30}/>
                     </TouchableOpacity>
                 </View>
                 <View >

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Text, View } from 'react-native'
+import { Image, Text, View, StyleSheet } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import COLORS from '../consts/Colors';
 export default function Comment() {
@@ -7,12 +7,12 @@ export default function Comment() {
     const starNumber = 3;
 
     return (
-        <View style={{padding:10,backgroundColor:'#f0e8e8',marginTop:20,marginBottom:5,borderRadius:10}}>
+        <View style={styles.container}>
             
-            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginTop:10,marginBottom:5}}>
+            <View style={styles.commentContainer}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Image style={{height:50,width:50,borderRadius:50,borderWidth:2,borderColor:COLORS.primary,resizeMode:'cover'}} source={{uri:'https://photo-cms-sggp.zadn.vn/w580/Uploaded/2021/evofzyresfj/2021_08_17/cristianoronaldotinhchuyenroijuventustrongnhungngaytoi_mktg.jpg'}} />
-                    <Text style={{marginLeft:10,fontSize:20,fontWeight:'bold'}}>Cristiano Ronaldo</Text>
+                    <Image style={styles.imgUser} source={{uri:'https://photo-cms-sggp.zadn.vn/w580/Uploaded/2021/evofzyresfj/2021_08_17/cristianoronaldotinhchuyenroijuventustrongnhungngaytoi_mktg.jpg'}} />
+                    <Text style={styles.nameUser}>Cristiano Ronaldo</Text>
                 </View>
             </View>
             <View style={{display:'flex',flexDirection:'row'}}>    
@@ -28,3 +28,32 @@ export default function Comment() {
         </View>
     )
 }
+const styles = StyleSheet.create({
+    container:{
+        padding:10,
+        backgroundColor:'#f0e8e8',
+        marginTop:20,
+        marginBottom:5,
+        borderRadius:10
+    },
+    commentContainer: {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginTop:10,
+        marginBottom:5
+    },
+    imgUser:{
+        height:50,
+        width:50,
+        borderRadius:50,
+        borderWidth:2,
+        borderColor:COLORS.primary,
+        resizeMode:'cover'
+    },
+    nameUser:{
+        marginLeft:10,
+        fontSize:20,
+        fontWeight:'bold'
+    }
+});

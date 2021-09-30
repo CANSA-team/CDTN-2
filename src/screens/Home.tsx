@@ -33,8 +33,8 @@ const dummyData =
     const plants = [
         {
           id: 1,
-          name: 'Dragon Plant',
-          price: '39.99',
+          name: 'Ravenea Plant Raven Plant Ravenea Plant',
+          price: '200.000',
           like: true,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
           about:
@@ -44,7 +44,7 @@ const dummyData =
         {
           id: 2,
           name: 'Dragon Plant',
-          price: '29.99',
+          price: '200.000',
           like: false,
           img: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
           about:
@@ -53,7 +53,7 @@ const dummyData =
         {
           id: 3,
           name: 'Ravenea Plant',
-          price: '25.99',
+          price: '200.000',
           like: false,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
           about:
@@ -63,7 +63,7 @@ const dummyData =
         {
           id: 4,
           name: 'Potted Plant',
-          price: '25.99',
+          price: '200.000',
           like: true,
           img: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
           about:
