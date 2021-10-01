@@ -32,7 +32,8 @@
     "react-navigation-stack": "^2.10.4",
     "react-navigation-tabs": "^2.11.1",
     "styled-components": "^5.3.1",
-    "styled-system": "^5.1.5"
+    "styled-system": "^5.1.5",
+    "react-native-confirmation-code-field": "^6.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
