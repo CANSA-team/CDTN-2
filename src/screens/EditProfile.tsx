@@ -26,6 +26,7 @@ export default function EditProfile() {
     }, [])
 
     const onChange = (event:any, selectedDate:Date) => {
+        selectedDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         setDate(selectedDate);
     };
