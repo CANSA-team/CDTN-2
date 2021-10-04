@@ -1,104 +1,109 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import { Accessory, Avatar, Button } from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker';
-import moment from 'moment';
-
-let user_temp = {
-    "id": 1,
-    "phone": "0968241064",
-    "name": "anh",
-    "birthday": "1999-09-28T17:00:00.000Z"
-}
+import React from 'react'
+import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-navigation'
+import COLORS from '../consts/Colors'
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '../utils/useNavigation';
+import HeaderTitle from '../components/HeaderTitle';
 
 export default function Account() {
-    const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
-    const [user, setUser] = useState(false);
-    useEffect(() => {
-        (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
-            }
-        })();
-    }, []);
-
-    let checkLogin = () => {
-        setUser(!user);
+    const { navigate } = useNavigation();
+    const onTapProfile = () => {    
+        navigate('Profile')
     }
-
-    function changDate(dateObj: Date) {
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "Sep", "October", "November", "December"];
-        const month = monthNames[dateObj.getMonth()];
-        const day = String(dateObj.getDate()).padStart(2, '0');
-        const year = dateObj.getFullYear();
-        const output = month + '\n' + day + ',' + year;
-        return output;
+    const onTapOrdered = () => {    
+        navigate('Ordered')
     }
+    return (
+       <SafeAreaView style={styles.container}>
+            <HeaderTitle title={'ACCOUNT'} />
 
-    let getImg = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [3, 3],
-            quality: 1,
-        });
-
-        if (!result.cancelled) {
-            setImage(result.uri);
-        }
-    };
-    if (user) {
-        return (
-            <View style={styles.container}>
-                <Avatar
-                    rounded
-                    size="xlarge"
-                    source={{
-                        uri: image,
-                    }}
-                    onPress={getImg}
-                >
-                    <Accessory></Accessory>
-                </Avatar>
-                <Text>User name: {user_temp.name}</Text>
-                <Text>User phone: {user_temp.phone}</Text>
-                <Text>User birthday: { moment.utc(user_temp.birthday).format('DD/MM/YYYY')}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <Button
-                        title="Logout"
-                        type="outline"
-                        onPress={checkLogin}
-                    />
-                    <Button
-                        title="edit"
-                        type="outline"
-                        onPress={checkLogin}
-                    />
+           <View style={styles.accountContainer}>
+                <View>
+                    <Image style={{width:100,height:100,borderRadius:50}} source={{uri:'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg'}} /> 
+                </View>
+                <View style={styles.actionAccount}>
+                    <Text style={styles.nameUser}>Hoang Anh</Text>
+                    <Text style={[styles.nameUser,{color:'black'}]}>Pham</Text>
+                    <Text style={{fontSize:18,color:'gray'}}>hoanganh@gmail.com</Text>
                 </View>
             </View>
-        )
-    }
-    else {
-        return (
-            <View style={styles.container}>
-                <Button
-                    title="Login"
-                    type="outline"
-                    onPress={checkLogin}
-                />
+
+            <View style={styles.viewNav}>
+               
+                <View style={styles.viewAction}>
+                    <TouchableOpacity onPress={onTapProfile} style={styles.actionTouch}>
+                        <Text style={styles.actionTitle}>Tài khoản của tôi</Text>
+                        <SimpleLineIcons name="arrow-right" size={20} color="#333"/>
+                    </TouchableOpacity>
+                </View>
+                
+                <View style={styles.viewAction}>
+                    <TouchableOpacity onPress={onTapOrdered} style={styles.actionTouch}>
+                        <Text style={styles.actionTitle}>Đơn hàng của tôi</Text>
+                        <SimpleLineIcons name="arrow-right" size={20} color="#333"/>
+                    </TouchableOpacity>
+                </View>
+               
+                <View style={styles.viewAction}>
+                    <TouchableOpacity style={styles.actionTouch}>
+                        <Text style={{fontSize:20,color:'red'}}>Logout</Text>
+                        <MaterialIcons name="exit-to-app" size={35} color='#ec2525'/>
+                    </TouchableOpacity>
+                </View>
+                
+                
             </View>
-        )
-    }
+       </SafeAreaView>
+    )
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        flex:1,
+        backgroundColor:'#E5E5E5'
     },
+    accountContainer:{
+        flexDirection:'row',
+        backgroundColor:'#fff',
+        padding:20,
+        borderBottomColor:'#ddd',
+        borderBottomWidth:1,
+    },
+    actionAccount:{
+        marginLeft:20,
+        flexDirection:'column',
+        justifyContent:'center',
+        alignContent:'flex-start'
+    },
+    nameUser:{
+        fontSize:24,
+        fontWeight:'bold'
+    },
+    viewAction:{
+        padding:15,
+        borderBottomColor:'#ccc',
+        borderBottomWidth:1
+    },
+    actionTouch:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center'
+    },
+    actionTitle:{
+        fontSize:20,
+        color:'#333'
+    },
+    viewNav:{
+        backgroundColor:'white',
+        paddingHorizontal:10,    
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.29,
+        shadowRadius: 4.65,
+        elevation: 7, 
+    }
 });

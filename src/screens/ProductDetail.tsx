@@ -4,9 +4,10 @@ import { View, StyleSheet, Text, TouchableOpacity,ScrollView } from 'react-nativ
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
-import Rating from './../components/Rating';
+import RatingComment from '../components/RatingComment';
 import Comment from '../components/Comment';
 import { useNavigation } from './../utils/useNavigation';
+import { Rating } from 'react-native-elements';
 const dummyData =
         [{
                 title: 'ƯU ĐÃI MỚI -  GIẢM TỚI 30%', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
@@ -32,6 +33,7 @@ const dummyData =
     }]
 export default function ProductDetail(props:any) {
     const { navigate } = useNavigation();
+   
     const {navigation,route} = props;
     return (
         <SafeAreaView style={styles.container}>
@@ -48,6 +50,10 @@ export default function ProductDetail(props:any) {
                     <Carousel images ={dummyData} auto={false}/>
                 </View>
                 <View style={styles.detailContainer}>
+                    <View style={{alignItems:'center',flexDirection:'row',marginBottom:10}}>
+                        <Rating readonly imageSize={28} fractions="{1}" startingValue="{3.3}" />
+                        <Text style={{marginLeft:20,color:'#444',fontSize:22}}>3.3</Text>
+                    </View>
                     <Text style={styles.title}>Potted Plant Potted Plant Potted Plant</Text>
                     <View style={{display:'flex',flexDirection:'row'}}>
                         <View style={{ flex:1,flexDirection:'column',alignItems:'flex-start'}}>
@@ -71,7 +77,7 @@ export default function ProductDetail(props:any) {
 
                     <Text style={styles.headerTitle}>Đánh giá & nhận xét :</Text>
 
-                    <Rating />
+                    <RatingComment />
 
                     <Comment />
                     <Comment />
@@ -113,7 +119,7 @@ const styles = StyleSheet.create({
         fontSize:30,
         fontWeight:'bold',
         color:COLORS.primary,
-        marginBottom:20
+        marginBottom:10
     },
     headerTitle:{
         fontSize:22,

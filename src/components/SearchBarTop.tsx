@@ -4,16 +4,17 @@ import { SearchBar } from 'react-native-elements';
 import  AntDesign from 'react-native-vector-icons/AntDesign';
 import COLORS from './../consts/Colors';
 
-export default function SearchBarTop() {
+export default function SearchBarTop(props:any) {
+    const {onSearch} = props;
     const[data,setData] = useState("");
     const updateSearch = (search:string):void => {
         setData(search);
     }; 
-
+  
     return (
         <View style={styles.container}>  
             <View style={styles.searchContainer}>        
-                <TouchableOpacity style={styles.searchIcon}>
+                <TouchableOpacity style={styles.searchIcon} onPress={()=>onSearch(data)}>
                     <AntDesign name="search1" color="white" size={20}/>
                 </TouchableOpacity>
                 <SearchBar

@@ -4,7 +4,8 @@ import Ionicons  from 'react-native-vector-icons/Ionicons';
 import COLORS from './../consts/Colors';
 import SearchBarTop from './SearchBarTop';
 
-export default function HeaderBar() {
+export default function HeaderBar(props:any) {
+    const {onSearch} = props
     return (
         <>
         <View style={styles.logoContainer}>
@@ -15,7 +16,7 @@ export default function HeaderBar() {
                 <Ionicons name="notifications-sharp" size={28} color={COLORS.colorFontInit}/> 
             </View>
         </View>
-         <SearchBarTop />
+         <SearchBarTop onSearch={onSearch}/>
         </>
     )
 }

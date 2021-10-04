@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, Image,SafeAreaView,ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, Dimensions, Image,SafeAreaView,ScrollView } from 'react-native';
+import {  useSelector, connect } from 'react-redux';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
+import { State,getProducts,ProductState } from '../redux';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
-import COLORS from './../consts/Colors';
 
 const dummyData =
         [{
@@ -34,7 +35,7 @@ const dummyData =
         {
           id: 1,
           name: 'Ravenea Plant Raven Plant Ravenea Plant',
-          price: '200.000',
+          product_image: '200.000',
           like: true,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
           about:
@@ -44,7 +45,7 @@ const dummyData =
         {
           id: 2,
           name: 'Dragon Plant',
-          price: '200.000',
+          product_image: '200.000',
           like: false,
           img: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
           about:
@@ -53,7 +54,7 @@ const dummyData =
         {
           id: 3,
           name: 'Ravenea Plant',
-          price: '200.000',
+          product_image: '200.000',
           like: false,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
           about:
@@ -63,7 +64,7 @@ const dummyData =
         {
           id: 4,
           name: 'Potted Plant',
-          price: '200.000',
+          product_image: '200.000',
           like: true,
           img: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
           about:
@@ -76,12 +77,27 @@ const categories = [
     {name:'INDOORS',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'},
     {name:'SYNTHETIC',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'}];     
 const WIDTH = Dimensions.get('window').width;
-export default function Home() {
-    const [catergoryIndex, setCategoryIndex] = useState(0);
-    const { navigate } = useNavigation();
 
+interface HomeProps{
+    productReducer:ProductState
+}
+export const _Home:React.FC<HomeProps> = (props:any) =>{
+    const [catergoryIndex, setCategoryIndex] = useState(0);
+    const [productList, setProductList] = useState([])
+    const { navigate } = useNavigation();
+    const { products } = props.productReducer;
+    
+    useEffect(() => {
+       setProductList(products); 
+    },[])
+
+
+    //Chuyen man hinh
     const onTapDetail = () => {    
         navigate('ProductDetail')
+    }
+    const searchProduct = (data:any) =>{
+        navigate('Search',{data})
     }
 
     return (
@@ -89,7 +105,7 @@ export default function Home() {
             <ScrollView  showsVerticalScrollIndicator={false} >
                 {/* Header */}
                 <View style={{marginTop:40}}>
-                     <HeaderBar />
+                    <HeaderBar onSearch={searchProduct} />
                 </View>
                 {/* Slider */}
                 <View style={{marginTop:20}}>
@@ -108,26 +124,26 @@ export default function Home() {
                 </View>
                 <View style={styles.productList}>
                     {
-                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="NONE" />)
+                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NONE" />)
                     }
                 </View>
                 {/* San pham moi nhat */}
                 <View style={styles.productContainer}>
-                     <Image style={{height:70,width:WIDTH}} source={require('../images/productnew.png')} />
+                     <Image style={{height:70,width:WIDTH}} source={require('../images/sanpnew.png')} />
                 </View>
                 <View style={styles.productList}>
                     {
-                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="HOT" />)
+                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
                     }
                 </View>
                 
                 {/* San pham moi nhat */}
                 <View style={styles.productContainer}>
-                    <Image style={{height:70,width:WIDTH}} source={require('../images/producthot.png')} />
+                    <Image style={{height:70,width:WIDTH}} source={require('../images/sanpnoibat.png')} />
                 </View>
                 <View style={styles.productList}>
                     {
-                        plants.map((item,index)=> <Product onTap={onTapDetail} key={index} item={item} type="NEW"/>)
+                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NEW"/>)
                     }
                 </View>
                
@@ -161,4 +177,8 @@ const styles = StyleSheet.create({
         justifyContent:'space-around'
     }
 });
-  
+const mapToStateProps = (state: State) => ({
+    productReducer: state.productReducer,
+})
+const Home = connect(mapToStateProps, { getProducts })(_Home)
+export default Home;
