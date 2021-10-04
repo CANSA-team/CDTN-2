@@ -9,8 +9,10 @@ import {
     Keyboard,
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-export default class ChangePassword extends Component {
+export default class PasswordInformation extends Component {
+
     constructor(props: any) {
         super(props)
         this.state = {
@@ -35,6 +37,7 @@ export default class ChangePassword extends Component {
             }
         }
     }
+
     render() {
         const Divider = (props: any) => {
             return <View {...props}>
@@ -54,10 +57,20 @@ export default class ChangePassword extends Component {
                             color={'rgb(221, 97, 97)'}>
                         </Ionicons>
                         <Text style={styles.title}>
-                            Change Password
+                            Change Password Information
                         </Text>
                     </View>
                     <View style={styles.down}>
+                        <View style={styles.textInputContainer}>
+                            <TextInput                            
+                               style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
+                               onChangeText = {(text) => this.valiDate(text, 'password')}
+                                placeholder="Current password"
+                                secureTextEntry={true}
+                            >
+                            </TextInput>
+                        </View>
+
                         <View style={styles.textInputContainer}>
                             <TextInput
                                 style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
