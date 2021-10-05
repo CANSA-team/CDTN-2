@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
 import COLORS from '../consts/Colors'
@@ -8,6 +8,7 @@ import { useNavigation } from '../utils/useNavigation';
 import HeaderTitle from '../components/HeaderTitle';
 
 export default function Account() {
+    const [checkLogin,setCheckLogin] = useState(false);
     const { navigate } = useNavigation();
     const onTapProfile = () => {    
         navigate('Profile')
@@ -15,6 +16,11 @@ export default function Account() {
     const onTapOrdered = () => {    
         navigate('Ordered')
     }
+    useEffect(() => {
+        if(!checkLogin){
+            navigate('loginStack');
+        }
+    })
     return (
        <SafeAreaView style={styles.container}>
             <HeaderTitle title={'ACCOUNT'} />

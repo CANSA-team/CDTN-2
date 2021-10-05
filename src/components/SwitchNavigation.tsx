@@ -15,6 +15,7 @@ import Profile from './../screens/User/Profile';
 import Checkout from './../screens/Checkout';
 import CheckoutSuccess from './../screens/CheckoutSuccess';
 import Ordered from './../screens/User/Ordered';
+import Login from '../screens/Auth/Login';
 
 
 
@@ -34,6 +35,16 @@ const switchNavigator = createSwitchNavigator({
 
     },
     
+    loginStack:{
+        screen: createStackNavigator({
+            Login,
+        }, {
+            defaultNavigationOptions: {
+                headerShown: false
+            }
+        })
+    },
+
     homeStack: createBottomTabNavigator({
         // Home tab Icon
         home: {
