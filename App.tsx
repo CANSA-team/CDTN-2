@@ -1,14 +1,14 @@
-
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import SwitchNavigation from './src/components/SwitchNavigation';
-import EditProfile from './src/screens/EditProfile';
-import Search from './src/screens/Search';
-
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 
 export default function App() {
-  return (
-      <EditProfile />  
+  return ( 
+    <Provider store={store}>
+        <SwitchNavigation />     
+    </Provider>
   );
 }
 

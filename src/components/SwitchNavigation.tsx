@@ -2,7 +2,7 @@ import React from 'react'
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import Lauding from './../screens/Lauding';
+import Landing from '../screens/Landing';
 import Home from './../screens/Home';
 import Cart from '../screens/Cart';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,6 +10,11 @@ import Account from './../screens/Account';
 import Categories from '../screens/Categories';
 import COLORS from '../consts/Colors';
 import ProductDetail from './../screens/ProductDetail';
+import Search from './../screens/Search';
+import Profile from './../screens/User/Profile';
+import Checkout from './../screens/Checkout';
+import CheckoutSuccess from './../screens/CheckoutSuccess';
+import Ordered from './../screens/User/Ordered';
 
 
 
@@ -20,7 +25,7 @@ const DIMENS = {
 const switchNavigator = createSwitchNavigator({
     landingStack: {
         screen: createStackNavigator({
-            Landing: Lauding,
+            Landing: Landing,
         }, {
             defaultNavigationOptions: {
                 headerShown: false
@@ -35,6 +40,7 @@ const switchNavigator = createSwitchNavigator({
             screen: createStackNavigator({
                 Home: Home,
                 ProductDetail: ProductDetail,
+                Search: Search,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -53,11 +59,11 @@ const switchNavigator = createSwitchNavigator({
         category: {
             screen: createStackNavigator({
                 Categories: Categories,
+                Search: Search,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
-                },
-                
+                },          
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
@@ -71,6 +77,9 @@ const switchNavigator = createSwitchNavigator({
         cart: {
             screen: createStackNavigator({
                 Cart: Cart,
+                Checkout: Checkout,
+                CheckoutSuccess: CheckoutSuccess,
+                Ordered:Ordered
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -89,6 +98,9 @@ const switchNavigator = createSwitchNavigator({
         account: {
             screen: createStackNavigator({
                 Account: Account,
+                Profile:Profile,
+                Checkout:Checkout,
+                Ordered:Ordered
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

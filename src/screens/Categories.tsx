@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-navigation';
 import Category from '../components/Category';
 import CategorySub from '../components/CategorySub';
 import SearchBarTop from '../components/SearchBarTop';
+import { useNavigation } from '../utils/useNavigation';
 import COLORS from './../consts/Colors';
 
 const categories1 = [
@@ -15,6 +16,11 @@ const categories1 = [
      
 export default function Categories() {
     const [catergoryIndex, setCategoryIndex] = useState(0);
+    const { navigate } = useNavigation();
+    const searchProduct = (data:any) =>{
+        navigate('Search',{data})
+    }
+
     let loadMore = ({}) => {
         //nối thêm dữ liệu vào
     }
@@ -22,7 +28,7 @@ export default function Categories() {
         <SafeAreaView style={styles.container}>
             
             <View style={styles.searchContainer}>
-                <SearchBarTop />
+                <SearchBarTop onSearch={searchProduct}/>
             </View>
             
             <View style={styles.categories}>  
