@@ -28,6 +28,7 @@ export interface ProductModel {
     product_title: string,
     product_image: [ImagesModel],
     product_description: string,
+    product_rating: number,
     last_update: number,
     status: number,
 }

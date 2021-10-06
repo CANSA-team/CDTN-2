@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import { ProductModel } from "../models";
 import  axios  from 'axios';
 import { ProductActionType } from "../action-types";
+import {cansa} from "../../consts/Selector";
 
 export interface GetAllProduct{
     readonly type: ProductActionType.GET_ALL_PRODUCT,
@@ -17,7 +18,8 @@ export type ProductActions = GetAllProduct | ProductErrorAction;
 export const getProducts = () => {
     return async ( dispatch: Dispatch<ProductActions>) => {
         try {
-            const response = await axios.get<any>(`http://103.207.38.200:3301/api/product/all/0/e4611a028c71342a5b083d2cbf59c494?fbclid=IwAR15YJjDQ0Qm_k0tm3WeSXt1YRpQxlGr9DiIapSJZMhe3N2QElIzBMs1uTA`)
+            console.log(cansa[0]);
+            const response = await axios.get<any>(`${cansa[0]}/api/product/page/1/0/e4611a028c71342a5b083d2cbf59c494?fbclid=IwAR15YJjDQ0Qm_k0tm3WeSXt1YRpQxlGr9DiIapSJZMhe3N2QElIzBMs1uTA`)
             if(!response){
                 dispatch({
                     type: ProductActionType.ON_PRODUCT_ERROR,
