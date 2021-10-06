@@ -7,8 +7,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '../utils/useNavigation';
 import HeaderTitle from '../components/HeaderTitle';
 import axios from 'axios';
+import  {cansa}  from '../consts/Selector'
 export default function Account() {
     const [checkLogin, setCheckLogin] = useState(false);
+    const [phone,setPhone] = useState('')
+    const [name,setName] = useState('')
+    const [email,setEmail] = useState('')
+    const [nickName,setNickName] = useState('')
+    const [birthday,setBirthday] = useState('')
     const { navigate } = useNavigation();
     const onTapProfile = () => {
         navigate('Profile')
@@ -17,7 +23,7 @@ export default function Account() {
         navigate('Ordered')
     }
     const logout = () => {
-        axios.get(`http://103.207.38.200:3000/api/user/logout`)
+        axios.get(`${cansa[1]}/api/user/logout`)
         .then(res => {
         navigate('homeStack');
         setCheckLogin(false)
@@ -28,7 +34,7 @@ export default function Account() {
     }
 
     useEffect(()=>{
-        axios.get(`http://103.207.38.200:3000/api/user/check/login`)
+        axios.get(`${cansa[1]}/api/user/check/login`)
           .then(res => {
             //Trạng thái khi đăng nhập thành công
             if(res.data.data == false){
@@ -36,6 +42,20 @@ export default function Account() {
             }else{
               navigate('homeStack');
               setCheckLogin(true);
+              (async ()=>{
+                await axios.get(`${cansa[1]}/api/user/get/profile`)
+                .then(res => {
+                    setPhone(res.data.data.phone)
+                    setName(res.data.data.name)
+                    setEmail(res.data.data.email)
+                })
+                .catch(error => console.log(error));
+                await axios.get(`${cansa[1]}/api/user/get/user`)
+                .then(res => {
+                    setNickName(res.data.data.user_name)
+                })
+                .catch(error => console.log(error));
+              })();
             }
           })
           .catch(error => console.log(error));
@@ -49,9 +69,9 @@ export default function Account() {
                     <Image style={{ width: 100, height: 100, borderRadius: 50 }} source={{ uri: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg' }} />
                 </View>
                 <View style={styles.actionAccount}>
-                    <Text style={styles.nameUser}>Hoang Anh</Text>
-                    <Text style={[styles.nameUser, { color: 'black' }]}>Pham</Text>
-                    <Text style={{ fontSize: 18, color: 'gray' }}>hoanganh@gmail.com</Text>
+                    <Text style={styles.nameUser}>{name}</Text>
+                    <Text style={[styles.nameUserNickName, { color: 'black' }]}>@{nickName}</Text>
+                    <Text style={{ fontSize: 18, color: 'gray' }}>{email}</Text>
                 </View>
             </View>
 
@@ -104,6 +124,10 @@ const styles = StyleSheet.create({
     },
     nameUser: {
         fontSize: 24,
+        fontWeight: 'bold'
+    },
+    nameUserNickName: {
+        fontSize: 12,
         fontWeight: 'bold'
     },
     viewAction: {

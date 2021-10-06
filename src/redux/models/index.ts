@@ -124,3 +124,11 @@ export interface OderModel{
     oder_customer: number,
     status: number,
 }
+export interface userModel{
+    user_id:number,
+    user_name:string,
+    user_avatar:string,
+    user_phone:string,
+    user_profile_name:string,
+    user_email:string,
+}

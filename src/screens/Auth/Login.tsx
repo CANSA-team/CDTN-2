@@ -14,7 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import axios from 'axios'
 import { useNavigation } from '../../utils/useNavigation'
-
+import  {cansa}  from '../../consts/Selector'
 
 
 
@@ -25,9 +25,8 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
   const [isLoading, setisLoading] = useState(false)
-
   useEffect(()=>{
-    axios.get(`http://103.207.38.200:3000/api/user/check/login`)
+    axios.get(`${cansa[1]}/api/user/check/login`)
       .then(res => {
         //Trạng thái khi đăng nhập thành công
         console.log(res.data.data)
@@ -84,11 +83,17 @@ export default function Login() {
   }
   const loginBtn = () => {
     if (email != '' && password != '') {
-      axios.get(`http://103.207.38.200:3000/api/user/login/${email}/${password}/123`)
+      axios.get(`${cansa[1]}/api/user/login/${email}/${password}/123`)
         .then(res => {
+          console.log(res.data.status)
           //Trạng thái khi đăng nhập thành công
-          navigate('homeStack');
-          Alert.alert('Thông báo', res.data.message);
+          if(res.data.status != 'Faild'){
+            navigate('homeStack');
+            Alert.alert('Thông báo', res.data.message);
+          }else{
+            Alert.alert('Thông báo', res.data.message);
+          }
+         
         })
         .catch(error => console.log(error));
     } else {
