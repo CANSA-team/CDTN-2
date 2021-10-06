@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import HeaderTitle from '../components/HeaderTitle'
-import { SafeAreaView, Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView, Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Button } from 'react-native-elements';
 import COLORS from '../consts/Colors';
@@ -24,89 +24,88 @@ export default function Checkout(props:any) {
                 </TouchableOpacity>
             </View>
 
-            <ScrollView style={{marginBottom:10}} showsVerticalScrollIndicator={false}>
-                <View style={styles.viewTotal}>
-                    <Text style={styles.txtTitle}>Tỉnh/Thành phố :</Text>
-                    <View style={styles.viewPicker}>          
-                        <RNPickerSelect
-                            placeholder={{ label: "Tỉnh/Thành phố", value: null }}
-                            style={{...pickerSelectStyles,placeholder:{color:'#acabab'}}}
-                            onValueChange={(data) => setData(data)}
-                            items={[
-                                { label: 'Football', value: 'football' },
-                                { label: 'Baseball', value: 'baseball' },
-                                { label: 'Hockey', value: 'hockey' },
-                            ]}
-                        />
-                    </View>
-                </View>
-
-                <View style={styles.viewTotal}>
-                    <Text style={styles.txtTitle}>Quận/Huyện :</Text>
-                    <View style={styles.viewPicker}>          
-                        <RNPickerSelect
-                            placeholder={{ label: "Quận/Huyện", value: null }}
-                            style={{...pickerSelectStyles,placeholder:{color:'#acabab'}}}
-                            onValueChange={(data) => setData(data)}
-                            items={[
-                                { label: 'Football', value: 'football' },
-                                { label: 'Baseball', value: 'baseball' },
-                                { label: 'Hockey', value: 'hockey' },
-                            ]}
-                        />
-                    </View>
-                </View>
-
-                <View style={styles.viewTotal}>
-                    <Text style={styles.txtTitle}>Phường/Xã :</Text>
-                    <View style={styles.viewPicker}>          
-                        <RNPickerSelect
-                            placeholder={{ label: "Phường/Xã", value: null }}
-                            style={{...pickerSelectStyles,placeholder:{color:'#acabab'}}}
-                            onValueChange={(data) => setData(data)}
-                            items={[
-                                { label: 'Football', value: 'football' },
-                                { label: 'Baseball', value: 'baseball' },
-                                { label: 'Hockey', value: 'hockey' },
-                            ]}
-                        />
-                    </View>
-                </View>
-
-                <View style={styles.viewTotal}>
-                    <Text style={styles.txtTitle}>Thôn/Xóm/Số nhà :</Text>
-                    <View style={styles.textAreaContainer} >
-                        <TextInput
-                        style={styles.textArea}
-                        underlineColorAndroid="transparent"
-                        placeholder="Thôn/Xóm/Số nhà"
-                        placeholderTextColor="#acabab"
-                        numberOfLines={10}
-                        maxLength={255}
-                        multiline={true}
-                        />
-                    </View>
-                </View>
-
-                <View style={[styles.viewTotal,styles.method]}>
-                    <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:15}}>
-                        <Text style={styles.txtPay}>Phương thức thanh toán : </Text>
-                        <Text style={styles.txtPrice}>Tiền mặt</Text>
-                    </View>
-                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <Text style={styles.txtPay}>Tổng tiền : </Text>
-                        <Text style={styles.txtPrice}>1.000.000đ</Text>
-                    </View>
-                </View>
-
-                <View style={styles.viewTotal}>
-                    <Button
-                        onPress={onTapCheckoutSuccess}
-                        title="CONTINUTE"
-                        buttonStyle={styles.btnContinute}
+            <View style={styles.viewTotal}>
+                <Text style={styles.txtTitle}>Tỉnh/Thành phố :</Text>
+                <View style={styles.viewPicker}>          
+                    <RNPickerSelect
+                        placeholder={{ label: "Tỉnh/Thành phố", value: null }}
+                        style={{...pickerSelectStyles,placeholder:{color:'#acabab'}}}
+                        onValueChange={(data) => setData(data)}
+                        items={[
+                            { label: 'Football', value: 'football' },
+                            { label: 'Baseball', value: 'baseball' },
+                            { label: 'Hockey', value: 'hockey' },
+                        ]}
                     />
                 </View>
-            </ScrollView>
+            </View>
+
+            <View style={styles.viewTotal}>
+                <Text style={styles.txtTitle}>Quận/Huyện :</Text>
+                <View style={styles.viewPicker}>          
+                    <RNPickerSelect
+                        placeholder={{ label: "Quận/Huyện", value: null }}
+                        style={{...pickerSelectStyles,placeholder:{color:'#acabab'}}}
+                        onValueChange={(data) => setData(data)}
+                        items={[
+                            { label: 'Football', value: 'football' },
+                            { label: 'Baseball', value: 'baseball' },
+                            { label: 'Hockey', value: 'hockey' },
+                        ]}
+                    />
+                </View>
+            </View>
+
+            <View style={styles.viewTotal}>
+                <Text style={styles.txtTitle}>Phường/Xã :</Text>
+                <View style={styles.viewPicker}>          
+                    <RNPickerSelect
+                        placeholder={{ label: "Phường/Xã", value: null }}
+                        style={{...pickerSelectStyles,placeholder:{color:'#acabab'}}}
+                        onValueChange={(data) => setData(data)}
+                        items={[
+                            { label: 'Football', value: 'football' },
+                            { label: 'Baseball', value: 'baseball' },
+                            { label: 'Hockey', value: 'hockey' },
+                        ]}
+                    />
+                </View>
+            </View>
+
+            <View style={styles.viewTotal}>
+                <Text style={styles.txtTitle}>Thôn/Xóm/Số nhà :</Text>
+                <View style={styles.textAreaContainer} >
+                    <TextInput
+                    style={styles.textArea}
+                    underlineColorAndroid="transparent"
+                    placeholder="Thôn/Xóm/Số nhà"
+                    placeholderTextColor="#acabab"
+                    numberOfLines={10}
+                    maxLength={255}
+                    multiline={true}
+                    />
+                </View>
+            </View>
+
+            <View style={[styles.viewTotal,styles.method]}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:15}}>
+                    <Text style={styles.txtPay}>Phương thức thanh toán : </Text>
+                    <Text style={styles.txtPrice}>Tiền mặt</Text>
+                </View>
+                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                    <Text style={styles.txtPay}>Tổng tiền : </Text>
+                    <Text style={styles.txtPrice}>1.000.000đ</Text>
+                </View>
+            </View>
+
+            <View style={styles.viewTotal}>
+                <Button
+                    onPress={onTapCheckoutSuccess}
+                    title="CONTINUTE"
+                    buttonStyle={styles.btnContinute}
+                />
+            </View>
+            
         </SafeAreaView>
     )
 }
