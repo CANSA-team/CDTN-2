@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, uffect } from 'react'
 import { View, StyleSheet, Dimensions, Image,SafeAreaView,ScrollView } from 'react-native';
-import {  useSelector, connect } from 'react-redux';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
-import { State,getProducts,ProductState } from '../redux';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
@@ -34,7 +32,7 @@ const dummyData =
     const plants = [
         {
           id: 1,
-          name: 'Ravenea Plant Raven Plant Ravenea Plant',
+          product_title: 'Ravenea Plant Raven Plant Ravenea Plant',
           product_image: '200.000',
           like: true,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
@@ -44,7 +42,7 @@ const dummyData =
       
         {
           id: 2,
-          name: 'Dragon Plant',
+          product_title: 'Dragon Plant',
           product_image: '200.000',
           like: false,
           img: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
@@ -53,7 +51,7 @@ const dummyData =
         },
         {
           id: 3,
-          name: 'Ravenea Plant',
+          product_title: 'Ravenea Plant',
           product_image: '200.000',
           like: false,
           img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
@@ -63,7 +61,7 @@ const dummyData =
       
         {
           id: 4,
-          name: 'Potted Plant',
+          product_title: 'Potted Plant',
           product_image: '200.000',
           like: true,
           img: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
@@ -78,20 +76,12 @@ const categories = [
     {name:'SYNTHETIC',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'}];     
 const WIDTH = Dimensions.get('window').width;
 
-interface HomeProps{
-    productReducer:ProductState
-}
-export const _Home:React.FC<HomeProps> = (props:any) =>{
+
+export default function Home() {
     const [catergoryIndex, setCategoryIndex] = useState(0);
     const [productList, setProductList] = useState([])
     const { navigate } = useNavigation();
-    const { products } = props.productReducer;
-    
-    useEffect(() => {
-       setProductList(products); 
-    },[])
-
-
+   
     //Chuyen man hinh
     const onTapDetail = () => {    
         navigate('ProductDetail')
@@ -124,7 +114,7 @@ export const _Home:React.FC<HomeProps> = (props:any) =>{
                 </View>
                 <View style={styles.productList}>
                     {
-                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NONE" />)
+                        plants.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NONE" />)
                     }
                 </View>
                 {/* San pham moi nhat */}
@@ -133,7 +123,7 @@ export const _Home:React.FC<HomeProps> = (props:any) =>{
                 </View>
                 <View style={styles.productList}>
                     {
-                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
+                        plants.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
                     }
                 </View>
                 
@@ -143,7 +133,7 @@ export const _Home:React.FC<HomeProps> = (props:any) =>{
                 </View>
                 <View style={styles.productList}>
                     {
-                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NEW"/>)
+                        plants.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NEW"/>)
                     }
                 </View>
                
@@ -177,8 +167,3 @@ const styles = StyleSheet.create({
         justifyContent:'space-around'
     }
 });
-const mapToStateProps = (state: State) => ({
-    productReducer: state.productReducer,
-})
-const Home = connect(mapToStateProps, { getProducts })(_Home)
-export default Home;

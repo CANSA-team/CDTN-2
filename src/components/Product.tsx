@@ -40,8 +40,8 @@ export default function Product(props:any) {
             </View>
             <Text style={styles.txtTitle}>{SlugStr(product.product_title,30)}</Text>
             <View style={{alignItems:'center',flexDirection:'row',}}>
-                <Rating ratingColor="gold" readonly imageSize={20} fractions="{1}" startingValue="{3.3}" />
-                <Text style={{marginLeft:20,color:'#444',fontSize:18}}>3.3</Text>
+                <Rating ratingColor="gold" readonly imageSize={18} fractions="{1}" startingValue="{3.3}" />
+                <Text style={{marginLeft:18,color:'#444',fontSize:18}}>3.3</Text>
             </View>
             <View style={{ flex:1,flexDirection:'column',alignItems:'flex-start',marginTop:6}}>
                 <Text style={{textDecorationLine: 'line-through',color:'gray',fontSize:18}}>{product.product_price*2}đ</Text>

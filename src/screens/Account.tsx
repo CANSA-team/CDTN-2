@@ -9,18 +9,8 @@ import HeaderTitle from '../components/HeaderTitle';
 
 export default function Account() {
     const [checkLogin,setCheckLogin] = useState(false);
-    const { navigate } = useNavigation();
-    const onTapProfile = () => {    
-        navigate('Profile')
-    }
-    const onTapOrdered = () => {    
-        navigate('Ordered')
-    }
-    useEffect(() => {
-        if(!checkLogin){
-            navigate('loginStack');
-        }
-    })
+    const { navigate } = useNavigation();   
+
     return (
        <SafeAreaView style={styles.container}>
             <HeaderTitle title={'ACCOUNT'} />
@@ -39,14 +29,14 @@ export default function Account() {
             <View style={styles.viewNav}>
                
                 <View style={styles.viewAction}>
-                    <TouchableOpacity onPress={onTapProfile} style={styles.actionTouch}>
+                    <TouchableOpacity onPress={()=>navigate('Profile')} style={styles.actionTouch}>
                         <Text style={styles.actionTitle}>Tài khoản của tôi</Text>
                         <SimpleLineIcons name="arrow-right" size={20} color="#333"/>
                     </TouchableOpacity>
                 </View>
                 
                 <View style={styles.viewAction}>
-                    <TouchableOpacity onPress={onTapOrdered} style={styles.actionTouch}>
+                    <TouchableOpacity onPress={()=>navigate('Ordered')} style={styles.actionTouch}>
                         <Text style={styles.actionTitle}>Đơn hàng của tôi</Text>
                         <SimpleLineIcons name="arrow-right" size={20} color="#333"/>
                     </TouchableOpacity>

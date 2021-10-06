@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet,Image } from 'react-native';
-import { State, getProducts } from '../redux';
+import React, { useEffect } from 'react'
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '../utils/useNavigation';
 import COLORS from '../consts/Colors';
-import { connect} from 'react-redux';
 
-interface LandingProps{
-    getProducts:Function
-}
-
-export const _Landing: React.FC<LandingProps> = (props) => {
+export default function Lauding(){
     const { navigate } = useNavigation();
     useEffect(()=>{
-        props.getProducts();
         setTimeout(() =>{  
             navigate('homeStack')
         }, 1000)
@@ -48,10 +41,3 @@ const styles = StyleSheet.create({
         color: '#7D7D7D'
     }
 });
-
-const mapToStateProps = (state: State) => ({
-})
-
-const Landing = connect(mapToStateProps, { getProducts })(_Landing);
-
-export default Landing;
