@@ -24,6 +24,8 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native-confirmation-code-field": "^6.4.0",
+    "react-native-cookies": "^3.3.0",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-numeric-input": "^1.9.0",
@@ -42,8 +44,7 @@
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.3.1",
-    "styled-system": "^5.1.5",
-    "react-native-confirmation-code-field": "^6.4.0"
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

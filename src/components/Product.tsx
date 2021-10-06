@@ -34,8 +34,9 @@ export default function Product(props:any) {
         break;
     }
 
+
     return (
-        <TouchableOpacity onPress={onTap} style={styles.container}>
+        <TouchableOpacity onPress={()=>onTap(product.product_id)} style={styles.container}>
             {Top}      
             <View style={styles.imgContainer}>
                 <Image style={styles.img} source={{uri: product.product_avatar}} />

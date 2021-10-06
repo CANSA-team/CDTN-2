@@ -18,9 +18,7 @@ export default function Carousel(props:any) {
                 dot={<View style={styles.dot}></View>}
                 activeDot={<View style={styles.activeDot}></View>}>
                     {
-                        images.map((item:object,index:number)=>
-                            <SlideItem key={index} item ={item} />
-                        ) 
+                        images.map((item:object,index:number)=><SlideItem key={index} item ={item} />) 
                     }
             </Swiper>  
         </View> 

@@ -1,16 +1,11 @@
-/**
- * Image
- */
-export interface ImagesModel {
-    uri: string;
-}
+
 
 /**
  * Silder
  */
 export interface SliderModel {
     slider_id: number,
-    slider_image: ImagesModel
+    slider_image: string
 }
 
 /**
@@ -20,13 +15,13 @@ export interface ProductModel {
     product_id: number,
     product_date: Date,
     shop_id: number,
-    product_avatar: ImagesModel,
+    product_avatar: string,
     product_quantity: any,
     product_view: number,
     product_price: number,
     product_sale: number,
     product_title: string,
-    product_image: [ImagesModel],
+    product_image: [string],
     product_description: string,
     product_rating: number,
     last_update: number,
@@ -45,7 +40,7 @@ export interface UserModel {
     user_id: number,
     user_key: null,
     user_name: string,
-    user_avatar: ImagesModel,
+    user_avatar: string,
     user_status: number,
     user_last_update: number
 }
@@ -67,7 +62,7 @@ export interface CommentModel {
  */
 export interface CategoryModel {
     category_id: number,
-    category_image: ImagesModel,
+    category_image: string,
     category_view: number,
     category_name: string,
     last_update: number,
@@ -83,7 +78,7 @@ export interface ShopModel {
     shop_name: string,
     shop_description: string,
     shop_owner: number,
-    shop_avatar: ImagesModel,
+    shop_avatar: string,
     last_update: number,
     status: number,
 }

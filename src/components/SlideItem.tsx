@@ -8,10 +8,7 @@ export default function SlideItem(props:any) {
     const {item} = props;
     return (
         <View style={styles.cardView} >
-            <Image style={styles.image} source={{uri:item.slider_image}} />
-            <View style={styles.textView}>
-                <Text style={styles.itemTitle}>{item.slider_title}</Text>
-            </View>
+            <Image style={styles.image} source={{uri:item}} />
         </View>
     )
 }
