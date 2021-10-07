@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { Image, Text, TouchableOpacity, View, ActivityIndicator, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
 import COLORS from '../consts/Colors'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -8,6 +8,7 @@ import { useNavigation } from '../utils/useNavigation';
 import HeaderTitle from '../components/HeaderTitle';
 import axios from 'axios';
 import  {cansa}  from '../consts/Selector'
+
 export default function Account() {
     const [checkLogin, setCheckLogin] = useState(false);
     const [phone,setPhone] = useState('')
@@ -16,6 +17,8 @@ export default function Account() {
     const [nickName,setNickName] = useState('')
     const [birthday,setBirthday] = useState('')
     const { navigate } = useNavigation();
+    const [isLoading, setisLoading] = useState(false)
+
     const onTapProfile = () => {
         navigate('Profile')
     }
@@ -48,19 +51,21 @@ export default function Account() {
                     setPhone(res.data.data.phone)
                     setName(res.data.data.name)
                     setEmail(res.data.data.email)
+                    axios.get(`${cansa[1]}/api/user/get/user`)
+                    .then(res => {
+                        setNickName(res.data.data.user_name)
+                        setisLoading(true)
+                    })
+                    .catch(error => console.log(error));
                 })
                 .catch(error => console.log(error));
-                await axios.get(`${cansa[1]}/api/user/get/user`)
-                .then(res => {
-                    setNickName(res.data.data.user_name)
-                })
-                .catch(error => console.log(error));
+               
               })();
             }
           })
           .catch(error => console.log(error));
-      },[checkLogin]) 
-    return (
+      },[checkLogin,isLoading]) 
+    return isLoading ? (
         <SafeAreaView style={styles.container}>
             <HeaderTitle title={'ACCOUNT'} />
 
@@ -102,13 +107,23 @@ export default function Account() {
 
             </View>
         </SafeAreaView>
-    )
+    ):
+    (<View style={[styles.container_login, styles.horizontal]}>
+      <ActivityIndicator size="large" color="#00ff00" />
+    </View>)
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#E5E5E5'
     },
+    container_login: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        backgroundColor: '#33FF99'
+      },
     accountContainer: {
         flexDirection: 'row',
         backgroundColor: '#fff',

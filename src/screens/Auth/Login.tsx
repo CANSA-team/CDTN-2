@@ -37,7 +37,7 @@ export default function Login() {
         }
       })
       .catch(error => console.log(error));
-  },[]) 
+  },[isLoading]) 
 
   const valiDate = (text: any, type: any) => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
