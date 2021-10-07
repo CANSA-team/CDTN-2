@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect} from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -14,7 +14,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import axios from 'axios'
 import { useNavigation } from '../../utils/useNavigation'
-import  {cansa}  from '../../consts/Selector'
+import { cansa } from '../../consts/Selector'
+import * as Facebook from 'expo-facebook';
 
 
 
@@ -25,37 +26,62 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
   const [isLoading, setisLoading] = useState(false)
-  useEffect(()=>{
+  useEffect(() => {
     axios.get(`${cansa[1]}/api/user/check/login`)
       .then(res => {
         //Trạng thái khi đăng nhập thành công
-        console.log(res.data.data)
-        if(res.data.data == false){
+        if (res.data.data == false) {
           setisLoading(true)
-        }else{
+        } else {
           navigate('homeStack');
         }
       })
       .catch(error => console.log(error));
-  },[isLoading]) 
-
+  }, [isLoading])
+  const logInFB = async () => {
+    setisLoading(false)
+    try {
+      await Facebook.initializeAsync({
+        appId: '994248931143640',
+      });
+      const {
+        type,
+        token,
+        expirationDate,
+        permissions,
+        declinedPermissions,
+      } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile', 'email'],
+      });
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
+        //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+        var infomation = await response.json();
+        console.log(infomation.name)
+        axios.get(`${cansa[1]}/api/user/login/facebook/1/${token}/${infomation.email}/${infomation.id}/${infomation.name}/e4611a028c71342a5b083d2cbf59c494`)
+          .then(res => {
+            setisLoading(true)
+            navigate('homeStack');
+            Alert.alert('Thông báo', res.data.message);
+          })
+          .catch(error => console.log(error));
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  }
   const valiDate = (text: any, type: any) => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
     if (type == 'email') {
       if (emailRegex.test(text)) {
-        // this.setState({
-        //   email: text,
-        //   emailValdate: true,
-        // })
         setEmail(text)
         setEmailValdate(true);
       }
       else {
-        // this.setState({
-        //   email: '',
-        //   emailValdate: false
-        // })
         setEmail('')
         setEmailValdate(false)
         console.log('Email chưa hợp lệ example@gmail.com')
@@ -63,18 +89,10 @@ export default function Login() {
     }
     else if (type == 'password') {
       if (passwordRegex.test(text)) {
-        // this.setState({
-        //   password: text,
-        //   passwordValdate: true,
-        // })
         setPassword(text)
         setPasswordValdate(true);
       }
       else {
-        // this.setState({
-        //   password: '',
-        //   passwordValdate: false
-        // })
         setPassword('')
         setPasswordValdate(false)
         console.log('Password chưa hợp lệ gồm 6 kí tự ,chữ cái hoa đầu')
@@ -87,13 +105,13 @@ export default function Login() {
         .then(res => {
           console.log(res.data.status)
           //Trạng thái khi đăng nhập thành công
-          if(res.data.status != 'Faild'){
+          if (res.data.status != 'Faild') {
             navigate('homeStack');
             Alert.alert('Thông báo', res.data.message);
-          }else{
+          } else {
             Alert.alert('Thông báo', res.data.message);
           }
-         
+
         })
         .catch(error => console.log(error));
     } else {
@@ -151,7 +169,7 @@ export default function Login() {
 
 
           <TouchableOpacity style={styles.loginButton}
-          onPress={() => loginBtn()}
+            onPress={() => loginBtn()}
           >
             <Text style={styles.loginButtonTitle}>Sign In</Text>
           </TouchableOpacity>
@@ -169,7 +187,9 @@ export default function Login() {
               name="facebook"
               backgroundColor="#3b5998"
             >
-              <Text style={styles.loginButtonTitle}>Login with Facebook</Text>
+              <Text style={styles.loginButtonTitle}
+                onPress={() => logInFB()}
+              >Login with Facebook</Text>
             </FontAwesome.Button>
           </View>
           <View>
