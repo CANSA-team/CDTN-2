@@ -14,10 +14,11 @@ export default function Category(props:any) {
             onPress={onTap}>
             <Image style={{height:50,width:50,borderRadius:15}} source={{uri:item.category_image}} />
             <Text
-            style={[
-                styles.categoryText,
-                catergoryIndex === index && styles.categoryTextSelected,
-            ]}>
+            // style={[
+            //     styles.categoryText,
+            //     catergoryIndex === index && styles.categoryTextSelected,
+            // ]}
+            >
             {item.category_name}
             </Text>
         </TouchableOpacity>

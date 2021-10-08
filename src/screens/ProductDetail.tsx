@@ -11,55 +11,41 @@ import { Rating } from 'react-native-elements';
 import axios from 'axios';
 import { cansa } from '../consts/Selector';
 import { CommentModel, ProductModel } from '../redux';
+// import CookieManager from '@react-native-cookies/cookies';
+import CookieManager from '@react-native-community/cookies';
+import Product from '../components/Product';
 
-const dummyData =
-    [{
-        title: 'ƯU ĐÃI MỚI -  GIẢM TỚI 30%', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-        description: "Khi mua hàng theo mùa",
-        id: 1
-
-    },
-    {
-        title: 'Food inside a Bowl', url: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
-        description: "Khi mua hàng theo mùa",
-        id: 2
-    },
-    {
-        title: 'Vegatable Salad', url: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
-        description: "Khi mua hàng theo mùa",
-        id: 3
-    },
-    {
-        title: 'Anise a Aroma Art Bazar', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-        description: "Khi mua hàng theo mùa",
-        id: 4
-
-    }]
- class _ProductDetail{
-    comments:CommentModel[] = [];
-    comment?:CommentModel;
-    product?:ProductModel;
-    constructor(){}
- }
+class _ProductDetail {
+    comments: CommentModel[] = [];
+    comment?: CommentModel;
+    product?: ProductModel;
+    constructor() { }
+}
 
 export default function ProductDetail(props: any) {
     const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
-    // const [product, setProduct] = useState<ProductModel>();
     let [_productDetail, setProductDetail] = useState<_ProductDetail>(new _ProductDetail());
     const [isLoading, setIsLoading] = useState(false);
     const id = getParam('id');
     useEffect(() => {
-        getProduct();
+        (
+            async () => {
+                const _getProduct: Promise<any> = getProduct();
+                const _getComments: Promise<any> = getComments();
+                await Promise.all([_getProduct, _getComments]).then(() => {
+                    setProductDetail(_productDetail);
+                    setIsLoading(true);
+                })
+            }
+        )();
     }, []);
 
     const getProduct = async () => {
         await axios.get(`${cansa[1]}/api/product/view/${id}/0/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
             const { data } = response.data;
             _productDetail.product = data;
-            getComments();
-            setIsLoading(true);
         })
     }
 
@@ -67,9 +53,17 @@ export default function ProductDetail(props: any) {
         await axios.get(`${cansa[1]}/api/comment/all/${id}/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
             const { data } = response.data;
             _productDetail.comments = data;
-            setProductDetail(_productDetail);
-            setIsLoading(true);
-            console.log(_productDetail);
+        })
+    }
+
+    const addToCart = ()=>{
+        console.log("tap")
+        axios.get(`${cansa[1]}/api/cart/add/${id}/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
+            const { data } = response.data;
+            axios.get(`${cansa[1]}/api/cart/all/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
+                const { data } = response.data;
+                console.log(data);
+            })
         })
     }
 
@@ -103,7 +97,7 @@ export default function ProductDetail(props: any) {
                                 <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 23 }}>{_productDetail.product && _productDetail.product.product_price}</Text>
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={addToCart}>
                                     <Text style={styles.btnBuy}>Add Cart</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity>
@@ -124,12 +118,14 @@ export default function ProductDetail(props: any) {
                         <RatingComment />
                         <View>
                             {
-                                _productDetail.comments && _productDetail.comments.map((comment:CommentModel) => 
-                                <Comment starNumber={comment.comment_rating} user={comment.user} comment_content={comment.comment_content}/>
+                                _productDetail.comments && _productDetail.comments.map((comment: CommentModel, index: number) =>
+                                    <View key={index}>
+                                        <Comment starNumber={comment.comment_rating} user={comment.user} comment_content={comment.comment_content} />
+                                    </View>
                                 )
                             }
                         </View>
-                        
+
                     </View>
                 </ScrollView>
                 )}

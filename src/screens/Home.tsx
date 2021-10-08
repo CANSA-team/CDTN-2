@@ -4,7 +4,7 @@ import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView, Activity
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
 import { cansa } from '../consts/Selector';
-import { ProductModel,CategoryModel } from '../redux';
+import { ProductModel, CategoryModel } from '../redux';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
@@ -21,20 +21,25 @@ class _Home {
     constructor() { }
 }
 
-interface CategoryIndex {
-    index: number;
-    id: number;
-}
-
 export default function Home() {
     const [catergoryIndex, setCategoryIndex] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(true);
+    const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(false);
     const { navigate } = useNavigation();
     let [_home, setHome] = useState<_Home>(new _Home());
 
     useEffect(() => {
-        getProductsNew();
+        (async () => {
+            const _getCategory: Promise<any> = getCategory();
+            const _getProductsNew: Promise<any> = getProductsNew();
+            const _getProductsHot: Promise<any> = getProductsHot();
+            const _getSliders: Promise<any> = getSliders();
+            await Promise.all([_getProductsNew, _getProductsHot, _getSliders, _getCategory]).then(() => {
+                setHome(_home);
+                setIsLoading(true);
+            })
+        })();
+
     }, []);
 
     const getProductCategory = async (index: number = 0) => {
@@ -42,10 +47,9 @@ export default function Home() {
         await axios.get(link).then((response) => {
             const { data } = response.data;
             _home.productsCategory = data;
-            setHome(_home);
-            setCategoryIndex(index);
-            setIsLoading(true);
             setIsLoadingCategory(true);
+            setCategoryIndex(index);
+            setHome(_home);
         });
     };
 
@@ -53,9 +57,7 @@ export default function Home() {
         let link = `${cansa[1]}/api/product/page/1/new/0/e4611a028c71342a5b083d2cbf59c494`;
         await axios.get(link).then((response) => {
             const { data } = response.data;
-            // setProductsNew(data);
             _home.productsNew = data;
-            getProductsHot();
         });
     };
 
@@ -64,7 +66,6 @@ export default function Home() {
         await axios.get(link).then((response) => {
             const { data } = response.data;
             _home.productsHot = data;
-            getCategory();
         });
     };
 
@@ -73,7 +74,7 @@ export default function Home() {
             const { data } = response.data;
             _home.categories = data;
             _home.id = Number(data[0].category_id);
-            getSliders();
+            getProductCategory();
         });
     };
 
@@ -85,7 +86,6 @@ export default function Home() {
                 tempArr.push(iterator.slider_image)
             }
             _home.slide = tempArr;
-            getProductCategory();
         });
     };
 
@@ -98,12 +98,6 @@ export default function Home() {
         navigate('Search', { data })
     }
 
-    const onTapCategory = (item: any,index: number) => {
-            _home.id = item.category_id;
-            setHome(_home);
-            setIsLoadingCategory(false);
-            getProductCategory(index);
-    }
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
@@ -139,12 +133,12 @@ export default function Home() {
                             </View>
                             <View style={styles.productList}>
                                 {
-                                    isLoadingCategory ?
-                                        _home.productsCategory && _home.productsCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
-                                        :
+                                    !isLoadingCategory ?
                                         (<View style={styles.container}>
                                             <ActivityIndicator size="large" color="#00ff00" />
-                                        </View>)
+                                        </View>) :
+                                        _home.productsCategory && _home.productsCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
+
                                 }
                             </View>
                             {/* San pham moi nhat */}
