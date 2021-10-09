@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
@@ -8,64 +8,49 @@ import RatingComment from '../components/RatingComment';
 import Comment from '../components/Comment';
 import { useNavigation } from './../utils/useNavigation';
 import { Rating } from 'react-native-elements';
-import axios from 'axios';
-import { cansa } from '../consts/Selector';
-import { CommentModel, ProductModel } from '../redux';
-// import CookieManager from '@react-native-cookies/cookies';
-import CookieManager from '@react-native-community/cookies';
-import Product from '../components/Product';
-
-class _ProductDetail {
-    comments: CommentModel[] = [];
-    comment?: CommentModel;
-    product?: ProductModel;
-    constructor() { }
-}
+import { CommentModel, getProduct, ProductModel, State } from '../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getComments } from '../redux/actions/commentActions';
+import { addCart } from '../redux/actions/cartActions';
 
 export default function ProductDetail(props: any) {
     const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
-    let [_productDetail, setProductDetail] = useState<_ProductDetail>(new _ProductDetail());
     const [isLoading, setIsLoading] = useState(false);
     const id = getParam('id');
+    const productState = useSelector((state: State) => state.productReducer);
+    const commentState = useSelector((state: State) => state.commentReducer);
+    const cartState = useSelector((state: State) => state.cartReducer);
+    const { product } = productState;
+    const { comment } = commentState;
+    const { status } = cartState;
+    const dispatch = useDispatch();
     useEffect(() => {
-        (
-            async () => {
-                const _getProduct: Promise<any> = getProduct();
-                const _getComments: Promise<any> = getComments();
-                await Promise.all([_getProduct, _getComments]).then(() => {
-                    setProductDetail(_productDetail);
-                    setIsLoading(true);
-                })
-            }
-        )();
+        dispatch(getProduct(id));
+        dispatch(getComments(id));
     }, []);
 
-    const getProduct = async () => {
-        await axios.get(`${cansa[1]}/api/product/view/${id}/0/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const { data } = response.data;
-            _productDetail.product = data;
-        })
-    }
 
-    const getComments = async () => {
-        await axios.get(`${cansa[1]}/api/comment/all/${id}/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const { data } = response.data;
-            _productDetail.comments = data;
-        })
-    }
+    useEffect(() => {
+        if (product && comment!.length > 0) {
+            setIsLoading(true);
+        }
+    }, [productState, commentState])
 
-    const addToCart = ()=>{
-        console.log("tap")
-        axios.get(`${cansa[1]}/api/cart/add/${id}/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const { data } = response.data;
-            axios.get(`${cansa[1]}/api/cart/all/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-                const { data } = response.data;
-                console.log(data);
-            })
-        })
-    }
+
+    useEffect(() => {
+        if(status != ''){
+            const message = (status === 'success') ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
+            Alert.alert(
+                "Thông báo",
+                message,
+                [
+                    { text: "OK" }
+                ]
+            );
+        }
+    }, [cartState])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -83,21 +68,23 @@ export default function ProductDetail(props: any) {
                         </TouchableOpacity>
                     </View>
                     <View >
-                        <Carousel images={_productDetail.product && _productDetail.product.product_image} auto={false} />
+                        {product && <Carousel images={product.product_image} auto={false} />}
                     </View>
                     <View style={styles.detailContainer}>
                         <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
-                            <Rating readonly imageSize={28} fractions="{1}" startingValue={_productDetail.product && _productDetail.product.product_rating} />
-                            <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{_productDetail.product && _productDetail.product.product_rating}</Text>
+                            {product && <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating} />}
+                            {product && <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating}</Text>}
                         </View>
-                        <Text style={styles.title}>{_productDetail.product && _productDetail.product.product_title}</Text>
+                        {product && <Text style={styles.title}>{product.product_title}</Text>}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
-                                <Text style={{ marginBottom: 10, color: 'red', fontSize: 26 }}>{_productDetail.product && _productDetail.product.product_price * (100 - _productDetail.product.product_sale) / 100}</Text>
-                                <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 23 }}>{_productDetail.product && _productDetail.product.product_price}</Text>
+                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 26 }}>{product.product_price * (100 - product.product_sale) / 100}</Text>}
+                                {product && <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 23 }}>{product.product_price}</Text>}
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                <TouchableOpacity onPress={addToCart}>
+                                <TouchableOpacity onPress={() => {
+                                    dispatch(addCart(id));
+                                }}>
                                     <Text style={styles.btnBuy}>Add Cart</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity>
@@ -109,7 +96,7 @@ export default function ProductDetail(props: any) {
                         <Text style={styles.headerTitle}>Mô tả sản phẩm :</Text>
                         <Text style={styles.desc}>
                             {
-                                _productDetail.product && _productDetail.product.product_description
+                                product && product.product_description
                             }
                         </Text>
 
@@ -118,7 +105,7 @@ export default function ProductDetail(props: any) {
                         <RatingComment />
                         <View>
                             {
-                                _productDetail.comments && _productDetail.comments.map((comment: CommentModel, index: number) =>
+                                comment && comment!.map((comment: CommentModel, index: number) =>
                                     <View key={index}>
                                         <Comment starNumber={comment.comment_rating} user={comment.user} comment_content={comment.comment_content} />
                                     </View>

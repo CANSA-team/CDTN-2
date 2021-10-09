@@ -1,93 +1,56 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
-import { cansa } from '../consts/Selector';
-import { ProductModel, CategoryModel } from '../redux';
+import { State, getProductsHot, getProductsNew, getProductsCategory, getSlider } from '../redux';
+import { getCategory } from '../redux/actions/categoryActions';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
 
 const WIDTH = Dimensions.get('window').width;
 
-class _Home {
-    public id: number = 0;
-    public productsNew: ProductModel[] = [];
-    public productsHot: ProductModel[] = [];
-    public productsCategory: ProductModel[] = [];
-    public categories: CategoryModel[] = [];
-    public slide: any[] = [];
-    constructor() { }
-}
-
 export default function Home() {
     const [catergoryIndex, setCategoryIndex] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(false);
+    const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(true);
     const { navigate } = useNavigation();
-    let [_home, setHome] = useState<_Home>(new _Home());
+    const productState = useSelector((state: State) => state.productReducer);
+    const sliderState = useSelector((state: State) => state.sliderReducer);
+    const categoryState = useSelector((state: State) => state.categoryReducer);
+    const { categories } = categoryState;
+    const { productHot, productNew, productCategory } = productState;
+    const { slider } = sliderState;
+    const [_slider, _setSlider] = useState<string[]>([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        (async () => {
-            const _getCategory: Promise<any> = getCategory();
-            const _getProductsNew: Promise<any> = getProductsNew();
-            const _getProductsHot: Promise<any> = getProductsHot();
-            const _getSliders: Promise<any> = getSliders();
-            await Promise.all([_getProductsNew, _getProductsHot, _getSliders, _getCategory]).then(() => {
-                setHome(_home);
-                setIsLoading(true);
-            })
-        })();
-
+        dispatch(getProductsNew());
+        dispatch(getProductsHot());
+        dispatch(getCategory());
+        dispatch(getSlider());
     }, []);
 
-    const getProductCategory = async (index: number = 0) => {
-        let link = `${cansa[1]}/api/category/page/1/${_home.id}/0/e4611a028c71342a5b083d2cbf59c494`;
-        await axios.get(link).then((response) => {
-            const { data } = response.data;
-            _home.productsCategory = data;
-            setIsLoadingCategory(true);
-            setCategoryIndex(index);
-            setHome(_home);
-        });
-    };
-
-    const getProductsNew = async () => {
-        let link = `${cansa[1]}/api/product/page/1/new/0/e4611a028c71342a5b083d2cbf59c494`;
-        await axios.get(link).then((response) => {
-            const { data } = response.data;
-            _home.productsNew = data;
-        });
-    };
-
-    const getProductsHot = async () => {
-        let link = `${cansa[1]}/api/product/page/1/hot/0/e4611a028c71342a5b083d2cbf59c494`;
-        await axios.get(link).then((response) => {
-            const { data } = response.data;
-            _home.productsHot = data;
-        });
-    };
-
-    const getCategory = async () => {
-        await axios.get(`${cansa[1]}/api/category/all/0/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const { data } = response.data;
-            _home.categories = data;
-            _home.id = Number(data[0].category_id);
-            getProductCategory();
-        });
-    };
-
-    const getSliders = async () => {
-        await axios.get(`${cansa[0]}/api/slider/all/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const { data } = response.data;
+    useEffect(() => {
+        if (productHot!.length > 0 && productNew!.length > 0 && productCategory!.length > 0 && slider!.length > 0 && isLoadingCategory) {
             let tempArr: any[] = [];
-            for (const iterator of data) {
+            for (const iterator of slider!) {
                 tempArr.push(iterator.slider_image)
             }
-            _home.slide = tempArr;
-        });
-    };
+            _setSlider(tempArr);
+            setIsLoading(true);
+        }
+        if (!isLoadingCategory) {
+            setIsLoadingCategory(true);
+        }
+    }, [productState, sliderState])
+
+    useEffect(() => {
+        if (categories!.length > 0 && productCategory) {
+            dispatch(getProductsCategory(categories![0].category_id!));
+        }
+    }, [categoryState])
 
     //Chuyen man hinh
     const onTapDetail = (id: number) => {
@@ -112,19 +75,19 @@ export default function Home() {
                         <ScrollView showsVerticalScrollIndicator={false} >
                             {/* Slider */}
                             <View style={{ marginTop: 20 }}>
-                                <Carousel images={_home.slide} auto={true} />
+                                {_slider && <Carousel images={_slider} auto={true} />}
                             </View>
                             {/* Category */}
                             <View style={{ flexDirection: 'row', marginBottom: 20 }}>
                                 {
 
-                                    _home.categories.map((item, index) =>
+                                    categories && categories.map((item, index) =>
                                         <View key={index} style={{ marginLeft: 20 }}>
                                             <Category item={item} index={index} catergoryIndex={catergoryIndex} onTap={() => {
-                                                _home.id = item.category_id;
-                                                setHome(_home);
                                                 setIsLoadingCategory(false);
-                                                getProductCategory(index);
+                                                const id: number = Number(item.category_id);
+                                                dispatch(getProductsCategory(id));
+                                                setCategoryIndex(index);
                                             }} />
                                         </View>
                                     )
@@ -137,7 +100,7 @@ export default function Home() {
                                         (<View style={styles.container}>
                                             <ActivityIndicator size="large" color="#00ff00" />
                                         </View>) :
-                                        _home.productsCategory && _home.productsCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
+                                    productCategory && productCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
 
                                 }
                             </View>
@@ -147,7 +110,7 @@ export default function Home() {
                             </View>
                             <View style={styles.productList}>
                                 {
-                                    _home.productsHot.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
+                                    productNew && productNew.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
                                 }
                             </View>
 
@@ -157,7 +120,7 @@ export default function Home() {
                             </View>
                             <View style={styles.productList}>
                                 {
-                                    _home.productsNew.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
+                                    productHot && productHot.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
                                 }
                             </View>
 
