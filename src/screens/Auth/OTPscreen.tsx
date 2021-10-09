@@ -1,15 +1,20 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { TextInput, View, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { TextInput, View, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import axios from 'axios'
+import { useNavigation } from '../../utils/useNavigation'
+import { cansa } from '../../consts/Selector'
 
-export default function OTPscreen() {
-
-    const [pinText1, setpinText1] = useState('');
-    const [pinText2, setpinText2] = useState('');
-    const [pinText3, setpinText3] = useState('');
-    const [pinText4, setpinText4] = useState('');
-    const [pinText5, setpinText5] = useState('');
-    const [pinText6, setpinText6] = useState('');
+export default function OTPscreen(props:any) {
+    const { navigate } = useNavigation();
+    const {navigation,route} = props;
+    const { getParam, goBack } = navigation;
+    const [pinText1, setpinText1] = useState<string>('');
+    const [pinText2, setpinText2] = useState<string>('');
+    const [pinText3, setpinText3] = useState<string>('');
+    const [pinText4, setpinText4] = useState<string>('');
+    const [pinText5, setpinText5] = useState<string>('');
+    const [pinText6, setpinText6] = useState<string>('');
     const pinInputRef1 = useRef<TextInput>();
     const pinInputRef2 = useRef<TextInput>();
     const pinInputRef3 = useRef<TextInput>();
@@ -19,63 +24,89 @@ export default function OTPscreen() {
 
 
     const updatePinText1 = (pinText1: string) => {
-        console.log(pinInputRef1.current.isFocused());
         setpinText1(pinText1);
         if (pinText1 != "") {
             pinInputRef2.current?.focus()
         }
     };
     const updatePinText2 = (pinText2: string) => {
-        console.log(pinInputRef2.current.isFocused());
         setpinText2(pinText2);
         if (pinText2 != "") {
             pinInputRef3.current?.focus()
+        }else if(pinText2 == ""){
+            pinInputRef1.current?.focus()
         }
     };
 
     const updatePinText3 = (pinText3: string) => {
-        console.log(pinInputRef3.current.isFocused());
         setpinText3(pinText3);
         if (pinText3 != "") {
             pinInputRef4.current?.focus()
+        }else if(pinText3 == ""){
+            pinInputRef2.current?.focus()
         }
     };
 
     const updatePinText4 = (pinText4: string) => {
-        console.log(pinInputRef4.current.isFocused());
         setpinText4(pinText4);
         if (pinText4 != "") {
             pinInputRef5.current?.focus()
+        }else if(pinText4 == ""){
+            pinInputRef3.current?.focus()
         }
     };
 
     const updatePinText5 = (pinText5: string) => {
-        console.log(pinInputRef5.current.isFocused());
         setpinText5(pinText5);
         if (pinText5 != "") {
             pinInputRef6.current?.focus()
+        }else if(pinText5 == ""){
+            pinInputRef4.current?.focus()
         }
     };
 
     const updatePinText6 = (pinText6: string) => {
-        console.log(pinInputRef6.current.isFocused());
         setpinText6(pinText6);
-        if (pinText6 != "") {
-            pinInputRef6.current?.focus()
+        if (pinText6 == "") {
+            pinInputRef5.current?.focus()
         }
     };
+    //Hàm continue
+    const continueBtn = ()=>{
+        if(pinText1 && pinText2 && pinText3 && pinText4 && pinText5 && pinText6){
+            let codePin = `${pinText1}${pinText2}${pinText3}${pinText4}${pinText5}${pinText6}`;
+            let email = getParam('email')
+            axios.get(`${cansa[1]}/api/user/forgot/password/checkPin/${email}/${codePin}`).then((res)=>{
+                if(res.data.data){
+                    Alert.alert('Thông Báo',res.data.message);
+                    navigate('ChangePassword',{email:email})
 
+                }else{
+                    Alert.alert('Thông Báo',res.data.message);
+                }
+            }) 
+            
+        }else{
+            Alert.alert('Thông báo',"Vui lòng không để trống ô nào!!")
+        }
+    }
     // Time out
     const [time, setTime] = useState(60);
     useEffect(() => {
-        setInterval(() => {
-            setTime(time - 1)
-        }, 1000)
-    });
+        if (time > 0) {
+            setTimeout(() => {
+                setTime(time - 1)
+            }, 1000);
+        }else{
+            // Alert.alert('Thông báo',"Vui lòng resend mã code!!")
+        }
+    }, [time]);
+    useEffect(() => {
+        setTime(time)
+    }, []);
 
 
-
-    return (       
+    return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <View style={styles.up}>
@@ -167,7 +198,9 @@ export default function OTPscreen() {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.loginButton}>
+                    <TouchableOpacity style={styles.loginButton}
+                    onPress={continueBtn}
+                    >
                         <Text style={styles.loginButtonTitle}>Continue</Text>
                     </TouchableOpacity>
 

@@ -30,8 +30,6 @@ export default function Account() {
         .then(res => {
         navigate('homeStack');
         setCheckLogin(false)
-          //Trạng thái khi đăng nhập thành công
-          console.log(res.data)
         })
         .catch(error => console.log(error));
     }
@@ -109,7 +107,7 @@ export default function Account() {
         </SafeAreaView>
     ):
     (<View style={[styles.container_login, styles.horizontal]}>
-      <ActivityIndicator size="large" color="#00ff00" />
+      <ActivityIndicator size="large" color="#FF6F61" />
     </View>)
 }
 const styles = StyleSheet.create({

@@ -39,7 +39,6 @@ export default function Login() {
       .catch(error => console.log(error));
   }, [isLoading])
   const logInFB = async () => {
-    setisLoading(false)
     try {
       await Facebook.initializeAsync({
         appId: '994248931143640',
@@ -58,12 +57,11 @@ export default function Login() {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
         //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
         var infomation = await response.json();
-        console.log(infomation.name)
+        console.log(infomation)
         axios.get(`${cansa[1]}/api/user/login/facebook/1/${token}/${infomation.email}/${infomation.id}/${infomation.name}/e4611a028c71342a5b083d2cbf59c494`)
           .then(res => {
             setisLoading(true)
             navigate('homeStack');
-            Alert.alert('Thông báo', res.data.message);
           })
           .catch(error => console.log(error));
       } else {
@@ -174,7 +172,9 @@ export default function Login() {
             <Text style={styles.loginButtonTitle}>Sign In</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.forgotButton}>
+          <TouchableOpacity style={styles.forgotButton}
+          onPress={() => {navigate('EmailOTPscreen')}}
+          >
             <Text style={styles.navButtonText}>
               Forgot Password?
             </Text>
@@ -211,7 +211,7 @@ export default function Login() {
     </TouchableWithoutFeedback>
   ) :
     (<View style={[styles.container, styles.horizontal]}>
-      <ActivityIndicator size="large" color="#00ff00" />
+      <ActivityIndicator size="large" color="#FF6F61" />
     </View>)
 }
 

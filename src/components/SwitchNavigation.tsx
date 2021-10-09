@@ -16,8 +16,9 @@ import Checkout from './../screens/Checkout';
 import CheckoutSuccess from './../screens/CheckoutSuccess';
 import Ordered from './../screens/User/Ordered';
 import Login from '../screens/Auth/Login';
-
-
+import EmailOTPscreen from '../screens/Auth/EmailOTPscreen';
+import OTPscreen from '../screens/Auth/OTPscreen';
+import ChangePassword from '../screens/Auth/ChangePassword';
 
 const DIMENS = {
     iconSize : 30,
@@ -38,13 +39,15 @@ const switchNavigator = createSwitchNavigator({
     loginStack:{
         screen: createStackNavigator({
             Login,
+            OTPscreen,
+            EmailOTPscreen,
+            ChangePassword,
         }, {
             defaultNavigationOptions: {
                 headerShown: false
             }
         })
     },
-
     homeStack: createBottomTabNavigator({
         // Home tab Icon
         home: {
