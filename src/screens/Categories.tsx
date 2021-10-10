@@ -18,7 +18,7 @@ export default function Categories() {
     const dispatch = useDispatch();
     const { navigate } = useNavigation();
     const searchProduct = (data: any) => {
-        navigate('Search', { data })
+        navigate('Search', { data:data,title:'Tìm kiếm' })
     }
 
     useEffect(() => {
@@ -30,6 +30,10 @@ export default function Categories() {
             setIsLoading(true);
         }
     },[categoryState])
+
+    const onTap = (id:number,title:string) => {
+        navigate('Search', { data:id,title:title })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -56,7 +60,7 @@ export default function Categories() {
                                 {
                                     categories && categories![catergoryIndex].categories!.map((category, index) => (
                                         <View key={index} style={{ flex: 1, minWidth: '30%' }}>
-                                            <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} />
+                                            <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} onTap={onTap}/>
                                         </View>
                                     ))
                                 }

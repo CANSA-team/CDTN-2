@@ -4,6 +4,8 @@ import categoryReducer from './categoryReducer';
 import sliderReducer from './sliderReducer';
 import commentReducer from './commentReducer';
 import cartReducer from './cartReducer';
+import shopReducer from './shopReducer';
+import accessReducer from './accessReducer';
 
 const rootReducer = combineReducers({
    productReducer,
@@ -11,6 +13,8 @@ const rootReducer = combineReducers({
    cartReducer,
    sliderReducer,
    commentReducer,
+   shopReducer,
+   accessReducer,
 });
 
 export default rootReducer;
