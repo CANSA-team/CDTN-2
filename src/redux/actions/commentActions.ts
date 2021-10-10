@@ -1,12 +1,12 @@
 import { Dispatch } from "redux";
-import { SliderModel } from "../models";
+import { CommentModel } from "../models";
 import  axios  from 'axios';
 import {  CommentActionType } from "../action-types";
 import {cansa} from "../../consts/Selector";
 
 export interface GetComment{
     readonly type: CommentActionType.GET_ALL_COMMENT,
-    payload?: [SliderModel]
+    payload?: [CommentModel]
 }
 
 export interface CommentErrorAction{

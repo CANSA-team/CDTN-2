@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Landing from '../screens/Landing';
 import Home from './../screens/Home';
 import Cart from '../screens/Cart';
+import Shop from '../screens/Shop';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Account from './../screens/Account';
 import Categories from '../screens/Categories';
@@ -46,6 +47,16 @@ const switchNavigator = createSwitchNavigator({
         })
     },
 
+    shopStack:{
+        screen: createStackNavigator({
+            Shop,
+        }, {
+            defaultNavigationOptions: {
+                headerShown: false
+            }
+        })
+    },
+
     homeStack: createBottomTabNavigator({
         // Home tab Icon
         home: {
@@ -53,6 +64,7 @@ const switchNavigator = createSwitchNavigator({
                 Home: Home,
                 ProductDetail: ProductDetail,
                 Search: Search,
+                Shop: Shop,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

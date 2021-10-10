@@ -7,6 +7,8 @@ const initialState: ProductState = {
     productNew: {} as [ProductModel],
     productHot: {} as [ProductModel],
     productCategory: {} as [ProductModel],
+    productSearch: {} as [ProductModel],
+    productShop: {} as [ProductModel],
     product: {} as ProductModel,
     error: undefined
 }
@@ -37,6 +39,16 @@ const productReducer = (state: ProductState = initialState, action: ProductActio
             return {
                 ...state,
                 error: action.payload
+            }
+        case ProductActionType.GET_PRODUCT_SEARCH:
+            return {
+                ...state,
+                productSearch: action.payload
+            }
+        case ProductActionType.GET_PRODUCT_SHOP:
+            return {
+                ...state,
+                productShop: action.payload
             }
         default:
             return state;

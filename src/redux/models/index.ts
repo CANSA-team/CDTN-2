@@ -32,6 +32,8 @@ export interface ProductState{
     productNew?: [ProductModel];
     productHot?: [ProductModel];
     productCategory?: [ProductModel];
+    productSearch?: [ProductModel];
+    productShop?: [ProductModel];
     product?: ProductModel;
     error: string | undefined;
 }
@@ -140,5 +142,15 @@ export interface SliderState{
 
 export interface CommentState{
     comment?: [CommentModel];
+    error: string | undefined;
+}
+
+export interface ShopState{
+    info?: ShopModel;
+    error: string | undefined;
+}
+
+export interface AccessState{
+    message?: any;
     error: string | undefined;
 }

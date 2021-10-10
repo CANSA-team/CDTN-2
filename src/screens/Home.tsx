@@ -58,7 +58,7 @@ export default function Home() {
     }
 
     const searchProduct = (data: any) => {
-        navigate('Search', { data })
+        navigate('Search', { data:data,title:'Tìm kiếm' })
     }
 
     return (

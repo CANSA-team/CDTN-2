@@ -5,8 +5,12 @@ import COLORS from './../consts/Colors';
 
 export default function CategorySub(props:any) {
     const item:CategoryModel = props.item;
+    const onTap:Function = props.onTap;
     return (
         <TouchableOpacity
+        onPress={()=>{
+            onTap(item.category_id,item.category_name);
+        }}
             style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}
             activeOpacity={0.8}
             >

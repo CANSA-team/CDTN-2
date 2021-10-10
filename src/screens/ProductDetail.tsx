@@ -78,7 +78,7 @@ export default function ProductDetail(props: any) {
                         {product && <Text style={styles.title}>{product.product_title}</Text>}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
-                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 26 }}>{product.product_price * (100 - product.product_sale) / 100}</Text>}
+                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 26 }}>{product.product_price! * (100 - product.product_sale!) / 100}</Text>}
                                 {product && <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 23 }}>{product.product_price}</Text>}
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -87,8 +87,10 @@ export default function ProductDetail(props: any) {
                                 }}>
                                     <Text style={styles.btnBuy}>Add Cart</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={styles.btnBuy}>Buy</Text>
+                                <TouchableOpacity onPress={() => {
+                                    navigate('Shop', { shop_id: product!.shop_id});
+                                }}>
+                                    <Text style={styles.btnBuy}>Shop</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -105,7 +107,7 @@ export default function ProductDetail(props: any) {
                         <RatingComment />
                         <View>
                             {
-                                comment && comment!.map((comment: CommentModel, index: number) =>
+                                comment && comment.map((comment: CommentModel, index: number) =>
                                     <View key={index}>
                                         <Comment starNumber={comment.comment_rating} user={comment.user} comment_content={comment.comment_content} />
                                     </View>

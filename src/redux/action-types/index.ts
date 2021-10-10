@@ -3,6 +3,8 @@ export enum ProductActionType{
     GET_PRODUCT_HOT = 'GET_PRODUCT_HOT',
     GET_PRODUCT_CATEGORY = 'GET_PRODUCT_CATEGORY',
     GET_PRODUCT = 'GET_PRODUCT',
+    GET_PRODUCT_SEARCH = 'GET_PRODUCT_SEARCH',
+    GET_PRODUCT_SHOP = 'GET_PRODUCT_SHOP',
     ON_PRODUCT_ERROR = 'ON_PRODUCT_ERROR'
 }
 
@@ -11,7 +13,6 @@ export enum CartActionType{
     ADD_TO_CART = 'ADD_TO_CART',
     ON_CART_ERROR = 'ON_CART_ERROR'
 }
-
 
 export enum CategoryActionType{
     GET_ALL_CATEGORY = 'GET_ALL_CATEGORY',
@@ -26,4 +27,14 @@ export enum SliderActionType{
 export enum CommentActionType{
     GET_ALL_COMMENT = 'GET_ALL_COMMENT',
     ON_COMMENT_ERROR = 'ON_COMMENT_ERROR'
+}
+
+export enum ShopActionType{
+    GET_SHOP_INFO = 'GET_SHOP_INFO',
+    ON_SHOP_ERROR = 'ON_SHOP_ERROR'
+}
+
+export enum AccessActionType{
+    UPDATE_ACCESS_INFO = 'UPDATE_ACCESS_INFO',
+    ON_ACCESS_ERROR = 'ON_ACCESS_ERROR'
 }
