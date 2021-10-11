@@ -17,7 +17,6 @@ export default function Home() {
     const [catergoryIndex, setCategoryIndex] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(true);
-    const { navigate } = useNavigation();
     const productState = useSelector((state: State) => state.productReducer);
     const sliderState = useSelector((state: State) => state.sliderReducer);
     const categoryState = useSelector((state: State) => state.categoryReducer);
@@ -26,6 +25,7 @@ export default function Home() {
     const { slider } = sliderState;
     const [_slider, _setSlider] = useState<string[]>([]);
     const dispatch = useDispatch();
+    const { navigate } = useNavigation();
 
     useEffect(() => {
         dispatch(getProductsNew());

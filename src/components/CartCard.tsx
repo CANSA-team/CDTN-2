@@ -1,39 +1,49 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import NumericInput from 'react-native-numeric-input';
 import COLORS from './../consts/Colors';
 import { SlugStr } from './../consts/Selector';
-import { ProductModel } from '../redux';
+import { ProductModel, State } from '../redux';
 import { borderWidth } from 'styled-system';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function CartCard(props: any) {
-    let [qty, setNumber] = useState<number>(props.qty);
-    const [product, setProduct] = useState<ProductModel>(props.product)
+    let [qty, setNumber] = useState<number>();
+    const [product, setProduct] = useState<ProductModel>();
+    const cartState = useSelector((state: State) => state.cartReducer);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setNumber(props.qty);
+        setProduct(props.product);
+    },[]);
+
+    useEffect(() => {
+        setNumber(props.qty);
+        setProduct(props.product);
+    },[cartState])
+
     const onTap_btn = (value: number) => {
-        (async () => {
-            props.onTap(product.product_id, value).then(() => {
-                setNumber(value)
-            });
-        }
-        )();
+        props.onTap(product.product_id, value);
     }
 
     return (
+        product ?
         <View style={styles.container}>
             <View style={{ flex: 1 }}>
                 <Image style={styles.img} source={{ uri: product.product_avatar }} />
             </View>
             <View style={styles.productContainer}>
                 <View style={styles.productDetal}>
-                    <Text style={styles.productName}>{SlugStr(product.product_title, 22)}</Text>
+                    <Text style={styles.productName}>{ product && SlugStr( product.product_title, 22)}</Text>
                     <TouchableOpacity style={styles.iconDelete} onPress={() => {
                         onTap_btn(0);
                     }}>
                         <MaterialIcons name="delete" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
-                <Text style={{ fontSize: 16, color: '#222' }}>{SlugStr(product.product_description, 62)}</Text>
+                <Text style={{ fontSize: 16, color: '#222' }}>{SlugStr(product && product.product_description, 62)}</Text>
                 <View style={styles.productPrice}>
                     <TouchableOpacity
                         style={{
@@ -74,6 +84,8 @@ export default function CartCard(props: any) {
                 </View>
             </View>
         </View>
+        :
+        <View></View>
     )
 }
 const styles = StyleSheet.create({

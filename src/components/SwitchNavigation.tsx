@@ -20,6 +20,8 @@ import Login from '../screens/Auth/Login';
 import EmailOTPscreen from '../screens/Auth/EmailOTPscreen';
 import OTPscreen from '../screens/Auth/OTPscreen';
 import ChangePassword from '../screens/Auth/ChangePassword';
+import OderDetail from '../screens/User/OderDetail';
+import Complaint from '../screens/Complaint';
 
 const DIMENS = {
     iconSize : 30,
@@ -69,6 +71,7 @@ const switchNavigator = createSwitchNavigator({
                 ProductDetail: ProductDetail,
                 Search: Search,
                 Shop: Shop,
+                Complaint:Complaint,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -128,7 +131,8 @@ const switchNavigator = createSwitchNavigator({
                 Account: Account,
                 Profile:Profile,
                 Checkout:Checkout,
-                Ordered:Ordered
+                Ordered:Ordered,
+                OderDetail:OderDetail,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

@@ -17,6 +17,11 @@ const cartReducer = (state: CartState = initialState, action: CartActions) => {
                 ...state,
                 cart: action.payload
             }
+        case CartActionType.UPDATE_CART:
+            return {
+                ...state,
+                cart: action.payload
+            }
         case CartActionType.ADD_TO_CART:
             return {
                 ...state,

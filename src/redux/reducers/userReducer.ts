@@ -6,7 +6,7 @@ import { CommentState, CommentModel, UserStage,UserModel } from "../models";
 
 const initialState: UserStage = {
     check: false,
-    userInfor: {} as UserModel,
+    userInfor: undefined,
     error: undefined
 }
 

@@ -101,7 +101,9 @@ export class CartItemModel {
  */
 export class CartModel{
     cart?:[CartItemModel];
-    price?: number;
+    sub_price?: number;
+    ship?: number;
+    total_price?: number;
 }
 export interface CartState{
     cart?: CartModel;
@@ -128,7 +130,16 @@ export class OderModel{
     oder_phone?: string;
     oder_date?: Date;
     oder_customer?: number;
+    product_oder?:OderItemModel[];
     status?: number;
+}
+
+
+
+export interface OderState{
+    status?: string;
+    oderList?: OderModel;
+    error: string | undefined;
 }
 
 export interface CategoryState{
@@ -168,6 +179,11 @@ export interface userModel{
 
 export interface UserStage{
     check: boolean;
-    userInfor: UserModel;
+    userInfor?: UserModel;
+    error: string | undefined;
+}
+
+export interface ComplaintStage{
+    status?: string;
     error: string | undefined;
 }
