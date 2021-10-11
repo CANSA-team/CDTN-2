@@ -5,14 +5,19 @@ import { ProductModel, ProductState, CartModel, CartState } from "../models";
 
 
 const initialState: CartState = {
-    cart: {} as CartModel,
-    status: '',
+    cart: undefined,
+    status: undefined,
     error: undefined
 }
 
 const cartReducer = (state: CartState = initialState, action: CartActions) => {
     switch (action.type) {
         case CartActionType.GET_ALL_CART:
+            return {
+                ...state,
+                cart: action.payload
+            }
+        case CartActionType.UPDATE_CART:
             return {
                 ...state,
                 cart: action.payload

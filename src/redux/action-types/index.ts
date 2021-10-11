@@ -11,6 +11,7 @@ export enum ProductActionType{
 export enum CartActionType{
     GET_ALL_CART = 'GET_ALL_CART',
     ADD_TO_CART = 'ADD_TO_CART',
+    UPDATE_CART = 'UPDATE_CART',
     ON_CART_ERROR = 'ON_CART_ERROR'
 }
 
@@ -26,6 +27,7 @@ export enum SliderActionType{
 
 export enum CommentActionType{
     GET_ALL_COMMENT = 'GET_ALL_COMMENT',
+    ADD_COMMENT ='ADD_COMMENT',
     ON_COMMENT_ERROR = 'ON_COMMENT_ERROR'
 }
 
@@ -37,4 +39,21 @@ export enum ShopActionType{
 export enum AccessActionType{
     UPDATE_ACCESS_INFO = 'UPDATE_ACCESS_INFO',
     ON_ACCESS_ERROR = 'ON_ACCESS_ERROR'
+}
+
+export enum UserActionType{
+    CHECK_LOGIN = 'CHECK_LOGIN',
+    GET_UER_INFO = 'GET_UER_INFO',
+    ON_LOGIN_ERROR = 'ON_LOGIN_ERROR'
+}
+
+export enum OderActionType{
+    ADD_ORDER = 'ADD_ORDER',
+    GET_ALL_ORDER = 'GET_ALL_ORDER',
+    ON_ORDER_ERROR = 'ON_ORDER_ERROR'
+}
+
+export enum CommplaintActionType{
+    ADD_COMPLAINT ='ADD_COMPLAINT',
+    ON_COMPLAINT_ERROR = 'ON_COMPLAINT_ERROR'
 }

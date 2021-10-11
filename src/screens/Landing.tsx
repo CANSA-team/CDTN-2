@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet,Image } from 'react-native';
+import { State } from '../redux';
 import { useNavigation } from '../utils/useNavigation';
 import COLORS from '../consts/Colors';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../redux';
 import { updateAccess } from '../redux/actions/accessActions';
 
 export default function Lauding(){
     const accessState = useSelector((state: State) => state.accessReducer);
+
     const { navigate } = useNavigation();
     const { message } = accessState;
     const dispatch = useDispatch();
@@ -18,8 +20,10 @@ export default function Lauding(){
 
 
     useEffect(()=>{
+
         if(message != ''){
             console.log(message);
+
             navigate('homeStack')
         }
     },[accessState]);

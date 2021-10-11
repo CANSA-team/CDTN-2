@@ -6,6 +6,9 @@ import commentReducer from './commentReducer';
 import cartReducer from './cartReducer';
 import shopReducer from './shopReducer';
 import accessReducer from './accessReducer';
+import userReducer from './userReducer';
+import oderReducer from './oderReducer';
+import complaintReducer from './complaintReducer';
 
 const rootReducer = combineReducers({
    productReducer,
@@ -15,6 +18,9 @@ const rootReducer = combineReducers({
    commentReducer,
    shopReducer,
    accessReducer,
+   userReducer,
+   oderReducer,
+   complaintReducer,
 });
 
 export default rootReducer;

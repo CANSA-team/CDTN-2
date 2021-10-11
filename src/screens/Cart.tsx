@@ -6,100 +6,83 @@ import COLORS from '../consts/Colors';
 import { SafeAreaView } from 'react-navigation';
 import HeaderTitle from '../components/HeaderTitle';
 import { useNavigation } from '../utils/useNavigation';
-import { CartItemModel, CartModel } from '../redux';
+import { CartItemModel, CartModel, State } from '../redux';
 import axios from 'axios';
 import { cansa } from '../consts/Selector';
 import { withNavigationFocus } from 'react-navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCart, updateCart } from '../redux/actions/cartActions';
 
-class _cart {
-    cart?: CartModel;
-    constructor() { }
-}
 
-let check = false;
+let check = true;
 
 const Cart = (props: any) => {
     const { navigate } = useNavigation();
-    let [cart, setCart] = useState<_cart>(new _cart());
     const { navigation, route } = props;
+    const cartState = useSelector((state: State) => state.cartReducer);
+    const { cart } = cartState;
+    let [cartItem,setCartItem] = useState([]);
+    const dispatch = useDispatch();
+
     const onTapCheckout = () => {
         navigate('Checkout')
     }
 
-    const getCart = async () => {
-        await axios.get(`${cansa[1]}/api/cart/all/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const data: CartModel = response.data.data;
-            let temp_cart = new _cart();
-            temp_cart.cart = data;
-            cart = temp_cart;
-        })
-    }
-
-    if (navigation.isFocused && !check) {
-        (async () => {
-            const _getCart: Promise<any> = getCart();
-            await Promise.all([_getCart]).then(() => {
-                setCart(cart);
-                check = true;
-            })
-        })()
-    }else {
+    if(check){
+        dispatch(getCart());
         check = false;
+    }else{
+        check = true;
     }
 
-    const onTap = async (id: number, qty: number) => {
-        await axios.get(`${cansa[1]}/api/cart/update/${id}/${qty}/e4611a028c71342a5b083d2cbf59c494`).then((response) => {
-            const data: CartModel = response.data.data;
-            let temp_cart = new _cart();
-            if(data){
-                temp_cart.cart = data;
-            }
-            setCart(temp_cart);
-        })
+    const onTap = (id: number, qty: number) => {
+        dispatch(updateCart(id,qty));
     }
 
     return (
         <SafeAreaView style={styles.container}>
             {
-                cart.cart ?
-                    (<View style={styles.container}>
-                        <HeaderTitle title={'giỏ hàng'} />
+                cart ?
+                    (
+                        <View style={styles.container}>
+                            <HeaderTitle title={'Giỏ Hàng'} />
 
-                        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                            <View style={{ flex: 1, marginBottom: 10 }}>
-                                <ScrollView>
-                                    {
-                                        cart.cart.cart && cart.cart.cart.map((cart: CartItemModel, index: number) => {
-                                            return (
-                                                < View key={index} >
-                                                    <CartCard qty={cart.qty} product={cart.product} onTap={onTap} />
-                                                </View>)
-                                        })
-                                    }
-                                </ScrollView>
-                            </View>
-                            <View style={styles.bill}>
-                                <Text style={styles.txtTotal}>Totals</Text>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                    <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
-                                    <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.cart && cart.cart.price}đ</Text>
+                            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                                <View style={{ flex: 1, marginBottom: 10 }}>
+                                    <ScrollView>
+                                        {
+                                            cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
+                                                return (
+                                                    < View key={index} >
+                                                        <CartCard qty={cart.qty} product={cart.product} onTap={onTap} />
+                                                    </View>)
+                                            })
+                                        }
+                                    </ScrollView>
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
-                                    <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
-                                    <Text style={[styles.priceTitle, { fontSize: 23 }]}>20.000đ</Text>
+                                <View style={styles.bill}>
+                                    <Text style={styles.txtTotal}>Totals</Text>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.sub_price}đ</Text>
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.ship}đ</Text>
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart && cart.total_price}đ</Text>
+                                    </View>
+                                    <Button
+                                        onPress={onTapCheckout}
+                                        title="CHECK OUT"
+                                        buttonStyle={styles.btnCheckOut}
+                                    />
                                 </View>
-                                <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                    <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
-                                    <Text style={[styles.priceTitle, { fontSize: 25 }]}>220.000đ</Text>
-                                </View>
-                                <Button
-                                    onPress={onTapCheckout}
-                                    title="CHECK OUT"
-                                    buttonStyle={styles.btnCheckOut}
-                                />
-                            </View>
-                        </ScrollView>
-                    </View >)
+                            </ScrollView>
+                        </View >
+                    )
                     :
                     (
                         <SafeAreaView style={[styles.container]}>

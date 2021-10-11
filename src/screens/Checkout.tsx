@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import HeaderTitle from '../components/HeaderTitle'
-import { SafeAreaView, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView, Text, View, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Button } from 'react-native-elements';
 import COLORS from '../consts/Colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '../utils/useNavigation';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../redux';
+import { checkLogin, getUserInfo } from '../redux/actions/userActions';
+import { addOder } from '../redux/actions/oderActions';
 
+let check = false;
 
 export default function Checkout(props: any) {
     let temp = [
@@ -19,34 +24,67 @@ export default function Checkout(props: any) {
             label: " "
         }
     ]
+    const userState = useSelector((state: State) => state.userReducer);
+    const { userInfor } = userState;
+    const dispatch = useDispatch();
+
     const [thanhPho, setThanhPho] = useState(temp);
     const [quanHuyen, setQuanHuyen] = useState(temp);
     const [phuongXa, setPhuongXa] = useState(temp);
+    const oderState = useSelector((state: State) => state.oderReducer);
+    const { status } = oderState;
+
+    const cartState = useSelector((state: State) => state.cartReducer);
+    const { cart } = cartState;
 
     const [_thanhPho, _setThanhPho] = useState('');
     const [_quanHuyen, _setQuanHuyen] = useState('');
     const [_phuongXa, _setPhuongXa] = useState('');
     const [_soNha, _setSoNha] = useState('');
+    const [_sdt, _setsdt] = useState('');
 
     const { navigation, route } = props;
     const { navigate } = useNavigation();
 
     const onTapCheckoutSuccess = () => {
-        if (_quanHuyen && _thanhPho && _soNha) {
-            let diaChi = `${_soNha},${_phuongXa && _phuongXa.name + ','}${_quanHuyen.name},${_thanhPho.name}`;
-            console.log(diaChi);
-            navigate('CheckoutSuccess')
-        }
-        else {
+        check = true;
+        if(userInfor){
+            if (_quanHuyen && _thanhPho && _soNha && /(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(_sdt)) {
+                let diaChi = `${_soNha},${_phuongXa && _phuongXa.name + ','}${_quanHuyen.name},${_thanhPho.name}`;
+                let user_id = userInfor.user_id;
+                dispatch(addOder(diaChi, _sdt, user_id));
+            }
+            else {
+                Alert.alert(
+                    "Thông báo!",
+                    "Điền đầy đủ thông tin!",
+                    [
+                        { text: "OK" }
+                    ]
+                );
+            }
+        }else{
             Alert.alert(
-                "Warning!!!",
-                "Checkout Fail!!!",
+                "Thông báo!",
+                "Chưa đăng nhập!",
                 [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK" }
                 ]
             );
         }
     }
+
+    useEffect(() => {
+        if(status && check){
+            Alert.alert(
+                "Thông báo!",
+                status,
+                [
+                    { text: "OK" , onPress:()=>{navigate('CheckoutSuccess');check=false;}}
+                ]
+            );
+        }
+    },[oderState]);
 
     useEffect(() => {
         (async function () {
@@ -60,6 +98,7 @@ export default function Checkout(props: any) {
                     setThanhPho(tempArr);
                 })
         })();
+        dispatch(getUserInfo());
     }, [])
 
 
@@ -73,90 +112,113 @@ export default function Checkout(props: any) {
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.viewTotal}>
-                <Text style={styles.txtTitle}>Tỉnh/Thành phố :</Text>
-                <View style={styles.viewPicker}>
-                    <RNPickerSelect
-                        placeholder={{ label: "Tỉnh/Thành phố", value: { code: 0, name: " " } }}
-                        style={{ ...pickerSelectStyles, placeholder: { color: '#acabab' } }}
-                        onValueChange={(data: any) => {
-                            data &&
-                                axios.get('https://api.mysupership.vn/v1/partner/areas/district?province=' + data.code).then((response: any) => {
+            <ScrollView>
+                <View style={styles.viewTotal}>
+                    <Text style={styles.txtTitle}>Tỉnh/Thành phố :</Text>
+                    <View style={styles.viewPicker}>
+                        <RNPickerSelect
+                            placeholder={{ label: "Tỉnh/Thành phố", value: { code: 0, name: " " } }}
+                            style={{ ...pickerSelectStyles, placeholder: { color: '#acabab' } }}
+                            onValueChange={(data: any) => {
+                                data &&
+                                    axios.get('https://api.mysupership.vn/v1/partner/areas/district?province=' + data.code).then((response: any) => {
 
-                                    let { results } = response.data;
+                                        let { results } = response.data;
 
-                                    let tempArr = results.map((item: any) => {
-                                        return { label: item.name, value: item };
-                                    });
+                                        let tempArr = results.map((item: any) => {
+                                            return { label: item.name, value: item };
+                                        });
 
-                                    setQuanHuyen(tempArr)
+                                        setQuanHuyen(tempArr)
 
-                                    _setThanhPho(data);
-                                })
-                        }}
-                        items={thanhPho}
-                    />
+                                        _setThanhPho(data);
+                                    })
+                            }}
+                            items={thanhPho}
+                        />
+                    </View>
                 </View>
-            </View>
 
-            <View style={styles.viewTotal}>
-                <Text style={styles.txtTitle}>Quận/Huyện :</Text>
-                <View style={styles.viewPicker}>
-                    <RNPickerSelect
-                        placeholder={{ label: "Quận/Huyện", value: { code: 0, name: " " } }}
-                        style={{ ...pickerSelectStyles, placeholder: { color: '#acabab' } }}
-                        onValueChange={(data) => {
-                            data &&
-                                axios.get('https://api.mysupership.vn/v1/partner/areas/commune?district=' + data.code).then((response: any) => {
+                <View style={styles.viewTotal}>
+                    <Text style={styles.txtTitle}>Quận/Huyện :</Text>
+                    <View style={styles.viewPicker}>
+                        <RNPickerSelect
+                            placeholder={{ label: "Quận/Huyện", value: { code: 0, name: " " } }}
+                            style={{ ...pickerSelectStyles, placeholder: { color: '#acabab' } }}
+                            onValueChange={(data) => {
+                                data &&
+                                    axios.get('https://api.mysupership.vn/v1/partner/areas/commune?district=' + data.code).then((response: any) => {
 
-                                    let { results } = response.data;
+                                        let { results } = response.data;
 
-                                    let tempArr = results.map((item: any) => {
-                                        return { label: item.name, value: item };
-                                    });
+                                        let tempArr = results.map((item: any) => {
+                                            return { label: item.name, value: item };
+                                        });
 
-                                    setPhuongXa(tempArr);
+                                        setPhuongXa(tempArr);
 
-                                    _setQuanHuyen(data);
-                                })
+                                        _setQuanHuyen(data);
+                                    })
 
-                        }}
-                        items={quanHuyen}
-                    />
+                            }}
+                            items={quanHuyen}
+                        />
+                    </View>
                 </View>
-            </View>
 
-            <View style={styles.viewTotal}>
-                <Text style={styles.txtTitle}>Phường/Xã :</Text>
-                <View style={styles.viewPicker}>
-                    <RNPickerSelect
-                        placeholder={{ label: "Phường/Xã", value: { code: 0, name: " " } }}
-                        style={{ ...pickerSelectStyles, placeholder: { color: '#acabab' } }}
-                        onValueChange={(data) =>
-                            data && _setPhuongXa(data)
-                        }
-                        items={phuongXa}
-                    />
-                </View>
-            </View>
+                <View style={styles.viewTotal}>
+                    <Text style={styles.txtTitle}>Phường/Xã :</Text>
 
-            <View style={styles.viewTotal}>
-                <Text style={styles.txtTitle}>Thôn/Xóm/Số nhà :</Text>
-                <View style={styles.textAreaContainer} >
-                    <TextInput
-                        style={styles.textArea}
-                        underlineColorAndroid="transparent"
-                        placeholder="Thôn/Xóm/Số nhà"
-                        placeholderTextColor="#acabab"
-                        numberOfLines={10}
-                        maxLength={255}
-                        multiline={true}
-                        onChangeText={(text) => {
-                            _setSoNha(text);
-                        }}
-                    />
+                    <View style={styles.viewPicker}>
+                        <RNPickerSelect
+                            placeholder={{ label: "Phường/Xã", value: { code: 0, name: " " } }}
+                            style={{ ...pickerSelectStyles, placeholder: { color: '#acabab' } }}
+                            onValueChange={(data) =>
+                                data && _setPhuongXa(data)
+                            }
+                            items={phuongXa}
+                        />
+                    </View>
                 </View>
-            </View>
+
+                <View style={styles.viewTotal}>
+                    <Text style={styles.txtTitle}>Thôn/Xóm/Số nhà :</Text>
+                    <View style={styles.textAreaContainer} >
+                        <TextInput
+
+                            style={styles.textArea}
+                            underlineColorAndroid="transparent"
+                            placeholder="Thôn/Xóm/Số nhà"
+                            placeholderTextColor="#acabab"
+                            numberOfLines={10}
+                            maxLength={255}
+                            multiline={true}
+                            onChangeText={(text) => {
+                                _setSoNha(text);
+                            }}
+                        />
+                    </View>
+
+                    <Text style={styles.txtTitle}>Số điện thoại :</Text>
+                    <View style={styles.textAreaContainer} >
+                        <TextInput
+
+                            style={styles.textArea}
+                            underlineColorAndroid="transparent"
+                            placeholder="Số điện thoại"
+                            placeholderTextColor="#acabab"
+                            numberOfLines={10}
+                            maxLength={255}
+                            multiline={true}
+                            keyboardType="numeric"
+                            onChangeText={(text) => {
+                                _setsdt(text);
+                            }}
+                        />
+                    </View>
+                </View>
+
+            </ScrollView>
 
             <View style={[styles.viewTotal, styles.method]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
@@ -165,10 +227,9 @@ export default function Checkout(props: any) {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.txtPay}>Tổng tiền : </Text>
-                    <Text style={styles.txtPrice}>1.000.000đ</Text>
+                    <Text style={styles.txtPrice}>{cart.total_price}đ</Text>
                 </View>
             </View>
-
             <View style={styles.viewTotal}>
                 <Button
                     onPress={onTapCheckoutSuccess}
@@ -176,7 +237,6 @@ export default function Checkout(props: any) {
                     buttonStyle={styles.btnContinute}
                 />
             </View>
-
         </SafeAreaView>
     )
 }
