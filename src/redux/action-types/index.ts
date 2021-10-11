@@ -38,3 +38,9 @@ export enum AccessActionType{
     UPDATE_ACCESS_INFO = 'UPDATE_ACCESS_INFO',
     ON_ACCESS_ERROR = 'ON_ACCESS_ERROR'
 }
+
+export enum UserActionType{
+    CHECK_LOGIN = 'CHECK_LOGIN',
+    GET_UER_INFO = 'GET_UER_INFO',
+    ON_LOGIN_ERROR = 'ON_LOGIN_ERROR'
+}

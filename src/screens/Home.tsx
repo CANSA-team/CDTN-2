@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'styled-system';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
 import { State, getProductsHot, getProductsNew, getProductsCategory, getSlider } from '../redux';
 import { getCategory } from '../redux/actions/categoryActions';
+import { getUserInfo } from '../redux/actions/userActions';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
@@ -33,7 +35,7 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        if (productHot!.length > 0 && productNew!.length > 0 && productCategory!.length > 0 && slider!.length > 0 && isLoadingCategory) {
+        if (productHot && productNew && productCategory && slider && isLoadingCategory) {
             let tempArr: any[] = [];
             for (const iterator of slider!) {
                 tempArr.push(iterator.slider_image)
@@ -47,7 +49,7 @@ export default function Home() {
     }, [productState, sliderState])
 
     useEffect(() => {
-        if (categories!.length > 0 && productCategory) {
+        if (categories && !productCategory) {
             dispatch(getProductsCategory(categories![0].category_id!));
         }
     }, [categoryState])
@@ -58,7 +60,7 @@ export default function Home() {
     }
 
     const searchProduct = (data: any) => {
-        navigate('Search', { data:data,title:'Tìm kiếm' })
+        navigate('Search', { data: data, title: 'Tìm kiếm' })
     }
 
     return (
@@ -100,7 +102,7 @@ export default function Home() {
                                         (<View style={styles.container}>
                                             <ActivityIndicator size="large" color="#00ff00" />
                                         </View>) :
-                                    productCategory && productCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
+                                        productCategory && productCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
 
                                 }
                             </View>

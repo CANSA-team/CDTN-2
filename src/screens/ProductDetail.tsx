@@ -33,14 +33,14 @@ export default function ProductDetail(props: any) {
 
 
     useEffect(() => {
-        if (product && comment!.length > 0) {
+        if (product) {
             setIsLoading(true);
         }
     }, [productState, commentState])
 
 
     useEffect(() => {
-        if(status != ''){
+        if(status){
             const message = (status === 'success') ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
             Alert.alert(
                 "Thông báo",

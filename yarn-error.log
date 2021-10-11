@@ -1,11 +1,11 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add redux react-redux redux-thunk @types\/redux-thunk
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
 
 PATH: 
-  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Users\Administrator\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Administrator\AppData\Roaming\npm;C:\Users\Administrator\AppData\Local\Android\Sdk\platform-tools;
+  C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Users\natsw\AppData\Local\Microsoft\WindowsApps;C:\Users\natsw\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\natsw\AppData\Roaming\npm;C:\Users\natsw\AppData\Local\Android\Sdk\platform-tools;C:\Users\natsw\AppData\Local\Yarn\bin;C:\Users\natsw\.dotnet\tools
 
 Yarn version: 
-  1.22.11
+  1.22.5
 
 Node version: 
   14.17.6
@@ -14,17 +14,12 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types/%2fredux-thunk: Request "https://registry.yarnpkg.com/@types/%2fredux-thunk" returned a 405
-      at Request.params.callback [as _callback] (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:67001:18)
-      at Request.self.callback (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140763:22)
-      at Request.emit (events.js:400:28)
-      at Request.<anonymous> (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141735:10)
-      at Request.emit (events.js:400:28)
-      at IncomingMessage.<anonymous> (C:\Users\Administrator\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141657:12)
-      at Object.onceWrapper (events.js:519:28)
-      at IncomingMessage.emit (events.js:412:35)
-      at endReadableNT (internal/streams/readable.js:1317:12)
-      at processTicksAndRejections (internal/process/task_queues.js:82:21)
+  SyntaxError: C:\Users\natsw\Desktop\Mobile\CDTN-2\package.json: Unexpected token < in JSON at position 1084
+      at JSON.parse (<anonymous>)
+      at C:\Program Files (x86)\Yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Program Files (x86)\Yarn\lib\cli.js:310:30)
+      at C:\Program Files (x86)\Yarn\lib\cli.js:321:13
 
 npm manifest: 
   {
@@ -37,11 +32,18 @@ npm manifest:
       "eject": "expo eject"
     },
     "dependencies": {
+      "@fortawesome/fontawesome-svg-core": "^1.2.36",
+      "@fortawesome/free-solid-svg-icons": "^5.15.4",
+      "@fortawesome/react-native-fontawesome": "^0.2.7",
+      "@react-native-community/cookies": "^5.0.1",
+      "@react-native-community/datetimepicker": "^3.5.2",
       "@react-native-community/masked-view": "0.1.10",
-      "@react-native-picker/picker": "^2.1.0",
+      "@react-native-cookies/cookies": "^6.0.11",
       "@types/react-native-vector-icons": "^6.4.8",
+      "@types/redux-thunk": "^2.1.0",
       "axios": "^0.21.4",
       "expo": "~42.0.1",
+      "expo-facebook": "~11.3.1",
       "expo-image-picker": "^10.2.3",
       "expo-status-bar": "~1.0.4",
       "moment": "^2.29.1",
@@ -49,6 +51,11 @@ npm manifest:
       "react": "16.13.1",
       "react-dom": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+      "react-native-confirmation-code-field": "^6.4.0",
+  <<<<<<< HEAD
+      "react-native-cookies": "^3.3.0",
+  =======
+  >>>>>>> Hoang_Anh
       "react-native-elements": "^3.4.2",
       "react-native-gesture-handler": "~1.10.2",
       "react-native-numeric-input": "^1.9.0",
@@ -63,11 +70,16 @@ npm manifest:
       "react-navigation": "^4.4.4",
       "react-navigation-stack": "^2.10.4",
       "react-navigation-tabs": "^2.11.1",
+      "react-redux": "^7.2.5",
+      "redux": "^4.1.1",
+      "redux-thunk": "^2.3.0",
+      "sfcookies": "^1.0.2",
       "styled-components": "^5.3.1",
       "styled-system": "^5.1.5"
     },
     "devDependencies": {
       "@babel/core": "^7.9.0",
+      "@babel/plugin-proposal-export-namespace-from": "^7.14.5",
       "@types/react": "~16.9.35",
       "@types/react-native": "~0.63.2",
       "typescript": "~4.0.0"
@@ -1166,7 +1178,7 @@ Lockfile:
       pirates "^4.0.0"
       source-map-support "^0.5.16"
   
-  "@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.6.2", "@babel/runtime@^7.8.4":
+  "@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.6.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
     version "7.15.4"
     resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
     integrity sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==
@@ -1424,6 +1436,33 @@ Lockfile:
     integrity sha512-/Ro85goRZnCojzxOegANFYL0LaDIpdPjAukR7xMTjOtRx+3yyjR0ifGTOW3/Kjhmab3t6GnyHBYWZSudxEOxPA==
     dependencies:
       tslib "^2.1.0"
+  
+  "@fortawesome/fontawesome-common-types@^0.2.36":
+    version "0.2.36"
+    resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.36.tgz#b44e52db3b6b20523e0c57ef8c42d315532cb903"
+    integrity sha512-a/7BiSgobHAgBWeN7N0w+lAhInrGxksn13uK7231n2m8EDPE3BMCl9NZLTGrj9ZXfCmC6LM0QLqXidIizVQ6yg==
+  
+  "@fortawesome/fontawesome-svg-core@^1.2.36":
+    version "1.2.36"
+    resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.36.tgz#4f2ea6f778298e0c47c6524ce2e7fd58eb6930e3"
+    integrity sha512-YUcsLQKYb6DmaJjIHdDWpBIGCcyE/W+p/LMGvjQem55Mm2XWVAP5kWTMKWLv9lwpCVjpLxPyOMOyUocP1GxrtA==
+    dependencies:
+      "@fortawesome/fontawesome-common-types" "^0.2.36"
+  
+  "@fortawesome/free-solid-svg-icons@^5.15.4":
+    version "5.15.4"
+    resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.15.4.tgz#2a68f3fc3ddda12e52645654142b9e4e8fbb6cc5"
+    integrity sha512-JLmQfz6tdtwxoihXLg6lT78BorrFyCf59SAwBM6qV/0zXyVeDygJVb3fk+j5Qat+Yvcxp1buLTY5iDh1ZSAQ8w==
+    dependencies:
+      "@fortawesome/fontawesome-common-types" "^0.2.36"
+  
+  "@fortawesome/react-native-fontawesome@^0.2.7":
+    version "0.2.7"
+    resolved "https://registry.yarnpkg.com/@fortawesome/react-native-fontawesome/-/react-native-fontawesome-0.2.7.tgz#2fea96c4afeb19cdab641b8fbb6022a8e6ee4aec"
+    integrity sha512-H3FjE01PDKGTZW+pXMsaCklT0FADaHo4D+Ni63BSXNQclmFgKj2Xlky37cx0s1BaIIw1geuHcyg0hdFxbACusw==
+    dependencies:
+      humps "^2.0.1"
+      prop-types "^15.7.2"
   
   "@hapi/address@2.x.x":
     version "2.1.4"
@@ -2054,6 +2093,13 @@ Lockfile:
       sudo-prompt "^9.0.0"
       wcwidth "^1.0.1"
   
+  "@react-native-community/datetimepicker@^3.5.2":
+    version "3.5.2"
+    resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.5.2.tgz#8e6feb30f2620e5abdf565d5fe74c0c04edcf6ae"
+    integrity sha512-TWRuAtr/DnrEcRewqvXMLea2oB+YF+SbtuYLHguALLxNJQLl/RFB7aTNZeF+OoH75zKFqtXECXV1/uxQUpA+sg==
+    dependencies:
+      invariant "^2.2.4"
+  
   "@react-native-community/masked-view@0.1.10":
     version "0.1.10"
     resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
@@ -2063,11 +2109,6 @@ Lockfile:
     version "1.16.8"
     resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-1.16.8.tgz#2126ca54d4a5a3e9ea5e3f39ad1e6643f8e4b3d4"
     integrity sha512-pacdQDX6V6EmjF+HoiIh6u++qx4mTK0WnhgUHRc01B+Qt5eoeUwseBqmqfTSXTx/aHDEd6PiIw7UGvKgFoqgFQ==
-  
-  "@react-native-picker/picker@^2.1.0":
-    version "2.1.0"
-    resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.1.0.tgz#1ef22d4e9b2e555d44b43453f51a46d8631f3182"
-    integrity sha512-iJ/QaDrBMBaW6cFuQyR3DXzcn2h7c5O7mGgmNLCBQHTTtLNBZR+Sxogy6YleFPeToNdysG5mTTkXqBmlWHMQqg==
   
   "@react-navigation/core@^3.7.9":
     version "3.7.9"
@@ -2469,6 +2510,14 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.40.tgz#ded0240b6ea1ad7afc1e60374c49087aaea5dbd8"
     integrity sha512-VbjwR1fhsn2h2KXAY4oy1fm7dCxaKy0D+deTb8Ilc3Eo3rc5+5eA4rfYmZaHgNJKxVyI0f6WIXzO2zLkVmQPHA==
   
+  "@types/hoist-non-react-statics@^3.3.0":
+    version "3.3.1"
+    resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
+    integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
+    dependencies:
+      "@types/react" "*"
+      hoist-non-react-statics "^3.3.0"
+  
   "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
     version "2.0.3"
     resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.3.tgz#4ba8ddb720221f432e443bd5f9117fd22cfd4762"
@@ -2548,6 +2597,16 @@ Lockfile:
     dependencies:
       "@types/react" "*"
   
+  "@types/react-redux@^7.1.16":
+    version "7.1.18"
+    resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.18.tgz#2bf8fd56ebaae679a90ebffe48ff73717c438e04"
+    integrity sha512-9iwAsPyJ9DLTRH+OFeIrm9cAbIj1i2ANL3sKQFATqnPWRbg+jEFXyZOKHiQK/N86pNRXbb4HRxAxo0SIX1XwzQ==
+    dependencies:
+      "@types/hoist-non-react-statics" "^3.3.0"
+      "@types/react" "*"
+      hoist-non-react-statics "^3.3.0"
+      redux "^4.0.0"
+  
   "@types/react@*":
     version "17.0.22"
     resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.22.tgz#c80d1d0e87fe953bae3ab273bef451dea1a6291b"
@@ -2564,6 +2623,13 @@ Lockfile:
     dependencies:
       "@types/prop-types" "*"
       csstype "^3.0.2"
+  
+  "@types/redux-thunk@^2.1.0":
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/@types/redux-thunk/-/redux-thunk-2.1.0.tgz#bc2b6e972961831afb82a9bf4f06726e351f9416"
+    integrity sha1-vCtulylhgxr7gqm/TwZybjUflBY=
+    dependencies:
+      redux-thunk "*"
   
   "@types/scheduler@*":
     version "0.16.2"
@@ -3848,6 +3914,14 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/expo-error-recovery/-/expo-error-recovery-2.2.0.tgz#89e5494d97347530dd53cd817d7ac63f07bf8de0"
     integrity sha512-HKbu6VHAlfhoP7y+HaGJwJizoUTY2eBTBHAi1RE7l/r4sc+cAegTmwwqf/3AOR8C7VntDvuQKtW7NZIyA+62KQ==
   
+  expo-facebook@~11.3.1:
+    version "11.3.1"
+    resolved "https://registry.yarnpkg.com/expo-facebook/-/expo-facebook-11.3.1.tgz#acbbecddbe0f041edcdee45ff72cacb0b53bbfb5"
+    integrity sha512-UxIzHkbMEui7oKXYZM+lK0smVsVQmaSX8aVFwuhjGw1vXfrG0qbvx7paDc3vSfno1rEAlOPyrI12O4kggoKVvA==
+    dependencies:
+      "@expo/config-plugins" "^3.0.0"
+      expo-modules-core "~0.2.0"
+  
   expo-file-system@~11.1.3:
     version "11.1.3"
     resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-11.1.3.tgz#f344bd175a5f65e2a97d2d6a1fd4c8da06386639"
@@ -4416,6 +4490,11 @@ Lockfile:
       setprototypeof "1.1.1"
       statuses ">= 1.5.0 < 2"
       toidentifier "1.0.0"
+  
+  humps@^2.0.1:
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/humps/-/humps-2.0.1.tgz#dd02ea6081bd0568dc5d073184463957ba9ef9aa"
+    integrity sha1-3QLqYIG9BWjcXQcxhEY5V7qe+ao=
   
   hyphenate-style-name@^1.0.2, hyphenate-style-name@^1.0.3:
     version "1.0.4"
@@ -6058,7 +6137,7 @@ Lockfile:
       prop-types "^15.6.2"
       scheduler "^0.19.1"
   
-  react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
+  react-is@^16.12.0, react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
     version "16.13.1"
     resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
     integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -6072,6 +6151,11 @@ Lockfile:
     version "3.0.4"
     resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
     integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+  
+  react-native-confirmation-code-field@^6.4.0:
+    version "6.7.0"
+    resolved "https://registry.yarnpkg.com/react-native-confirmation-code-field/-/react-native-confirmation-code-field-6.7.0.tgz#81f5e646898addb3243cf89d41d884b0762ae962"
+    integrity sha512-dzw1Wh0Lz4myVUSyj7E4u/s5y5Sz5jS4B5w+oRlaeDVnUHer+HQSIzr11ckNBGr+WVCdGIYwxrYcpZ+Dr8ELfA==
   
   react-native-elements@^3.4.2:
     version "3.4.2"
@@ -6272,6 +6356,18 @@ Lockfile:
       "@react-navigation/core" "^3.7.9"
       "@react-navigation/native" "^3.8.4"
   
+  react-redux@^7.2.5:
+    version "7.2.5"
+    resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.5.tgz#213c1b05aa1187d9c940ddfc0b29450957f6a3b8"
+    integrity sha512-Dt29bNyBsbQaysp6s/dN0gUodcq+dVKKER8Qv82UrpeygwYeX1raTtil7O/fftw/rFqzaf6gJhDZRkkZnn6bjg==
+    dependencies:
+      "@babel/runtime" "^7.12.1"
+      "@types/react-redux" "^7.1.16"
+      hoist-non-react-statics "^3.3.2"
+      loose-envify "^1.4.0"
+      prop-types "^15.7.2"
+      react-is "^16.13.1"
+  
   react-refresh@^0.4.0:
     version "0.4.3"
     resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.4.3.tgz#966f1750c191672e76e16c2efa569150cc73ab53"
@@ -6303,6 +6399,18 @@ Lockfile:
       safe-buffer "~5.1.1"
       string_decoder "~1.1.1"
       util-deprecate "~1.0.1"
+  
+  redux-thunk@*, redux-thunk@^2.3.0:
+    version "2.3.0"
+    resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+    integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
+  
+  redux@^4.0.0, redux@^4.1.1:
+    version "4.1.1"
+    resolved "https://registry.yarnpkg.com/redux/-/redux-4.1.1.tgz#76f1c439bb42043f985fbd9bf21990e60bd67f47"
+    integrity sha512-hZQZdDEM25UY2P493kPYuKqviVwZ58lEmGQNeQ+gXa+U0gYPUBf7NKYazbe3m+bs/DzM/ahN12DbF+NG8i0CWw==
+    dependencies:
+      "@babel/runtime" "^7.9.2"
   
   regenerate-unicode-properties@^9.0.0:
     version "9.0.0"

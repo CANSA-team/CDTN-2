@@ -4,7 +4,7 @@ import { CommentState, CommentModel } from "../models";
 
 
 const initialState: CommentState = {
-    comment: {} as [CommentModel],
+    comment: undefined,
     error: undefined
 }
 

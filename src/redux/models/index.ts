@@ -104,7 +104,7 @@ export class CartModel{
     price?: number;
 }
 export interface CartState{
-    cart: CartModel;
+    cart?: CartModel;
     status?: string;
     error: string | undefined;
 }
@@ -121,6 +121,7 @@ export interface OderItemModel {
 /**
  * Oder
 */
+
 export class OderModel{
     oder_id?: string;
     oder_address?: string;
@@ -152,5 +153,21 @@ export interface ShopState{
 
 export interface AccessState{
     message?: any;
+    error: string | undefined;
+}
+
+export interface userModel{
+    user_id:number,
+    user_name:string,
+    user_avatar:string,
+    user_phone:string,
+    user_profile_name:string,
+    user_email:string,
+
+}
+
+export interface UserStage{
+    check: boolean;
+    userInfor: UserModel;
     error: string | undefined;
 }

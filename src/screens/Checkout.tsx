@@ -128,6 +128,7 @@ export default function Checkout(props: any) {
 
             <View style={styles.viewTotal}>
                 <Text style={styles.txtTitle}>Phường/Xã :</Text>
+
                 <View style={styles.viewPicker}>
                     <RNPickerSelect
                         placeholder={{ label: "Phường/Xã", value: { code: 0, name: " " } }}
@@ -144,6 +145,7 @@ export default function Checkout(props: any) {
                 <Text style={styles.txtTitle}>Thôn/Xóm/Số nhà :</Text>
                 <View style={styles.textAreaContainer} >
                     <TextInput
+
                         style={styles.textArea}
                         underlineColorAndroid="transparent"
                         placeholder="Thôn/Xóm/Số nhà"
@@ -157,6 +159,7 @@ export default function Checkout(props: any) {
                     />
                 </View>
             </View>
+
 
             <View style={[styles.viewTotal, styles.method]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
@@ -176,7 +179,6 @@ export default function Checkout(props: any) {
                     buttonStyle={styles.btnContinute}
                 />
             </View>
-
         </SafeAreaView>
     )
 }

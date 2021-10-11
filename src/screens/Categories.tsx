@@ -26,7 +26,7 @@ export default function Categories() {
     }, [])
 
     useEffect(() => {
-        if(categories!.length > 0){
+        if(categories){
             setIsLoading(true);
         }
     },[categoryState])

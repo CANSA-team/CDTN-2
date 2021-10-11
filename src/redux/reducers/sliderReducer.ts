@@ -4,7 +4,7 @@ import { SliderState, SliderModel } from "../models";
 
 
 const initialState: SliderState = {
-    slider: {} as [SliderModel],
+    slider: undefined,
     error: undefined
 }
 

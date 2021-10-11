@@ -38,10 +38,10 @@ export default function Profile(props:any) {
             <View>
                 <HeaderTitle title={'PROFILE'} />
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
-                        <MaterialIcons name="arrow-back" size={35} color="white" />
+                    <TouchableOpacity>
+                        <MaterialIcons name="arrow-back" size={35} color="white" onPress={()=>navigation.goBack()}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>navigate('EditProfile')}>
+                    <TouchableOpacity>
                         <Feather name="edit" color="white" size={35}/>
                     </TouchableOpacity>
                 </View>

@@ -4,7 +4,7 @@ import { AccessState } from "../models";
 
 
 const initialState: AccessState = {
-    message: '',
+    message: undefined,
     error: undefined
 }
 

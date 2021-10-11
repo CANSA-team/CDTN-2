@@ -17,9 +17,9 @@ import Checkout from './../screens/Checkout';
 import CheckoutSuccess from './../screens/CheckoutSuccess';
 import Ordered from './../screens/User/Ordered';
 import Login from '../screens/Auth/Login';
-import EditProfile from './../screens/User/EditProfile';
-
-
+import EmailOTPscreen from '../screens/Auth/EmailOTPscreen';
+import OTPscreen from '../screens/Auth/OTPscreen';
+import ChangePassword from '../screens/Auth/ChangePassword';
 
 const DIMENS = {
     iconSize : 30,
@@ -40,12 +40,16 @@ const switchNavigator = createSwitchNavigator({
     loginStack:{
         screen: createStackNavigator({
             Login,
+            OTPscreen,
+            EmailOTPscreen,
+            ChangePassword,
         }, {
             defaultNavigationOptions: {
                 headerShown: false
             }
         })
     },
+
 
     shopStack:{
         screen: createStackNavigator({
@@ -76,7 +80,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
-                tabBarLabel: "Trang chủ"
+                tabBarLabel: "Home"
             },
             
         },
@@ -94,7 +98,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
-                tabBarLabel: "Danh mục"
+                tabBarLabel: "Categories"
             },
             
         },
@@ -115,7 +119,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
-                tabBarLabel: "Giỏ hàng"
+                tabBarLabel: "Cart"
             },
             
         },
@@ -124,8 +128,7 @@ const switchNavigator = createSwitchNavigator({
                 Account: Account,
                 Profile:Profile,
                 Checkout:Checkout,
-                Ordered:Ordered,
-                EditProfile:EditProfile
+                Ordered:Ordered
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -137,7 +140,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
                     return icon;
                 },
-                tabBarLabel: "Tài khoản"
+                tabBarLabel: "Account"
             },
             
         },

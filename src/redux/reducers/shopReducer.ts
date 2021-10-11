@@ -4,7 +4,7 @@ import { CommentState, CommentModel, ShopState, ShopModel } from "../models";
 
 
 const initialState: ShopState = {
-    info: {} as ShopModel,
+    info: undefined,
     error: undefined
 }
 

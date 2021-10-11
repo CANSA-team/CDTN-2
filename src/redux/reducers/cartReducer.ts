@@ -5,8 +5,8 @@ import { ProductModel, ProductState, CartModel, CartState } from "../models";
 
 
 const initialState: CartState = {
-    cart: {} as CartModel,
-    status: '',
+    cart: undefined,
+    status: undefined,
     error: undefined
 }
 
