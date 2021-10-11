@@ -9,46 +9,6 @@ import HeaderTitle from '../components/HeaderTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductsCategory, getProductsSearch, ProductModel, State } from '../redux';
 import { ScrollView } from 'react-native-gesture-handler';
-const plants = [
-    {
-        id: 1,
-        name: 'Ravenea Plant Raven Plant Ravenea Plant',
-        price: '200.000',
-        like: true,
-        img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-        about:
-            'Succulent Plantis one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-    },
-
-    {
-        id: 2,
-        name: 'Dragon Plant',
-        price: '200.000',
-        like: false,
-        img: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
-        about:
-            'Dragon Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-    },
-    {
-        id: 3,
-        name: 'Ravenea Plant',
-        price: '200.000',
-        like: false,
-        img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-        about:
-            'Ravenea Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-    },
-
-    {
-        id: 4,
-        name: 'Potted Plant',
-        price: '200.000',
-        like: true,
-        img: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
-        about:
-            'Potted Plant Ravenea Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-    },
-];
 
 export default function Search(props: any) {
     const [selectedSort, setSelectedSort] = useState();
