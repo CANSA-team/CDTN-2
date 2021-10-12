@@ -35,6 +35,7 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
+ 
         if (productHot && productNew && productCategory && slider && isLoadingCategory) {
             let tempArr: any[] = [];
             for (const iterator of slider!) {
@@ -66,7 +67,7 @@ export default function Home() {
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
-            <View style={{ marginTop: 40 }}>
+            <View style={{ marginTop: 40,marginBottom:20 }}>
                 <HeaderBar onSearch={searchProduct} />
             </View>
             {
@@ -76,7 +77,7 @@ export default function Home() {
                     </View>) : (
                         <ScrollView showsVerticalScrollIndicator={false} >
                             {/* Slider */}
-                            <View style={{ marginTop: 20 }}>
+                            <View >
                                 {_slider && <Carousel images={_slider} auto={true} />}
                             </View>
                             {/* Category */}

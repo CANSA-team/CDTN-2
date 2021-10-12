@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../redux';
 import { addComplaint } from '../redux/actions/complaintActions';
 import { useNavigation } from '../utils/useNavigation';
+import HeaderTitle from './../components/HeaderTitle';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 let check = false;
 
 export default function Complaint(props:any) {
-    const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
     const id = getParam('id');
@@ -61,20 +62,20 @@ export default function Complaint(props:any) {
 
     return (
         <View style={styles.container}>
-            <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:5,marginTop:5}}>      
-                
-                <TouchableOpacity style={{justifyContent:'flex-end',marginRight:5}} onPress={()=>{
-                    check = true;
-                    opTap();
-                }}>
-                    <Text style={styles.btnSend}>Send</Text>
+            <HeaderTitle title="Báo Cáo" />
+            <View style={styles.header}>
+                <TouchableOpacity>
+                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigation.goBack()} />
                 </TouchableOpacity>
+            </View>
+            <View style={{marginTop:20,justifyContent:'center',alignItems:'center',marginHorizontal:10}}>
+                <Text style={{fontSize:18}}>Hãy nhập phản hồi của bạn :</Text>
             </View>
             <View style={styles.textAreaContainer} >
                     <TextInput
                     style={styles.textArea}
                     underlineColorAndroid="transparent"
-                    placeholder="Your complaint..."
+                    placeholder="Nhập phản hồi của bạn tại đây . . ."
                     placeholderTextColor="grey"
                     numberOfLines={10}
                     maxLength={255}
@@ -83,7 +84,16 @@ export default function Complaint(props:any) {
                         setComplaint(text);
                     }}
                     />
-            </View>       
+            </View>  
+            <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:5,marginTop:10,marginHorizontal:10}}>      
+                
+                <TouchableOpacity style={{justifyContent:'flex-end',marginRight:5}} onPress={()=>{
+                    check = true;
+                    opTap();
+                }}>
+                    <Text style={styles.btnSend}>Send</Text>
+                </TouchableOpacity>
+            </View>     
         </View>
     )
 }
@@ -91,14 +101,29 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
       },
     textAreaContainer: {
       borderColor: 'gray',
       borderWidth: 1,
       padding: 5,
-      borderRadius:20
+      borderRadius:20,
+      marginTop:20,
+      marginHorizontal:10
+    },
+    header: {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        padding: 5,
+        position: 'absolute',
+        top: 35,
+        left: 5,
+        right: 0,
+        zIndex:2
+    },
+    headerIcon: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 50,
+        padding: 5
     },
     textArea: {
       height: 90,

@@ -36,7 +36,7 @@ export default function RatingComment(props:any) {
                     <TextInput
                     style={styles.textArea}
                     underlineColorAndroid="transparent"
-                    placeholder="Your comment..."
+                    placeholder="Comment của bạn tại đây . . ."
                     placeholderTextColor="grey"
                     numberOfLines={10}
                     maxLength={255}

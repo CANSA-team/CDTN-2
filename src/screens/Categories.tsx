@@ -59,7 +59,7 @@ export default function Categories() {
                             <View style={styles.categoriesLeft}>
                                 {
                                     categories && categories![catergoryIndex].categories!.map((category, index) => (
-                                        <View key={index} style={{ flex: 1, minWidth: '30%' }}>
+                                        <View key={index} style={{ flex: 1, minWidth: '30%',marginBottom:20  }}>
                                             <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} onTap={onTap}/>
                                         </View>
                                     ))
@@ -70,6 +70,7 @@ export default function Categories() {
         </SafeAreaView>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
         flex: 3,
         flexDirection: 'row',
         backgroundColor: 'white',
-        padding: 10
+        padding: 10,
+        flexWrap:'wrap' 
     }
 });

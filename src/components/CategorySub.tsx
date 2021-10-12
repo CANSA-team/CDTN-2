@@ -15,7 +15,7 @@ export default function CategorySub(props:any) {
             activeOpacity={0.8}
             >
             <Image style={{height:50,width:50,borderRadius:15}} source={{uri:item.category_image}} />
-            <Text style={{color:'#222'}}> 
+            <Text style={styles.categoryText}> 
                 {item.category_name}
             </Text>
         </TouchableOpacity>

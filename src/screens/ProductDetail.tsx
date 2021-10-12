@@ -91,8 +91,8 @@ export default function ProductDetail(props: any) {
                     </View>
                     <View style={styles.detailContainer}>
                         <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
-                            {product && <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating} />}
-                            {product && <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating}</Text>}
+                            {product && <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating!.toFixed(1)} />}
+                            {product && <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating!.toFixed(1)}</Text>}
                         </View>
                         {product && <Text style={styles.title}>{product.product_title}</Text>}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>

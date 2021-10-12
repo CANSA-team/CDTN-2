@@ -127,7 +127,7 @@ const switchNavigator = createSwitchNavigator({
             
         },
         account: {
-            screen: createStackNavigator({
+            screen: createStackNavigator({         
                 Account: Account,
                 Profile:Profile,
                 Checkout:Checkout,

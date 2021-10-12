@@ -19,7 +19,7 @@ export default function Comment(props:any) {
                 {
                     maxRating.map((item,index)=>
                         <View key={index}>
-                            <FontAwesome name={ item<=starNumber ? "star" : "star-o"} size={28} color="#f1c40f"/>      
+                            <FontAwesome name={ item<=starNumber ? "star" : "star-o"} size={24} color="#f1c40f"/>      
                         </View>
                     )
                 }
