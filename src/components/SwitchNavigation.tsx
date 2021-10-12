@@ -22,6 +22,7 @@ import OTPscreen from '../screens/Auth/OTPscreen';
 import ChangePassword from '../screens/Auth/ChangePassword';
 import OderDetail from '../screens/User/OderDetail';
 import Complaint from '../screens/Complaint';
+import EditProfile from '../screens/User/EditProfile';
 
 const DIMENS = {
     iconSize : 30,
@@ -133,6 +134,10 @@ const switchNavigator = createSwitchNavigator({
                 Checkout:Checkout,
                 Ordered:Ordered,
                 OderDetail:OderDetail,
+                EditProfile: EditProfile,
+                EmailOTPscreen,
+                ChangePassword,
+                OTPscreen,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
