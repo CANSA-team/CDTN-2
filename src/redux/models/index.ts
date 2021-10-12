@@ -138,7 +138,7 @@ export class OderModel{
 
 export interface OderState{
     status?: string;
-    oderList?: OderModel;
+    oderList?: OderModel[];
     error: string | undefined;
 }
 

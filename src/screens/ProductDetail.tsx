@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addComment, getComments } from '../redux/actions/commentActions';
 import { addCart } from '../redux/actions/cartActions';
 import { getUserInfo } from '../redux/actions/userActions';
+import { vnd } from '../consts/Selector';
 let isAdd = false;
 export default function ProductDetail(props: any) {
     const { navigate } = useNavigation();
@@ -97,8 +98,8 @@ export default function ProductDetail(props: any) {
                         {product && <Text style={styles.title}>{product.product_title}</Text>}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
-                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 26 }}>{product.product_price! * (100 - product.product_sale!) / 100}</Text>}
-                                {product && <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 23 }}>{product.product_price}</Text>}
+                                {product && product.product_sale! != 0 && <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 25 }}>{vnd(product.product_price)}đ</Text>}
+                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 29 }}>{vnd(product.product_price! * (100 - product.product_sale!) / 100)}đ</Text>}
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                 <TouchableOpacity onPress={() => {

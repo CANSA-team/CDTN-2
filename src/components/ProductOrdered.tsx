@@ -1,12 +1,12 @@
 import moment from 'moment';
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import COLORS from '../consts/Colors';
 import { useNavigation } from '../utils/useNavigation';
 import { SlugStr } from './../consts/Selector';
 
 export default function ProductOrdered(props: any) {
-    const [oder, setOder] = useState(props.oder);
+    const oder = props.oder;
     const { navigate } = useNavigation();
 
     const OderStatus = [
@@ -16,7 +16,7 @@ export default function ProductOrdered(props: any) {
         <View style={styles.statusPending}>
             <Text style={styles.txtStatus}>Đang xử lí</Text>
         </View>,
-        <View style={styles.statusPending}>
+        <View style={styles.statusAccept}>
             <Text style={styles.txtStatus}>Đã nhận</Text>
         </View>
     ]
@@ -37,7 +37,6 @@ export default function ProductOrdered(props: any) {
                         <Text style={styles.productName}>Ngày đặt hàng: {moment.utc(oder.oder_date).format('DD/MM/YYYY')}</Text>
                     </View>
                     <Text style={{ color: '#222', fontSize: 18, fontWeight: 'bold' }}>Trạng thái :</Text>
-                    {/* <Text style={styles.txtStatus}>Đang xử lí</Text>  */}
                     {
                         OderStatus[oder.status]
                     }
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     },
     statusAccept: {
         marginTop: 8,
-        backgroundColor: '#42EB53',
+        backgroundColor: COLORS.primary,
         padding: 8,
         borderRadius: 10
     },

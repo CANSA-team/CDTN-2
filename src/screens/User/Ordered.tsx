@@ -7,6 +7,7 @@ import { OderItemModel, OderModel, State } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOder } from '../../redux/actions/oderActions';
 import { getUserInfo } from '../../redux/actions/userActions';
+import RNPickerSelect from 'react-native-picker-select';
 
 let check = true;
 
@@ -18,20 +19,22 @@ export default function Ordered(props: any) {
     const { userInfor } = userState;
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    let [_oderList, setOderList] = useState<Array<any>>();
 
     useEffect(() => {
         dispatch(getUserInfo());
     }, []);
 
-    // useEffect(() => {
-    //     if(oderList){
-    //         setIsLoading(true);
-    //     }
-    // },[orderState]);
+    useEffect(() => {
+        setOderList(oderList);
+    }, [orderState]);
 
     if (check) {
         if (userInfor) {
-            dispatch(getAllOder(userInfor.user_id));
+            if (!oderList) {
+                dispatch(getAllOder(userInfor.user_id));
+                check = true;
+            }
             check = false;
         } else {
             check = true;
@@ -40,7 +43,18 @@ export default function Ordered(props: any) {
         check = true;
     }
 
-    // console.log(oderList);
+
+    const filterStatus = (data: number) => {
+        if (oderList) {
+            if (data != -1 ) {
+                let __oderList = oderList.filter((item: any) => item.status === data);
+                setOderList(__oderList);
+            }else{
+                setOderList(oderList);
+            }
+        }
+    }
+
 
     return (
         <View style={styles.container}>
@@ -50,16 +64,29 @@ export default function Ordered(props: any) {
                     <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
                 </TouchableOpacity>
             </View>
+            <View style={{ padding: 10, backgroundColor: 'white' }}>
+                <RNPickerSelect
+                    placeholder={{ label: "Filter", value: -1 }}
+                    style={{ ...pickerSelectStyles, placeholder: { color: '#555' } }}
+                    onValueChange={(data) => filterStatus(data)}
+                    items={[
+                        { label: 'Đang sử lý', value: 1 },
+                        { label: 'Đã nhận', value: 2 },
+                        { label: 'Đã hủy', value: 0 },
+                    ]}
+                />
+            </View>
             {
-                !oderList ?
+                !_oderList ?
                     (<View style={styles.container}>
                         <ActivityIndicator size="large" color="#00ff00" />
                     </View>) :
                     (
                         <ScrollView style={{ flex: 1, marginTop: 5 }} showsVerticalScrollIndicator={false}>
                             {
-                                oderList && oderList.map((oder: OderModel, index: number) => {
-                                    return(
+                                _oderList && _oderList.map((oder: OderModel, index: number) => {
+                                    console.log(oder.status);
+                                    return (
                                         <View key={index}>
                                             <ProductOrdered oder={oder} />
                                         </View>
@@ -86,6 +113,23 @@ const styles = StyleSheet.create({
         left: 5,
         right: 0,
         zIndex: 2
+    },
+
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 20,
+        borderRadius: 30,
+        color: 'black',
+        padding: 20,
+
+    },
+    inputAndroid: {
+        fontSize: 20,
+        borderRadius: 30,
+        color: 'black',
+        padding: 20
     },
 
 });

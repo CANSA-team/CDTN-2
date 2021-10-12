@@ -65,6 +65,7 @@ export default function Search(props: any) {
             }
         }
     }
+
     const sortName = (data:number)=>{
         if (products) {
             let arr;
@@ -115,8 +116,6 @@ export default function Search(props: any) {
     useEffect(() => {
         CheckSearchOrCat(title)
     }, [])
-
-
 
     useEffect(() => {
         switch (title) {
