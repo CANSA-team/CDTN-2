@@ -27,6 +27,8 @@ export default function RatingComment(props:any) {
                 </View>
                 
                 <TouchableOpacity style={{justifyContent:'flex-end',marginRight:5}} onPress={()=>{
+                    setComment('');
+                    setDefautRating(5);
                     props.onTap(comment,defautRating)
                 }}>
                     <Text style={styles.btnSend}>Send</Text>

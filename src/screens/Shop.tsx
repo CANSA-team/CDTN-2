@@ -28,6 +28,7 @@ export default function ProductDetail(props: any) {
     const dispatch = useDispatch();
     const { info } = shopState;
     const { productShop } = productState;
+    const [_productShop, setProductShop] = useState<any>();
     const [selectedSort, setSelectedSort] = useState();
     const [selectedPrice, setSelectedPrice] = useState();
     const onTapDetail = (id: number) => {
@@ -41,9 +42,8 @@ export default function ProductDetail(props: any) {
     }, [])
 
     useEffect(() => {
-        console.log(productShop!.length);
-        if (info && productShop!.length > 0) {
-            console.log("set is loading");
+        if (info && productShop) {
+            setProductShop(productShop);
             setIsLoading(true);
         }
     }, [shopState, productState])
@@ -53,6 +53,57 @@ export default function ProductDetail(props: any) {
         return layoutMeasurement.height + contentOffset.y >=
             contentSize.height - paddingToBottom;
     };
+    useEffect(() => {
+        dispatch(getProductsShop(shop_id, page));
+    }, [page])
+
+
+    const filterPrice = (data: number) => {
+        if (_productShop) {
+            let arr: any = [];
+            switch (data) {
+                case 1:
+                    arr = productShop && productShop.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 <= 999999)
+                    setProductShop(arr);
+                    break;
+                case 2:
+                    arr = productShop && productShop.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 >= 1000000 && product.product_price! * (100 - product.product_sale!) / 100 <= 9999999)
+                    setProductShop(arr);
+                    break;
+                case 3:
+                    arr = productShop && productShop.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 >= 10000000)
+                    setProductShop(arr);
+                    break;
+                default:
+                    arr = []
+                    setProductShop(productShop);
+                    break;
+            }
+        }
+    }
+
+    const sortName = (data: number) => {
+        if (_productShop) {
+            let arr: any = [];
+            switch (data) {
+                case 1:
+                    arr = [..._productShop];
+                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() < b.product_title!.toUpperCase() ? -1 : 1 : 0);
+                    setProductShop(arr);
+                    break;
+                case 2:
+                    arr = [..._productShop];
+                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() > b.product_title!.toUpperCase() ? -1 : 1 : 0);
+                    setProductShop(arr);
+                    break;
+                default:
+                    productShop ? arr = [...productShop] : arr = [];
+                    setProductShop(arr);
+                    break;
+            }
+        }
+    }
+
     return (
 
         !isLoading ?
@@ -62,11 +113,14 @@ export default function ProductDetail(props: any) {
                 <SafeAreaView style={styles.container}>
                     <View style={styles.accountContainer}>
                         <View>
-                            {info && <Image style={{ width: 100, height: 100, borderRadius: 50 }} source={{ uri: info.shop_avatar }} />}
+                            {info && <Image style={{
+                                width: 100, height: 100, borderRadius: 50, borderWidth: 2,
+                                borderColor: "#444",
+                            }} source={{ uri: info.shop_avatar }} />}
                         </View>
                         <View style={styles.actionAccount}>
                             {info && <Text style={styles.nameUser}>{info.shop_name}</Text>}
-                            {info && <Text style={{ fontSize: 18, color: 'gray' }}>{info.shop_description}</Text>}
+                            {info && <Text style={{ fontSize: 18, color: '#333' }}>{info.shop_description}</Text>}
                         </View>
                     </View>
                     <View style={{ flex: 1, marginTop: 30, backgroundColor: '#E5E5E5' }}>
@@ -74,13 +128,13 @@ export default function ProductDetail(props: any) {
                             <View style={{ flex: 1, borderRadius: 50, paddingRight: 10 }}>
                                 <View style={{ borderWidth: 1, borderColor: '#888' }}>
                                     <RNPickerSelect
-                                        placeholder={{ label: "Filter", value: null }}
+                                        placeholder={{ label: "Filter", value: 0 }}
                                         style={{ ...pickerSelectStyles, placeholder: { color: '#555' } }}
-                                        onValueChange={(data) => setSelectedPrice(data)}
+                                        onValueChange={(data) => filterPrice(data)}
                                         items={[
-                                            { label: '< 1.000.000đ', value: '1' },
-                                            { label: '1.000.000 - 10.000.000đ', value: '2' },
-                                            { label: '> 10.000.000đ', value: '3' },
+                                            { label: '< 1.000.000đ', value: 1 },
+                                            { label: '1.000.000 - 10.000.000đ', value: 2 },
+                                            { label: '> 10.000.000đ', value: 3 },
                                         ]}
                                     />
                                 </View>
@@ -89,19 +143,19 @@ export default function ProductDetail(props: any) {
 
                                 <View style={{ borderWidth: 1, borderColor: '#888' }}>
                                     <RNPickerSelect
-                                        placeholder={{ label: "Sort", value: null }}
+                                        placeholder={{ label: "Sort", value: 0 }}
                                         style={{ ...pickerSelectStyles, placeholder: { color: '#555' } }}
-                                        onValueChange={(data) => setSelectedSort(data)}
+                                        onValueChange={(data) => sortName(data)}
                                         items={[
-                                            { label: 'A - Z', value: '1' },
-                                            { label: 'Z - A', value: '2' },
+                                            { label: 'A - Z', value: 1 },
+                                            { label: 'Z - A', value: 2 },
                                         ]}
                                     />
                                 </View>
                             </View>
                         </View>
                         <ScrollView
-                            style={styles.productList}
+
                             onScroll={({ nativeEvent }) => {
                                 if (isCloseToBottom(nativeEvent)) {
                                     setPage(page + 1);
@@ -109,10 +163,12 @@ export default function ProductDetail(props: any) {
                             }}
                             scrollEventThrottle={400}
                         >
-                            {
-                                productShop && productShop.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} />)
+                            <View style={styles.productList}>
+                                {
+                                    _productShop && _productShop.map((product: any, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
 
-                            }
+                                }
+                            </View>
                         </ScrollView>
 
                     </View>
@@ -130,7 +186,8 @@ const styles = StyleSheet.create({
     productList: {
         display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        flexWrap: 'wrap'
     },
     header: {
         flexDirection: 'row',
@@ -184,7 +241,7 @@ const styles = StyleSheet.create({
     },
     accountContainer: {
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        backgroundColor: '#E63538',
         padding: 20,
         borderBottomColor: '#ddd',
         borderBottomWidth: 1,
@@ -197,7 +254,8 @@ const styles = StyleSheet.create({
     },
     nameUser: {
         fontSize: 24,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#fff'
     },
     viewAction: {
         padding: 15,
