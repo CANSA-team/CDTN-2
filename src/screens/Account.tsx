@@ -9,7 +9,6 @@ import HeaderTitle from '../components/HeaderTitle';
 import axios from 'axios';
 import { cansa } from '../consts/Selector'
 
-let check = true;
 let user_avatar: any = undefined;
 export default function Account() {
     const [checkLogin, setCheckLogin] = useState(false);
@@ -21,20 +20,9 @@ export default function Account() {
     const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
     const { navigate } = useNavigation();
     const [isLoading, setisLoading] = useState(false)
-    if (check) {
-        if (user_avatar) {
-            axios.get(`${cansa[0]}/api/image/get/${user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
-                setImage(res.data.data);
-                // setisLoading(true)
-            })
-        }
-        check = true;
-    } else {
-        check = false;
-    }
 
     const onTapProfile = () => {
-        navigate('Profile',{email:email})
+        navigate('Profile', { email: email })
     }
     const onTapOrdered = () => {
         navigate('Ordered')
@@ -67,8 +55,10 @@ export default function Account() {
                                     .then(res => {
                                         setNickName(res.data.data.user_name)
                                         user_avatar = res.data.data.user_avatar;
-                                        // setImage(res.data.data);
-                                        setisLoading(true)
+                                        axios.get(`${cansa[0]}/api/image/get/${user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
+                                            setImage(res.data.data);
+                                            setisLoading(true)
+                                        })
                                     })
                                     .catch(error => console.log(error));
                             })
@@ -79,7 +69,6 @@ export default function Account() {
             })
             .catch(error => console.log(error));
     }, [checkLogin, isLoading])
-    console.log(image)
     return isLoading ? (
         <SafeAreaView style={styles.container}>
             <HeaderTitle title={'ACCOUNT'} />

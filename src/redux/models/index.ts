@@ -187,3 +187,10 @@ export interface ComplaintStage{
     status?: string;
     error: string | undefined;
 }
+
+
+export interface ImageStage{
+    status?: string;
+    image?: string;
+    error: string | undefined;
+}

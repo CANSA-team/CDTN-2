@@ -9,6 +9,7 @@ import accessReducer from './accessReducer';
 import userReducer from './userReducer';
 import oderReducer from './oderReducer';
 import complaintReducer from './complaintReducer';
+import imageReducer from './imageReducer';
 
 const rootReducer = combineReducers({
    productReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
    userReducer,
    oderReducer,
    complaintReducer,
+   imageReducer,
 });
 
 export default rootReducer;

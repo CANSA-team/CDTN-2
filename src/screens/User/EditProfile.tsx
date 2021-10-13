@@ -13,6 +13,8 @@ import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { cansa } from '../../consts/Selector';
+import {  margin, marginBottom } from 'styled-system';
+import COLORS from '../../consts/Colors';
 
 let user_temp = {
     "id": 1,
@@ -53,15 +55,6 @@ export default function EditProfile(props: any) {
         setDate(date);
     };
 
-    // const setUser = () => {
-    //     user_temp = {
-    //         "id": 1,
-    //         "phone": phone,
-    //         "name": name,
-    //         "birthday": moment.utc(date).format('YYYY-MM-DD'),
-    //     };
-
-    // }
     let getImg = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -74,10 +67,8 @@ export default function EditProfile(props: any) {
             setImage(result.uri);
         }
     };
-console.log(userProdfile.user_avatar);
 
     const save = () => {
-        // console.log(date, name, phone)
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data;'
@@ -96,9 +87,7 @@ console.log(userProdfile.user_avatar);
             const link = `/api/user/update/profile/${name}/${phone}/${moment.utc(date).format('YYYY-MM-DD')}`;
             axios.get(`${cansa[1]}${link}`).then((res) => {
                 const link = `/api/user/update/user/${userProdfile.user_key}/${nickName}/${avatar_user}/${userProdfile.user_status}`;
-                console.log(link);
                 axios.get(`${cansa[1]}${link}`).then((res) => {
-                    console.log(res.data.status);
                     Alert.alert(
                         "Thông báo!",
                         res.data.message,
@@ -107,7 +96,6 @@ console.log(userProdfile.user_avatar);
                         ]
                     );
                 })
-                console.log(res.data.message);
             })
         })
     }
@@ -134,7 +122,11 @@ console.log(userProdfile.user_avatar);
                         }}
                         onPress={getImg}
                     >
-                        <Accessory></Accessory>
+                        <Accessory style={{
+                            borderWidth: 2,
+                            borderColor: "#444",
+                            backgroundColor: COLORS.primary
+                        }} size={50}></Accessory>
                     </Avatar>
                 </View>
 
@@ -158,10 +150,14 @@ console.log(userProdfile.user_avatar);
                         onChangeText={setPhone}
                     />
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User birthday: {moment.utc(date).format('DD/MM/YYYY')}</Text>
-                        <Button onPress={showDatepicker} title={
-                            <FontAwesomeIcon icon={faCalendarAlt} />
-                        } >
+                        <Text style={styles.txtTitle}>Ngày sinh: {moment.utc(date).format('DD/MM/YYYY')}</Text>
+                        <Button onPress={showDatepicker}
+                            buttonStyle={{
+                                backgroundColor: COLORS.primary,
+                            }}
+                            title={
+                                <FontAwesomeIcon color="white" size={20} icon={faCalendarAlt} />
+                            } >
                         </Button>
                         {show && (
                             <DateTimePicker
@@ -172,11 +168,13 @@ console.log(userProdfile.user_avatar);
                             />
                         )}
                     </View>
-                    <TouchableOpacity onPress={() => {
-                        save();
-                    }}>
-                        <Text style={styles.btnBuy}>Lưu</Text>
-                    </TouchableOpacity>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 25, marginBottom: 8 }}>
+                        <TouchableOpacity onPress={() => {
+                            save();
+                        }}>
+                            <Text style={styles.btnBuy}>Lưu</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         </View>
@@ -227,6 +225,7 @@ const styles = StyleSheet.create({
         zIndex: 2
     },
     viewTxt: {
+        paddingTop: 5,
         marginTop: 3,
         backgroundColor: '#fff',
         shadowColor: "#000",
@@ -241,12 +240,13 @@ const styles = StyleSheet.create({
     },
     txtContainer: {
         flexDirection: 'row',
-        margin: 15,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        alignItems: 'center'
     },
     txtTitle: {
         fontSize: 20,
-        color: '#111'
+        color: '#111',
+        marginRight: 20,
     },
     resetPassContainer: {
         borderTopColor: '#ddd',

@@ -57,3 +57,9 @@ export enum CommplaintActionType{
     ADD_COMPLAINT ='ADD_COMPLAINT',
     ON_COMPLAINT_ERROR = 'ON_COMPLAINT_ERROR'
 }
+
+export enum ImageActionType{
+    GET_IMAGE ='GET_IMAGE',
+    UPDATE_IMAGE ='UPDATE_IMAGE',
+    ON_IMAGE_ERROR = 'ON_IMAGE_ERROR'
+}
