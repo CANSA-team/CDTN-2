@@ -38,6 +38,7 @@ export default function Profile(props: any) {
     let [userProdfile, setUserProfile] = useState(new UserProfile());
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoadingChangePassword, setIsLoadingChangePassword] = useState<boolean>(true);
 
     const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
 
@@ -126,17 +127,22 @@ export default function Profile(props: any) {
                             </View>
 
                             <View style={styles.resetPassContainer}>
-                                <TouchableOpacity style={styles.touchReset}
-                                    onPress={() => {
-                                        let email = getParam('email');
-                                        axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
-                                            Alert.alert('Thông Báo', res.data.message);
-                                            navigate('OTPscreen', { email: email })
-                                        })
-                                    }}>
-                                    <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
-                                    <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
-                                </TouchableOpacity>
+                                {
+                                    isLoadingChangePassword &&
+                                    <TouchableOpacity style={styles.touchReset}
+                                        onPress={() => {
+                                            setIsLoadingChangePassword(false);
+                                            let email = getParam('email');
+                                            axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
+                                                Alert.alert('Thông Báo', res.data.message);
+                                                navigate('OTPscreen', { email: email })
+                                            })
+                                        }}>
+                                        <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
+                                        <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
+                                    </TouchableOpacity>
+                                }
+
                             </View>
                         </View>
                     </View>)}
