@@ -21,22 +21,30 @@ const Cart = (props: any) => {
     const { navigation, route } = props;
     const cartState = useSelector((state: State) => state.cartReducer);
     const { cart } = cartState;
-    let [cartItem,setCartItem] = useState([]);
+    let [cartItem, setCartItem] = useState([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
 
     const onTapCheckout = () => {
         navigate('Checkout')
     }
 
-    if(check){
+    useEffect(() => {
+        if (cart && !isLoading) {
+            setIsLoading(true);
+        }
+    }, [cartState])
+
+    if (check) {
         dispatch(getCart());
         check = false;
-    }else{
+    } else {
         check = true;
     }
 
     const onTap = (id: number, qty: number) => {
-        dispatch(updateCart(id,qty));
+        setIsLoading(false);
+        dispatch(updateCart(id, qty));
     }
 
     return (
@@ -44,44 +52,51 @@ const Cart = (props: any) => {
             {
                 cart ?
                     (
-                        <View style={styles.container}>
-                            <HeaderTitle title={'Giỏ Hàng'} />
+                        !isLoading ?
+                            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                                <Text style={{ justifyContent: 'center', alignItems: 'center'}}>
+                                    Đang sử lý yêu cầu
+                                </Text>
+                            </View>
+                            :
+                            <View style={styles.container}>
+                                <HeaderTitle title={'Giỏ Hàng'} />
 
-                            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                                <View style={{ flex: 1, marginBottom: 10 }}>
-                                    <ScrollView>
-                                        {
-                                            cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
-                                                return (
-                                                    < View key={index} >
-                                                        <CartCard qty={cart.qty} product={cart.product} onTap={onTap} />
-                                                    </View>)
-                                            })
-                                        }
-                                    </ScrollView>
-                                </View>
-                                <View style={styles.bill}>
-                                    <Text style={styles.txtTotal}>Totals</Text>
-                                    <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.sub_price}đ</Text>
+                                <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                                    <View style={{ flex: 1, marginBottom: 10 }}>
+                                        <ScrollView>
+                                            {
+                                                cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
+                                                    return (
+                                                        < View key={index} >
+                                                            <CartCard qty={cart.qty} product={cart.product} onTap={onTap} />
+                                                        </View>)
+                                                })
+                                            }
+                                        </ScrollView>
                                     </View>
-                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.ship}đ</Text>
+                                    <View style={styles.bill}>
+                                        <Text style={styles.txtTotal}>Totals</Text>
+                                        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
+                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.sub_price}đ</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
+                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
+                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.ship}đ</Text>
+                                        </View>
+                                        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
+                                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart && cart.total_price}đ</Text>
+                                        </View>
+                                        <Button
+                                            onPress={onTapCheckout}
+                                            title="CHECK OUT"
+                                            buttonStyle={styles.btnCheckOut}
+                                        />
                                     </View>
-                                    <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
-                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart && cart.total_price}đ</Text>
-                                    </View>
-                                    <Button
-                                        onPress={onTapCheckout}
-                                        title="CHECK OUT"
-                                        buttonStyle={styles.btnCheckOut}
-                                    />
-                                </View>
-                            </ScrollView>
-                        </View >
+                                </ScrollView>
+                            </View >
                     )
                     :
                     (

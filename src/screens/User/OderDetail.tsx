@@ -38,7 +38,7 @@ export default function OderDetail(props: any) {
         <View style={styles.statusPending}>
             <Text style={styles.txtStatus}>Đang xử lí</Text>
         </View>,
-        <View style={styles.statusPending}>
+        <View style={styles.statusAccept}>
             <Text style={styles.txtStatus}>Đã nhận</Text>
         </View>
     ]
@@ -52,10 +52,9 @@ export default function OderDetail(props: any) {
                         <ScrollView>
                             {
                                 oder.product_oder.map((cart: any, index: number) => {
-                                    console.log(oder);
                                     return (
                                         < View key={index} >
-                                            <OderCard qty={cart.product_quantity} product={cart.product} />
+                                            <OderCard qty={cart.product_quantity} product={cart.product} status={oder.status} />
                                         </View>)
                                 })
                             }
@@ -122,17 +121,17 @@ const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 10
     },
+    statusAccept: {
+        marginTop: 8,
+        backgroundColor: COLORS.primary,
+        padding: 8,
+        borderRadius: 10
+    },
     txtStatus: {
         color: '#fff',
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center'
-    },
-    statusAccept: {
-        marginTop: 8,
-        backgroundColor: '#42EB53',
-        padding: 8,
-        borderRadius: 10
     },
     txtTotal: {
         fontSize: 28,

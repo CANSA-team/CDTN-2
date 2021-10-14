@@ -27,9 +27,9 @@ export default function RatingComment(props:any) {
                 </View>
                 
                 <TouchableOpacity style={{justifyContent:'flex-end',marginRight:5}} onPress={()=>{
-                    setComment('');
-                    setDefautRating(5);
                     props.onTap(comment,defautRating)
+                    setDefautRating(5);
+                    setComment("");
                 }}>
                     <Text style={styles.btnSend}>Send</Text>
                 </TouchableOpacity>
@@ -42,6 +42,7 @@ export default function RatingComment(props:any) {
                     placeholderTextColor="grey"
                     numberOfLines={10}
                     maxLength={255}
+                    value={comment}
                     multiline={true}
                     onChangeText = {(text) =>{
                         setComment(text);

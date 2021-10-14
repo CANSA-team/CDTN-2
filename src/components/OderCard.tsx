@@ -1,13 +1,14 @@
 import React from 'react'
-import { Image, Text, View, StyleSheet } from 'react-native'
+import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import COLORS from '../consts/Colors';
 import { SlugStr } from '../consts/Selector';
+import { useNavigation } from '../utils/useNavigation';
 
 export default function OderCard(props: any) {
     const product = props.product;
     const qty = props.qty;
     const status = props.status;
-    
+    const { navigate } = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -23,6 +24,14 @@ export default function OderCard(props: any) {
                     <Text>{qty}</Text>
                     <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{(product.product_price * (100 - product.product_sale) / 100) * qty}đ</Text>
                 </View>
+                {
+                    status === 2 &&
+                    <TouchableOpacity onPress={() => {
+                        navigate('Complaint', { id: product.product_id });
+                    }}>
+                        <Text style={styles.btnReport}>Báo cáo</Text>
+                    </TouchableOpacity>
+                }
             </View>
         </View>
     )
@@ -37,6 +46,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderBottomColor: COLORS.primary,
         borderBottomWidth: 1
+    },
+    btnReport: {
+        backgroundColor: 'red',
+        padding: 7,
+        width: 150,
+        borderRadius: 20,
+        marginBottom: 10,
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: '700',
+        color: '#fff'
     },
     img: {
         flex: 1,

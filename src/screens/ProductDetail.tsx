@@ -14,13 +14,14 @@ import { addComment, getComments } from '../redux/actions/commentActions';
 import { addCart } from '../redux/actions/cartActions';
 import { getUserInfo } from '../redux/actions/userActions';
 import { vnd } from '../consts/Selector';
-let isAdd = false;
 export default function ProductDetail(props: any) {
     const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
     const id = getParam('id');
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingComment, setIsLoadingComment] = useState(false);
+    const [isLoadingAddCart, setIsLoadingAddCart] = useState(false);
     const productState = useSelector((state: State) => state.productReducer);
     const commentState = useSelector((state: State) => state.commentReducer);
     const cartState = useSelector((state: State) => state.cartReducer);
@@ -44,24 +45,30 @@ export default function ProductDetail(props: any) {
     }, [productState, commentState])
 
     useEffect(() => {
-        if (status && isAdd) {
+        if (comment && !isLoadingComment) {
+            setIsLoadingComment(true);
+        }
+    }, [commentState])
+
+    useEffect(() => {
+        if (status && isLoadingAddCart) {
             const message = (status === 'success') ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
             Alert.alert(
                 "Thông báo",
                 message,
                 [
-                    { text: "OK", onPress: () => isAdd = false }
+                    { text: "OK"},
                 ]
             );
+            setIsLoadingAddCart(false);
         }
     }, [cartState])
 
 
-    const onTap = (comment_content:string,comment_rating:number)=>{
-        if(userInfor){
-            // console.log(id,userInfor.user_id,comment_content,comment_rating)
-            dispatch(addComment(id,userInfor.user_id,comment_content,comment_rating));
-        }else{
+    const onTap = (comment_content: string, comment_rating: number) => {
+        if (userInfor) {
+            dispatch(addComment(id, userInfor.user_id, comment_content, comment_rating));
+        } else {
             Alert.alert(
                 "Thông báo!",
                 "Chưa đăng nhập!",
@@ -91,10 +98,17 @@ export default function ProductDetail(props: any) {
                         {product && <Carousel images={product.product_image} auto={false} />}
                     </View>
                     <View style={styles.detailContainer}>
-                        <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
-                            {product && <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating!.toFixed(1)} />}
-                            {product && <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating!.toFixed(1)}</Text>}
-                        </View>
+                        {product && product.product_rating ?
+                            <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
+                                <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating!.toFixed(1)} />
+                                <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating!.toFixed(1)}</Text>
+                            </View>
+                            :
+                            <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
+                                <Rating readonly imageSize={28} fractions="{1}" startingValue={0} />
+                                <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{0}</Text>
+                            </View>
+                        }
                         {product && <Text style={styles.title}>{product.product_title}</Text>}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -102,22 +116,21 @@ export default function ProductDetail(props: any) {
                                 {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 29 }}>{vnd(product.product_price! * (100 - product.product_sale!) / 100)}đ</Text>}
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                <TouchableOpacity onPress={() => {
-                                    isAdd = true;
-                                    dispatch(addCart(id));
-                                }}>
-                                    <Text style={styles.btnBuy}>Add Cart</Text>
-                                </TouchableOpacity>
+                                {
+                                    !isLoadingAddCart &&
+                                    <TouchableOpacity onPress={() => {
+                                        dispatch(addCart(id));
+                                        setIsLoadingAddCart(true);
+                                    }}>
+                                        <Text style={styles.btnBuy}>Add Cart</Text>
+                                    </TouchableOpacity>
+                                }
                                 <TouchableOpacity onPress={() => {
                                     navigate('Shop', { shop_id: product!.shop_id });
                                 }}>
                                     <Text style={styles.btnBuy}>Shop</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigate('Complaint', { id: id });
-                                }}>
-                                    <Text style={styles.btnReport}>Báo cáo</Text>
-                                </TouchableOpacity>
+
                             </View>
                         </View>
 
@@ -130,7 +143,10 @@ export default function ProductDetail(props: any) {
 
                         <Text style={styles.headerTitle}>Đánh giá & nhận xét :</Text>
 
-                        <RatingComment onTap={onTap}/>
+                        {
+                            isLoadingComment &&
+                            <RatingComment onTap={onTap} />
+                        }
 
                         <View>
                             {
@@ -203,16 +219,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '700',
         color: '#222'
-    },
-    btnReport: {
-        backgroundColor: 'red',
-        padding: 7,
-        width: 150,
-        borderRadius: 20,
-        marginBottom: 10,
-        fontSize: 18,
-        textAlign: 'center',
-        fontWeight: '700',
-        color: '#fff'
     }
 });
