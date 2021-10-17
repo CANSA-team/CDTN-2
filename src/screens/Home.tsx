@@ -1,184 +1,160 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, Image,SafeAreaView,ScrollView } from 'react-native';
-import {  useSelector, connect } from 'react-redux';
+import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'styled-system';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
-import { State,getProducts,ProductState } from '../redux';
+import { State, getProductsHot, getProductsNew, getProductsCategory, getSlider } from '../redux';
+import { getCategory } from '../redux/actions/categoryActions';
+import { getUserInfo } from '../redux/actions/userActions';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
 
-const dummyData =
-        [{
-                title: 'ƯU ĐÃI MỚI -  GIẢM TỚI 30%', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-                description: "Khi mua hàng theo mùa",
-                id: 1
-
-        },
-        {
-                title: 'Food inside a Bowl', url: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
-                description: "Khi mua hàng theo mùa",
-                id: 2
-        },
-        {
-                title: 'Vegatable Salad', url: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
-                description: "Khi mua hàng theo mùa",
-                id: 3
-        },
-        {
-            title: 'Anise a Aroma Art Bazar', url: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-            description: "Khi mua hàng theo mùa",
-            id: 4
-
-    }]
-    const plants = [
-        {
-          id: 1,
-          name: 'Ravenea Plant Raven Plant Ravenea Plant',
-          product_image: '200.000',
-          like: true,
-          img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-          about:
-            'Succulent Plantis one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-        },
-      
-        {
-          id: 2,
-          name: 'Dragon Plant',
-          product_image: '200.000',
-          like: false,
-          img: 'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg',
-          about:
-            'Dragon Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-        },
-        {
-          id: 3,
-          name: 'Ravenea Plant',
-          product_image: '200.000',
-          like: false,
-          img: 'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg',
-          about:
-            'Ravenea Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-        },
-      
-        {
-          id: 4,
-          name: 'Potted Plant',
-          product_image: '200.000',
-          like: true,
-          img: 'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg',
-          about:
-            'Potted Plant Ravenea Plant one of the most popular and beautiful species that will produce clumpms. The storage of water often gives succulent plants a more swollen or fleshy appearance than other plants, a characteristic known as succulence.',
-        },
-      ];
-const categories = [
-    {name:'POPULAR',img:'https://i.ibb.co/JxykVBt/flat-lay-photography-of-vegetable-salad-on-plate-1640777.jpg'},
-    {name:'ORGANIC',img:'https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg'},
-    {name:'INDOORS',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'},
-    {name:'SYNTHETIC',img:'https://i.ibb.co/JtS24qP/food-inside-bowl-1854037.jpg'}];     
 const WIDTH = Dimensions.get('window').width;
 
-interface HomeProps{
-    productReducer:ProductState
-}
-export const _Home:React.FC<HomeProps> = (props:any) =>{
-    const [catergoryIndex, setCategoryIndex] = useState(0);
-    const [productList, setProductList] = useState([])
+export default function Home() {
+    const [catergoryIndex, setCategoryIndex] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(true);
+    const productState = useSelector((state: State) => state.productReducer);
+    const sliderState = useSelector((state: State) => state.sliderReducer);
+    const categoryState = useSelector((state: State) => state.categoryReducer);
+    const { categories } = categoryState;
+    const { productHot, productNew, productCategory } = productState;
+    const { slider } = sliderState;
+    const [_slider, _setSlider] = useState<string[]>([]);
+    const dispatch = useDispatch();
     const { navigate } = useNavigation();
-    const { products } = props.productReducer;
-    
-    useEffect(() => {
-       setProductList(products); 
-    },[])
 
+    useEffect(() => {
+        dispatch(getProductsNew());
+        dispatch(getProductsHot());
+        dispatch(getCategory());
+        dispatch(getSlider());
+    }, []);
+
+    useEffect(() => {
+ 
+        if (productHot && productNew && productCategory && slider && isLoadingCategory) {
+            let tempArr: any[] = [];
+            for (const iterator of slider!) {
+                tempArr.push(iterator.slider_image)
+            }
+            _setSlider(tempArr);
+            setIsLoading(true);
+        }
+        if (!isLoadingCategory) {
+            setIsLoadingCategory(true);
+        }
+    }, [productState, sliderState])
+
+    useEffect(() => {
+        if (categories && !productCategory) {
+            dispatch(getProductsCategory(categories![0].category_id!));
+        }
+    }, [categoryState])
 
     //Chuyen man hinh
-    const onTapDetail = () => {    
-        navigate('ProductDetail')
+    const onTapDetail = (id: number) => {
+        navigate('ProductDetail', { id })
     }
-    const searchProduct = (data:any) =>{
-        navigate('Search',{data})
+
+    const searchProduct = (data: any) => {
+        navigate('Search', { data: data, title: 'Tìm kiếm' })
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView  showsVerticalScrollIndicator={false} >
-                {/* Header */}
-                <View style={{marginTop:40}}>
-                    <HeaderBar onSearch={searchProduct} />
-                </View>
-                {/* Slider */}
-                <View style={{marginTop:20}}>
-                    <Carousel images ={dummyData} auto={true}/>
-                </View>
-                {/* Category */}
-                <View style={{flexDirection:'row',marginBottom:20}}>      
-                    {
-                        categories.map((item,index)=>
-                            <View key={index} style={{marginLeft:20}}>
-                                <Category item={item} index ={index} catergoryIndex={catergoryIndex} onTap={()=>setCategoryIndex(index)}/>
+            {/* Header */}
+            <View style={{ marginTop: 40,marginBottom:20 }}>
+                <HeaderBar onSearch={searchProduct} />
+            </View>
+            {
+                !isLoading ?
+                    (<View style={styles.container}>
+                        <ActivityIndicator size="large" color="#00ff00" />
+                    </View>) : (
+                        <ScrollView showsVerticalScrollIndicator={false} >
+                            {/* Slider */}
+                            <View >
+                                {_slider && <Carousel images={_slider} auto={true} />}
                             </View>
-                        )
-                    }
-                    
-                </View>
-                <View style={styles.productList}>
-                    {
-                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NONE" />)
-                    }
-                </View>
-                {/* San pham moi nhat */}
-                <View style={styles.productContainer}>
-                     <Image style={{height:70,width:WIDTH}} source={require('../images/sanpnew.png')} />
-                </View>
-                <View style={styles.productList}>
-                    {
-                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
-                    }
-                </View>
-                
-                {/* San pham moi nhat */}
-                <View style={styles.productContainer}>
-                    <Image style={{height:70,width:WIDTH}} source={require('../images/sanpnoibat.png')} />
-                </View>
-                <View style={styles.productList}>
-                    {
-                        productList.map((product,index)=> <Product onTap={onTapDetail} key={index} product={product} type="NEW"/>)
-                    }
-                </View>
-               
-            </ScrollView>
+                            {/* Category */}
+                            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+                                {
+
+                                    categories && categories.map((item, index) =>
+                                        <View key={index} style={{ marginLeft: 20 }}>
+                                            <Category item={item} index={index} catergoryIndex={catergoryIndex} onTap={() => {
+                                                setIsLoadingCategory(false);
+                                                const id: number = Number(item.category_id);
+                                                dispatch(getProductsCategory(id));
+                                                setCategoryIndex(index);
+                                            }} />
+                                        </View>
+                                    )
+                                }
+
+                            </View>
+                            <View style={styles.productList}>
+                                {
+                                    !isLoadingCategory ?
+                                        (<View style={styles.container}>
+                                            <ActivityIndicator size="large" color="#00ff00" />
+                                        </View>) :
+                                        productCategory && productCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
+
+                                }
+                            </View>
+                            {/* San pham moi nhat */}
+                            <View style={styles.productContainer}>
+                                <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnew.png')} />
+                            </View>
+                            <View style={styles.productList}>
+                                {
+                                    productNew && productNew.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
+                                }
+                            </View>
+
+                            {/* San pham moi nhat */}
+                            <View style={styles.productContainer}>
+                                <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnoibat.png')} />
+                            </View>
+                            <View style={styles.productList}>
+                                {
+                                    productHot && productHot.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
+                                }
+                            </View>
+
+                        </ScrollView>)
+            }
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-       flex: 1,
-       backgroundColor: '#E5E5E5',
+        flex: 1,
+        backgroundColor: '#E5E5E5',
     },
-    productContainer:{
-        flex:1,
-        marginBottom:20,
-        marginTop:10
+    productContainer: {
+        flex: 1,
+        marginBottom: 20,
+        marginTop: 10
     },
-    productsTitle:{
-        textAlign:'center',
-        padding:10,
-        color:'#fff7f7',
-        fontWeight:'bold',
-        fontSize:20,
+    productsTitle: {
+        textAlign: 'center',
+        padding: 10,
+        color: '#fff7f7',
+        fontWeight: 'bold',
+        fontSize: 20,
         backgroundColor: '#FF00FF'
     },
-    productList:{
-        display:'flex',
-        flexDirection:'row',
-        flexWrap:'wrap',
-        justifyContent:'space-around'
+    productList: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around'
     }
 });
-const mapToStateProps = (state: State) => ({
-    productReducer: state.productReducer,
-})
-const Home = connect(mapToStateProps, { getProducts })(_Home)
-export default Home;

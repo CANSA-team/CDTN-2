@@ -16,28 +16,36 @@ import axios from 'axios'
 import { useNavigation } from '../../utils/useNavigation'
 import { cansa } from '../../consts/Selector'
 import * as Facebook from 'expo-facebook';
+import { useDispatch, useSelector } from 'react-redux'
+import { State } from '../../redux'
+import { checkLogin } from '../../redux/actions/userActions'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 
-export default function Login() {
+export default function Login(props: any) {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState('')
   const [emailValdate, setEmailValdate] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
   const [isLoading, setisLoading] = useState(false)
+  const userState = useSelector((state: State) => state.userReducer);
+  const { check } = userState;
+  const dispatch = useDispatch();
   useEffect(() => {
-    axios.get(`${cansa[1]}/api/user/check/login`)
-      .then(res => {
-        //Trạng thái khi đăng nhập thành công
-        if (res.data.data == false) {
-          setisLoading(true)
-        } else {
-          navigate('homeStack');
-        }
-      })
-      .catch(error => console.log(error));
+
+    dispatch(checkLogin());
   }, [isLoading])
+
+  useEffect(() => {
+    if (!check) {
+      setisLoading(true)
+    } else {
+      navigate('homeStack');
+    }
+  }, [userState])
+
   const logInFB = async () => {
     try {
       await Facebook.initializeAsync({
@@ -130,6 +138,11 @@ export default function Login() {
     //Donot dismis Keyboard when click outside of TextInput
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigate('homeStack')} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.up}>
           <Ionicons
             name="ios-speedometer"
@@ -173,7 +186,7 @@ export default function Login() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.forgotButton}
-          onPress={() => {navigate('EmailOTPscreen')}}
+            onPress={() => { navigate('EmailOTPscreen') }}
           >
             <Text style={styles.navButtonText}>
               Forgot Password?
@@ -201,7 +214,9 @@ export default function Login() {
               <Text style={styles.loginButtonTitle}>Login with Google</Text>
             </FontAwesome.Button>
           </View>
-          <TouchableOpacity style={styles.forgotButton}>
+          <TouchableOpacity style={styles.forgotButton}
+            onPress={() => {  navigate('Register') }}
+          >
             <Text style={styles.navButtonText1}>
               Don't have an account? Create here
             </Text>
@@ -223,6 +238,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     backgroundColor: '#33FF99'
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 5,
+    position: 'absolute',
+    top: 30,
+    left: 10,
+    right: 0,
+    zIndex: 2
+  },
+  headerIcon: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 50,
+    padding: 5
   },
   up: {
     flex: 3,
