@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import COLORS from '../consts/Colors';
-import { SlugStr } from '../consts/Selector';
+import { SlugStr, vnd } from '../consts/Selector';
 import { useNavigation } from '../utils/useNavigation';
 
 export default function OderCard(props: any) {
@@ -40,7 +40,7 @@ export default function OderCard(props: any) {
                     <Text style={{ fontSize: 16, color: '#222' }}>{SlugStr(product && product.product_description, 62)}</Text>
                     <View style={styles.productPrice}>
                         <Text>{qty}</Text>
-                        <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{(product.product_price * (100 - product.product_sale) / 100) * qty}đ</Text>
+                        <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
                     </View>
                     {
                         status === 2 &&

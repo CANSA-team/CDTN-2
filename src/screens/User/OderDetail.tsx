@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CartCard from '../../components/CartCard';
 import OderCard from '../../components/OderCard';
 import { updateOderItem } from '../../redux/actions/oderActions';
+import { vnd } from '../../consts/Selector';
 
 
 let check = true;
@@ -84,15 +85,15 @@ export default function oderDetail(props: any) {
                         <Text style={styles.txtTotal}>Totals</Text>
                         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                             <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
-                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{sub_price}đ</Text>
+                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{vnd(sub_price)}đ</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
                             <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
-                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{ship}đ</Text>
+                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{vnd(ship)}đ</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                             <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
-                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>{total_price}đ</Text>
+                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>{vnd(total_price)}đ</Text>
                         </View>
                     </View>
                     {

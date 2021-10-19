@@ -8,7 +8,7 @@ import HeaderTitle from '../components/HeaderTitle';
 import { useNavigation } from '../utils/useNavigation';
 import { CartItemModel, CartModel, State } from '../redux';
 import axios from 'axios';
-import { cansa } from '../consts/Selector';
+import { cansa, vnd } from '../consts/Selector';
 import { withNavigationFocus } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart, updateCart } from '../redux/actions/cartActions';
@@ -79,15 +79,15 @@ const Cart = (props: any) => {
                                         <Text style={styles.txtTotal}>Totals</Text>
                                         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                                             <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
-                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.sub_price}đ</Text>
+                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && vnd(cart.sub_price)}đ</Text>
                                         </View>
                                         <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
                                             <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
-                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && cart.ship}đ</Text>
+                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart && vnd(cart.ship)}đ</Text>
                                         </View>
                                         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                                             <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
-                                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart && cart.total_price}đ</Text>
+                                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart && vnd(cart.total_price)}đ</Text>
                                         </View>
                                         <Button
                                             onPress={onTapCheckout}
