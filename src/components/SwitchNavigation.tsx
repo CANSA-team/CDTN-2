@@ -24,6 +24,7 @@ import ChangePassword from '../screens/Auth/ChangePassword';
 import OderDetail from '../screens/User/OderDetail';
 import Complaint from '../screens/Complaint';
 import EditProfile from '../screens/User/EditProfile';
+import Chat from '../screens/Chat/Chat';
 
 const DIMENS = {
     iconSize: 30,
@@ -140,7 +141,7 @@ const switchNavigator = createSwitchNavigator({
                 EmailOTPscreen,
                 ChangePassword,
                 OTPscreen,
-
+                Chat,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
