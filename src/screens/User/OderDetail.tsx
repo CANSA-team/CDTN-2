@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import COLORS from '../../consts/Colors';
 import { SafeAreaView } from 'react-navigation';
@@ -11,27 +11,37 @@ import { withNavigationFocus } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import CartCard from '../../components/CartCard';
 import OderCard from '../../components/OderCard';
+import { updateOderItem } from '../../redux/actions/oderActions';
 
 
 let check = true;
 
-export default function OderDetail(props: any) {
+export default function oderDetail(props: any) {
     const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
-    const oder = getParam('oder');
-
+    // const _oder = getParam('oder');
+    const [_oder,setOder] = useState(getParam('oder'));
+    const dispatch = useDispatch();
+    const orderState = useSelector((state: State) => state.oderReducer);
+    const { oder } = orderState;
     let sub_price = 0;
     let ship = 20000;
     let total_price = 0;
 
-    for (const item of oder.product_oder) {
+    useEffect(() => {
+        if(oder){
+            setOder(oder);
+        }
+    },[orderState])
+
+    for (const item of _oder.product_oder) {
         sub_price += (item.product.product_price * (100 - item.product.product_sale) / 100) * item.product_quantity;
     }
 
     total_price = sub_price + ship;
 
-    const OderStatus = [
+    const oderStatus = [
         <View style={styles.statusDes}>
             <Text style={styles.txtStatus}>Đã hủy</Text>
         </View>,
@@ -42,19 +52,29 @@ export default function OderDetail(props: any) {
             <Text style={styles.txtStatus}>Đã nhận</Text>
         </View>
     ]
+    const changeStatus = (product_id: number) => {
 
+        Alert.alert(
+            "Thông báo",
+            "Hủy đơn hàng ?",
+            [
+                { text: "Cancel" },
+                { text: "Yes", onPress: () => { dispatch(updateOderItem(product_id, _oder.oder_id)) } },
+            ]
+        );
+    }
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderTitle title={`Mã đơn hàng: ${oder.oder_id}`} />
+            <HeaderTitle title={`Mã đơn hàng: ${_oder.oder_id}`} />
             <View style={styles.container}>
                 <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                     <View style={{ flex: 1, marginBottom: 10 }}>
                         <ScrollView>
                             {
-                                oder.product_oder.map((cart: any, index: number) => {
+                                _oder.product_oder.map((cart: any, index: number) => {
                                     return (
                                         < View key={index} >
-                                            <OderCard qty={cart.product_quantity} product={cart.product} status={oder.status} />
+                                            <OderCard qty={cart.product_quantity} product={cart.product} oderStatus={cart.status} status={_oder.status} onTap={changeStatus}/>
                                         </View>)
                                 })
                             }
@@ -76,7 +96,7 @@ export default function OderDetail(props: any) {
                         </View>
                     </View>
                     {
-                        OderStatus[oder.status]
+                        oderStatus[_oder.status]
                     }
                 </ScrollView>
             </View >
@@ -113,19 +133,22 @@ const styles = StyleSheet.create({
         marginTop: 8,
         backgroundColor: 'blue',
         padding: 8,
-        borderRadius: 10
+        borderRadius: 10,
+        margin:10
     },
     statusDes: {
         marginTop: 8,
         backgroundColor: 'red',
         padding: 8,
-        borderRadius: 10
+        borderRadius: 10,
+        margin:10
     },
     statusAccept: {
         marginTop: 8,
         backgroundColor: COLORS.primary,
         padding: 8,
-        borderRadius: 10
+        borderRadius: 10,
+        margin:10
     },
     txtStatus: {
         color: '#fff',

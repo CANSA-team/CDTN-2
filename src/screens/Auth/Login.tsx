@@ -65,7 +65,6 @@ export default function Login(props:any) {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
         //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
         var infomation = await response.json();
-        console.log(infomation)
         axios.get(`${cansa[1]}/api/user/login/facebook/1/${token}/${infomation.email}/${infomation.id}/${infomation.name}/e4611a028c71342a5b083d2cbf59c494`)
           .then(res => {
             setisLoading(true)
@@ -109,7 +108,6 @@ export default function Login(props:any) {
     if (email != '' && password != '') {
       axios.get(`${cansa[1]}/api/user/login/${email}/${password}/123`)
         .then(res => {
-          console.log(res.data.status)
           //Trạng thái khi đăng nhập thành công
           if (res.data.status != 'Faild') {
             navigate('homeStack');

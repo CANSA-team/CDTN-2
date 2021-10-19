@@ -50,6 +50,8 @@ export enum UserActionType{
 export enum OderActionType{
     ADD_ORDER = 'ADD_ORDER',
     GET_ALL_ORDER = 'GET_ALL_ORDER',
+    UPDATE_ORDER = 'UPDATE_ORDER',
+    UPDATE_ODER_ITEM = 'UPDATE_ODER_ITEM',
     ON_ORDER_ERROR = 'ON_ORDER_ERROR'
 }
 

@@ -19,7 +19,16 @@ export interface OderErrorAction {
     payload: any
 }
 
-export type OrderActions = AddOrder | OderErrorAction | GetAllOrder;
+export interface UpdateOderAction {
+    readonly type: OderActionType.UPDATE_ORDER,
+    payload: any
+}
+export interface UpdateOderItemAction {
+    readonly type: OderActionType.UPDATE_ODER_ITEM,
+    payload: any
+}
+
+export type OrderActions = AddOrder | OderErrorAction | GetAllOrder | UpdateOderAction | UpdateOderItemAction;
 
 export const addOder = (diaChi: string, sdt: string, user_id: number) => {
     return async (dispatch: Dispatch<OrderActions>) => {
@@ -82,5 +91,68 @@ export const getAllOder = (user_id: number, option: number = 3) => {
             })
         }
 
+    }
+}
+
+export const updateOder = (user_id: number, oder_id: number, status: number = 0) => {
+
+    return async (dispatch: Dispatch<OrderActions>) => {
+        const data = {
+            oder_id: oder_id,
+            status: status,
+        }
+        try {
+            const response = await axios.post<any>(`${cansa[1]}/api/oder/change/${user_id}/e4611a028c71342a5b083d2cbf59c494`, data);
+            if (!response) {
+                dispatch({
+                    type: OderActionType.ON_ORDER_ERROR,
+                    payload: 'Product list error'
+                })
+            } else {
+                // save our location in local storage
+                dispatch({
+                    type: OderActionType.UPDATE_ORDER,
+                    payload: response.data.data
+                })
+            }
+
+        } catch (error) {
+            dispatch({
+                type: OderActionType.ON_ORDER_ERROR,
+                payload: error
+            })
+        }
+
+    }
+}
+
+export const updateOderItem = (product_id: number, oder_id: number, status: number = 0) => {
+    const data = {
+        product_id: product_id,
+        oder_id: oder_id,
+        status: status,
+    }
+    return async (dispatch: Dispatch<OrderActions>) => {
+        try {
+            const response = await axios.post<any>(`${cansa[1]}/api/oder/change_product/e4611a028c71342a5b083d2cbf59c494`, data);
+            if (!response) {
+                dispatch({
+                    type: OderActionType.ON_ORDER_ERROR,
+                    payload: 'Product list error'
+                })
+            } else {
+                // save our location in local storage
+                dispatch({
+                    type: OderActionType.UPDATE_ODER_ITEM,
+                    payload: response.data.data
+                })
+            }
+
+        } catch (error) {
+            dispatch({
+                type: OderActionType.ON_ORDER_ERROR,
+                payload: error
+            })
+        }
     }
 }

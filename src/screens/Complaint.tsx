@@ -23,7 +23,6 @@ export default function Complaint(props:any) {
     const { status } = complaintState;
 
     useEffect(() => {
-        console.log(status);
         if(status && check){
             Alert.alert(
                 "Thông báo!",

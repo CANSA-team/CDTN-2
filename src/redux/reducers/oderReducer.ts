@@ -7,6 +7,7 @@ import { CommentState, CommentModel, OderState } from "../models";
 const initialState: OderState = {
     status: undefined,
     oderList: undefined,
+    oder: undefined,
     error: undefined
 }
 
@@ -21,6 +22,16 @@ const oderReducer = (state: OderState = initialState, action: OrderActions) => {
             return {
                 ...state,
                 oderList: action.payload
+            }
+        case OderActionType.UPDATE_ORDER:
+            return {
+                ...state,
+                oderList: action.payload
+            }
+        case OderActionType.UPDATE_ODER_ITEM:
+            return {
+                ...state,
+                oder: action.payload
             }
         case OderActionType.ON_ORDER_ERROR:
             return {

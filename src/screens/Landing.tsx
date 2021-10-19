@@ -22,8 +22,6 @@ export default function Lauding(){
     useEffect(()=>{
 
         if(message != ''){
-            console.log(message);
-
             navigate('homeStack')
         }
     },[accessState]);
