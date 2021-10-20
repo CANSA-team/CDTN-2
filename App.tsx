@@ -5,11 +5,12 @@ import Register from './src/screens/Auth/Register';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import PasswordInformation from './src/screens/Auth/PasswordInformation';
+import EmailOTPscreen from './src/screens/Auth/EmailOTPscreen';
 
 export default function App() {
   return ( 
     <Provider store={store}>
-        <PasswordInformation/>     
+        <EmailOTPscreen/>     
     </Provider>
   );
 }

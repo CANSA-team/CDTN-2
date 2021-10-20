@@ -54,7 +54,7 @@ export default function EmailOTPscreen() {
                     <Text style={styles.title}>
                         Email OTP Code
                     </Text>
-                    <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10 }}>
+                    <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10, textAlign:'center'}}>
                         We will send 4 digits code to your email for the verifiction
                     </Text>
                 </View>
@@ -76,6 +76,12 @@ export default function EmailOTPscreen() {
                         onPress={continueBtn}
                     >
                         <Text style={styles.loginButtonTitle}>Continue</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.forgotButton}>
+                        <Text style={styles.navButtonText}>
+                            Have an account? Sign In
+                        </Text>
                     </TouchableOpacity>
 
                 </View>
@@ -143,6 +149,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 75,
         left: 30
+    },
+    forgotButton: {
+
+    },
+    navButtonText: {
+        marginTop: 10,
+        textAlign: 'center',
+        fontSize: 15,
+        color: '#3b5998'
+
     },
     error: {
         borderColor: 'red',
