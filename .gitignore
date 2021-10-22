@@ -1,18 +1,14 @@
-# Build and Release Folders
-
-# Other files and folders
-.settings/
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-# Executables
+.expo/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+package-lock.json*
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# macOS
+.DS_Store
