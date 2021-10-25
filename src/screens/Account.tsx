@@ -100,7 +100,7 @@ export default function Account() {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.viewAction}>
-                    <TouchableOpacity onPress={()=>{navigate('Chat')}} style={styles.actionTouch}>
+                    <TouchableOpacity onPress={()=>{navigate('ListChat')}} style={styles.actionTouch}>
                         <Text style={styles.actionTitle}>Test chat</Text>
                         <SimpleLineIcons name="arrow-right" size={20} color="#333" />
                     </TouchableOpacity>

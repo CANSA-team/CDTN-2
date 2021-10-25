@@ -25,6 +25,7 @@ import OderDetail from '../screens/User/OderDetail';
 import Complaint from '../screens/Complaint';
 import EditProfile from '../screens/User/EditProfile';
 import Chat from '../screens/Chat/Chat';
+import ListChat from '../screens/Chat/ListChat';
 
 const DIMENS = {
     iconSize: 30,
@@ -142,6 +143,7 @@ const switchNavigator = createSwitchNavigator({
                 ChangePassword,
                 OTPscreen,
                 Chat,
+                ListChat,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

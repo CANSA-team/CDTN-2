@@ -15,8 +15,9 @@ export default function Chat(props: any) {
     const [mess, setMess] = useState([])
     const [isTyping, setIsTyping] = useState(false)
     const socket = io("http://192.168.1.93:3002");
-    var myID = 1;
-    var hisID = 2;
+    const myName = 'Hoàng Anh';
+    const myID = 1;
+    const hisID = 2;
     useEffect(() => {
         setMess([]);
         (async()=>{

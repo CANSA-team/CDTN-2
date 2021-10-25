@@ -66,7 +66,7 @@ export default function Login(props: any) {
         //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
         var infomation = await response.json();
         console.log(infomation)
-        axios.get(`${cansa[1]}/api/user/login/facebook/1/${token}/${infomation.email}/${infomation.id}/${infomation.name}/e4611a028c71342a5b083d2cbf59c494`)
+        axios.post(`${cansa[1]}/api/user/login/facebook/e4611a028c71342a5b083d2cbf59c494`,{user_permission:'1',tocken:token,user_email:infomation.email,user_name:infomation.id,full_name:infomation.name})
           .then(res => {
             setisLoading(true)
             navigate('homeStack');
@@ -107,7 +107,7 @@ export default function Login(props: any) {
   }
   const loginBtn = () => {
     if (email != '' && password != '') {
-      axios.get(`${cansa[1]}/api/user/login/${email}/${password}/123`)
+      axios.post(`${cansa[1]}/api/user/login/123`,{email:email,password:password})
         .then(res => {
           console.log(res.data.status)
           //Trạng thái khi đăng nhập thành công
