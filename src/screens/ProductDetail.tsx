@@ -98,7 +98,7 @@ export default function ProductDetail(props: any) {
                         {product && <Carousel images={product.product_image} auto={false} />}
                     </View>
                     <View style={styles.detailContainer}>
-                        {(product && product.product_rating != -1) ?
+                        {(product && product.product_rating) ?
                             <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
                                 <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating!.toFixed(1)} />
                                 <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating!.toFixed(1)}</Text>

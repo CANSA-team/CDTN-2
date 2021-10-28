@@ -88,6 +88,7 @@ export default function EditProfile(props: any) {
             axios.get(`${cansa[1]}${link}`).then((res) => {
                 const link = `/api/user/update/user/${userProdfile.user_key}/${nickName}/${avatar_user}/${userProdfile.user_status}`;
                 axios.get(`${cansa[1]}${link}`).then((res) => {
+                   
                     Alert.alert(
                         "Thông báo!",
                         res.data.message,

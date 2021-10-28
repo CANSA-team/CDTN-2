@@ -229,6 +229,7 @@ export default function Checkout(props: any) {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.txtPay}>Tổng tiền : </Text>
                     <Text style={styles.txtPrice}>{vnd(cart.total_price)}đ</Text>
+                    <Text style={styles.txtPrice}>{cart.total_price}đ</Text>
                 </View>
             </View>
             <View style={styles.viewTotal}>

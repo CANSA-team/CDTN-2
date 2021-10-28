@@ -34,7 +34,6 @@ export default function Login(props:any) {
   const { check } = userState;
   const dispatch = useDispatch();
   useEffect(() => {
-   
     dispatch(checkLogin());
   }, [isLoading])
 
@@ -65,7 +64,8 @@ export default function Login(props:any) {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
         //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
         var infomation = await response.json();
-        axios.get(`${cansa[1]}/api/user/login/facebook/1/${token}/${infomation.email}/${infomation.id}/${infomation.name}/e4611a028c71342a5b083d2cbf59c494`)
+        console.log(infomation)
+        axios.post(`${cansa[1]}/api/user/login/facebook/e4611a028c71342a5b083d2cbf59c494`,{user_permission:'1',tocken:token,user_email:infomation.email,user_name:infomation.id,full_name:infomation.name})
           .then(res => {
             setisLoading(true)
             navigate('homeStack');
@@ -106,7 +106,7 @@ export default function Login(props:any) {
   }
   const loginBtn = () => {
     if (email != '' && password != '') {
-      axios.get(`${cansa[1]}/api/user/login/${email}/${password}/123`)
+      axios.post(`${cansa[1]}/api/user/login/123`,{email:email,password:password})
         .then(res => {
           //Trạng thái khi đăng nhập thành công
           if (res.data.status != 'Faild') {
@@ -137,9 +137,9 @@ export default function Login(props:any) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.header}>
-            <TouchableOpacity>
-                <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigate('homeStack')} />
-            </TouchableOpacity>
+          <TouchableOpacity>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigate('homeStack')} />
+          </TouchableOpacity>
         </View>
         <View style={styles.up}>
           <Ionicons
@@ -212,7 +212,9 @@ export default function Login(props:any) {
               <Text style={styles.loginButtonTitle}>Login with Google</Text>
             </FontAwesome.Button>
           </View>
-          <TouchableOpacity style={styles.forgotButton}>
+          <TouchableOpacity style={styles.forgotButton}
+            onPress={() => {  navigate('Register') }}
+          >
             <Text style={styles.navButtonText1}>
               Don't have an account? Create here
             </Text>

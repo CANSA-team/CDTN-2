@@ -17,15 +17,18 @@ import Checkout from './../screens/Checkout';
 import CheckoutSuccess from './../screens/CheckoutSuccess';
 import Ordered from './../screens/User/Ordered';
 import Login from '../screens/Auth/Login';
+import Register from '../screens/Auth/Register';
 import EmailOTPscreen from '../screens/Auth/EmailOTPscreen';
 import OTPscreen from '../screens/Auth/OTPscreen';
 import ChangePassword from '../screens/Auth/ChangePassword';
 import OderDetail from '../screens/User/OderDetail';
 import Complaint from '../screens/Complaint';
 import EditProfile from '../screens/User/EditProfile';
+import Chat from '../screens/Chat/Chat';
+import ListChat from '../screens/Chat/ListChat';
 
 const DIMENS = {
-    iconSize : 30,
+    iconSize: 30,
     fontNameCategory: 15
 }
 const switchNavigator = createSwitchNavigator({
@@ -39,13 +42,14 @@ const switchNavigator = createSwitchNavigator({
         }),
 
     },
-    
-    loginStack:{
+
+    loginStack: {
         screen: createStackNavigator({
             Login,
             OTPscreen,
             EmailOTPscreen,
             ChangePassword,
+            Register,
         }, {
             defaultNavigationOptions: {
                 headerShown: false
@@ -53,6 +57,16 @@ const switchNavigator = createSwitchNavigator({
         })
     },
 
+
+    shopStack: {
+        screen: createStackNavigator({
+            Shop,
+        }, {
+            defaultNavigationOptions: {
+                headerShown: false
+            }
+        })
+    },
 
     shopStack:{
         screen: createStackNavigator({
@@ -73,20 +87,21 @@ const switchNavigator = createSwitchNavigator({
                 Search: Search,
                 Shop: Shop,
                 Complaint:Complaint,
+                Complaint: Complaint,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
                 },
-                
+
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
+                    let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
                 tabBarLabel: "Home"
             },
-            
+
         },
         category: {
             screen: createStackNavigator({
@@ -95,78 +110,80 @@ const switchNavigator = createSwitchNavigator({
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
-                },          
+                },
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
+                    let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
                 tabBarLabel: "Categories"
             },
-            
+
         },
         cart: {
             screen: createStackNavigator({
                 Cart: Cart,
                 Checkout: Checkout,
                 CheckoutSuccess: CheckoutSuccess,
-                Ordered:Ordered
+                Ordered: Ordered
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
                 },
-                
+
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
+                    let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
                 tabBarLabel: "Cart"
             },
-            
+
         },
         account: {
-            screen: createStackNavigator({         
+            screen: createStackNavigator({
                 Account: Account,
-                Profile:Profile,
-                Checkout:Checkout,
-                Ordered:Ordered,
-                OderDetail:OderDetail,
+                Profile: Profile,
+                Checkout: Checkout,
+                Ordered: Ordered,
+                OderDetail: OderDetail,
                 EditProfile: EditProfile,
                 EmailOTPscreen,
                 ChangePassword,
                 OTPscreen,
+                Chat,
+                ListChat,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
                 },
-                
+
             }),
             navigationOptions: {
                 tabBarIcon: ({ focused, tintColor }) => {
-                    let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.primary}/> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit}/>
+                    let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
                 tabBarLabel: "Account"
             },
-            
+
         },
-    },{
-        tabBarOptions:{
+    }, {
+        tabBarOptions: {
             activeTintColor: COLORS.primary,
-            inactiveTintColor :COLORS.colorFontInit,
-            labelStyle:{
-                fontSize:DIMENS.fontNameCategory,
-                fontWeight:'600'
+            inactiveTintColor: COLORS.colorFontInit,
+            labelStyle: {
+                fontSize: DIMENS.fontNameCategory,
+                fontWeight: '600'
             },
             style: {
-                padding:8,
+                padding: 8,
                 height: 60,
             },
             allowFontScaling: true
-        }          
+        }
     }),
 });
 const AppNavigation = createAppContainer(switchNavigator);
