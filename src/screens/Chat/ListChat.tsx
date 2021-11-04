@@ -13,50 +13,46 @@ import { Avatar, Badge, withBadge, Icon } from 'react-native-elements';
 import { cansa } from '../../consts/Selector'
 
 export default function Chat(props: any) {
-    const [data, setData] = useState([])
-
+    const [data, setData]: any = useState([])
+    const [dataStatus, setDataStatus]: any = useState([])
+    const { navigate } = useNavigation();
+    const socket = io("http://192.168.1.93:3002");
+    const myID = 1;
 
     useEffect(() => {
-        let tempData = [];
-        (async () => {
-            await axios.get(`http://192.168.1.93:3002/api/chat/getChatList/1/`)
-                .then(async res => {
-                   let i = 1;
-                   let temNum = Object.keys(res.data.data).length;
-                    res.data.data.forEach(element => {
-                        axios.get(`https://103.207.38.200:443/api/user/get/user/by/${element.user_to}`)
-                            .then(res1 => {
-                                tempData.push({
-                                    id: '_' + Math.random().toString(36).substr(2, 16),
-                                    title: res1.data.data.user_name,
-                                    id_user: element.user_to,
-                                    newStatusMess: false,
-                                    statusOnline: true,
-                                    text: 'oke',
-                                })
-                                i++;
-                                if(temNum == i){
-                                    let temp = tempData.sort(function (x, y) {
-                                        return (x === y) ? 0 : x ? -1 : 1;
-                                    })
-                                    setData(temp)
-                                }
-                            })
-                            .catch(error => console.log(error));
-                    });
-                    
-                })
-                .catch(error => console.log(error));
+        let temp:any = []
+        socket.on("thread", function (data) {
+            if (data.user_to == myID) {
+                socket.emit('roomList', myID)
+            }
+        });
+        socket.emit('roomList', myID)
+        socket.on("roomList", function (data) {
+            let tempData: any = [];
+            data.forEach((element: any) => {
                 
-
-        })();
+                socket.emit('onlineStatus', element[0].user_to)
+                tempData.push({
+                    id: '_' + Math.random().toString(36).substr(2, 16),
+                    title: 'hoanganh22k',
+                    id_user: (myID != element[0].user_to)?element[0].user_to:element[0].user_from,
+                    newStatusMess: (element[0].isWatched == 1)?false:true,
+                    statusOnline: false,
+                    CreateDate:element[0].CreateDate,
+                    text: element[0].message,
+                })
+            });
+            let temp = tempData.sort((a:any, b:any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
+            setData(temp)
+        });
         
     }, [])
+
     const BadgedIcon = withBadge(1)(Icon)
 
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item }: any) => {
         return (
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={() => { navigate('Chat', { id_user: item.id_user }) }}>
                 <View style={styles.row}>
                     <Avatar
                         rounded
@@ -65,11 +61,12 @@ export default function Chat(props: any) {
                         }}
                         size="large"
                     />
-                    <Badge
+                    {item.statusOnline ? (<Badge
                         status="success"
                         value={' '}
-                        containerStyle={{ position: 'absolute', top: 57, left: item.statusOnline ? 55 : -9999, zIndex: 999, }}
-                    />
+                        containerStyle={{ position: 'absolute', top: 57, left: 55, zIndex: 999, }}
+                    />) : (<View></View>)}
+
                     <View style={{
                         flexDirection: "column",
                     }}>
@@ -86,8 +83,7 @@ export default function Chat(props: any) {
             <FlatList
                 data={data}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-                extraData={data}
+                keyExtractor={(item: any) => item.id}
             />
         </SafeAreaView>
     );
