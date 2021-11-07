@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Text, Alert } from 'react-native';
 import HeaderTitle from '../../components/HeaderTitle';
 import ProductOrdered from '../../components/ProductOrdered';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { OderItemModel, OderModel, State } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllOder } from '../../redux/actions/oderActions';
+import { getAllOder, updateOder } from '../../redux/actions/oderActions';
 import { getUserInfo } from '../../redux/actions/userActions';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -14,7 +14,7 @@ let check = true;
 export default function Ordered(props: any) {
     const { navigation, route } = props;
     const orderState = useSelector((state: State) => state.oderReducer);
-    const { oderList } = orderState;
+    const { oderList, oder } = orderState;
     const userState = useSelector((state: State) => state.userReducer);
     const { userInfor } = userState;
     const dispatch = useDispatch();
@@ -26,8 +26,16 @@ export default function Ordered(props: any) {
     }, []);
 
     useEffect(() => {
-        setOderList(oderList);
+        if (oderList) {
+            setOderList(oderList);
+        }
     }, [orderState]);
+
+    useEffect(() => {
+        if (userInfor) {
+            dispatch(getAllOder(userInfor.user_id));
+        }
+    }, [oder]);
 
     if (check) {
         if (userInfor) {
@@ -46,15 +54,26 @@ export default function Ordered(props: any) {
 
     const filterStatus = (data: number) => {
         if (oderList) {
-            if (data != -1 ) {
+            if (data != -1) {
                 let __oderList = oderList.filter((item: any) => item.status === data);
                 setOderList(__oderList);
-            }else{
+            } else {
                 setOderList(oderList);
             }
         }
     }
 
+    const changeStatus = (oder_id: number,) => {
+
+        Alert.alert(
+            "Thông báo",
+            "Hủy đơn hàng ?",
+            [
+                { text: "Cancel" },
+                { text: "Yes", onPress: () => { dispatch(updateOder(userInfor.user_id, oder_id)) } },
+            ]
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -85,10 +104,9 @@ export default function Ordered(props: any) {
                         <ScrollView style={{ flex: 1, marginTop: 5 }} showsVerticalScrollIndicator={false}>
                             {
                                 _oderList && _oderList.map((oder: OderModel, index: number) => {
-                                    console.log(oder.status);
                                     return (
                                         <View key={index}>
-                                            <ProductOrdered oder={oder} />
+                                            <ProductOrdered oder={oder} onTap={changeStatus} />
                                         </View>
                                     )
                                 })

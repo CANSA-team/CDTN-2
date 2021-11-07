@@ -12,9 +12,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-import { cansa } from '../../consts/Selector';
-import {  margin, marginBottom } from 'styled-system';
+import { cansa, saveImage, updateImage } from '../../consts/Selector';
+import { margin, marginBottom } from 'styled-system';
 import COLORS from '../../consts/Colors';
+import { ImageId, State, UserModel, UserStage } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfile, getUserInfo } from '../../redux/actions/userActions';
 
 let user_temp = {
     "id": 1,
@@ -27,15 +30,20 @@ export default function EditProfile(props: any) {
     const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor, updateUser }: { userInfor: UserModel, updateUser: number } = userState;
     const userProdfile = getParam('userProfile');
-    const avatar = getParam('avatar');
-    const [date, setDate] = useState(new Date(userProdfile.birthday));
+    const [date, setDate] = useState(new Date(userInfor.user_birthday));
     const [show, setShow] = useState(false);
-    const [name, setName] = useState(userProdfile.name);
-    const [nickName, setNickName] = useState(userProdfile.user_name);
-    const [phone, setPhone] = useState(userProdfile.phone);
-    const [image, setImage] = useState(avatar);
+    const [name, setName] = useState(userInfor.user_real_name);
+    const [phone, setPhone] = useState(userInfor.user_phone);
+    const [image, setImage] = useState(userInfor.user_avatar_image);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [avatar, setavatar] = useState<number | undefined>(undefined);
+    const [checkSave, setcheckSave] = useState<boolean>(false);
+    const dispatch = useDispatch();
+
+
 
     useEffect(() => {
     }, [])
@@ -55,6 +63,23 @@ export default function EditProfile(props: any) {
         setDate(date);
     };
 
+    useEffect(() => {
+        if (userInfor) {
+            setName(userInfor.user_real_name);
+            setPhone(userInfor.user_phone);
+            setDate(userInfor.user_birthday);
+            setavatar(Number(userInfor.user_avatar));
+            setImage(userInfor.user_avatar_image);
+        }
+    }, [userInfor])
+
+    useEffect(() => {
+        if (avatar && checkSave) {
+            dispatch(updateUserProfile(name, phone, date, avatar));
+        }
+    }, [avatar])
+
+
     let getImg = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -65,41 +90,54 @@ export default function EditProfile(props: any) {
 
         if (!result.cancelled) {
             setImage(result.uri);
+            console.log(result.uri)
         }
     };
 
     const save = () => {
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data;'
-            }
-        };
-        var data = new FormData();
-        data.append('file',
-            {
-                uri: image,
-                name: 'userProfile.jpg',
-                type: 'image/jpg'
-            });
+        if (/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone) && name && date && image) {
+            if (userInfor.user_avatar) {
+                //them hinh
+                let _avatar: ImageId = { id: 0 };
+                const avatar_img = {
+                    uri: image,
+                    name: 'userProfile.jpg',
+                    type: 'image/jpg'
+                }
+                const saveAvt: Promise<void> = saveImage(avatar_img, _avatar);
 
-        axios.post(`${cansa[0]}/api/image/update/${userProdfile.user_avatar}/e4611a028c71342a5b083d2cbf59c494`, data, config).then((resp) => {
-            const avatar_user = resp.data.data.image_id;
-            const link = `/api/user/update/profile/${name}/${phone}/${moment.utc(date).format('YYYY-MM-DD')}`;
-            axios.get(`${cansa[1]}${link}`).then((res) => {
-                const link = `/api/user/update/user/${userProdfile.user_key}/${nickName}/${avatar_user}/${userProdfile.user_status}`;
-                axios.get(`${cansa[1]}${link}`).then((res) => {
-                   
-                    Alert.alert(
-                        "Thông báo!",
-                        res.data.message,
-                        [
-                            { text: "OK" }
-                        ]
-                    );
+                Promise.all([saveAvt]).then(() => {
+                    dispatch(updateUserProfile(name, phone, date, _avatar.id));
                 })
-            })
-        })
+            }
+            else {
+                //sua hinh
+                let _avatar: ImageId = { id: Number(userInfor.user_avatar) };
+                let saveAvt: Promise<void>;
+                if (image !== userInfor.user_avatar_image) {
+                    const avatar_img = {
+                        uri: image,
+                        name: 'userProfile.jpg',
+                        type: 'image/jpg'
+                    }
+                    saveAvt = updateImage(avatar_img, Number(userInfor.user_avatar), _avatar);
+                } else {
+                    saveAvt = new Promise((resolve, reject) => resolve());
+                }
+                Promise.all([saveAvt]).then(() => {
+                    dispatch(updateUserProfile(name, phone, date, _avatar.id));
+                })
+            }
+        }
     }
+
+    useEffect(() => {
+        if (updateUser) {
+            dispatch(getUserInfo());
+            navigate('Profile')
+        }
+
+    }, [updateUser])
 
     return (
         <View style={styles.container}>
@@ -121,13 +159,14 @@ export default function EditProfile(props: any) {
                         source={{
                             uri: image,
                         }}
-                        onPress={getImg}
+
                     >
-                        <Accessory style={{
-                            borderWidth: 2,
-                            borderColor: "#444",
-                            backgroundColor: COLORS.primary
-                        }} size={50}></Accessory>
+                        <Accessory onPress={getImg}
+                            style={{
+                                borderWidth: 2,
+                                borderColor: "#444",
+                                backgroundColor: COLORS.primary
+                            }} size={50}></Accessory>
                     </Avatar>
                 </View>
 
@@ -136,12 +175,6 @@ export default function EditProfile(props: any) {
                         value={name}
                         label="Họ và Tên"
                         onChangeText={setName}
-                    />
-
-                    <Input
-                        value={nickName}
-                        label="Nick Name"
-                        onChangeText={setNickName}
                     />
 
                     <Input

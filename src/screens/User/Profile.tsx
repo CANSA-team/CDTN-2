@@ -10,6 +10,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '../../utils/useNavigation';
 import axios from 'axios';
 import { cansa } from '../../consts/Selector';
+import { State, UserModel, UserStage } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkLogin, getUserInfo } from '../../redux/actions/userActions';
 
 let user_temp = {
     "id": 1,
@@ -41,111 +44,121 @@ export default function Profile(props: any) {
     const [isLoadingChangePassword, setIsLoadingChangePassword] = useState<boolean>(true);
 
     const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { userInfor: UserModel } = userState;
 
 
-    useEffect(() => {
-        (async () => {
-            const _getUserProfile = getUserProfile();
-            const _getUserInfor = getUserInfor();
 
-            await Promise.all([_getUserProfile, _getUserInfor]).then(() => {
-                setUserProfile(userProdfile);
-                setIsLoading(true);
-            })
-        }
-        )();
-    }, [])
+    // useEffect(() => {
+    //     (async () => {
+    //         const _getUserProfile = getUserProfile();
+    //         const _getUserInfor = getUserInfor();
 
-    const getUserProfile = async () => {
-        await axios.get(`${cansa[1]}/api/user/get/profile`)
-            .then(res => {
-                userProdfile.phone = res.data.data.phone;
-                userProdfile.birthday = res.data.data.birthday;
-                userProdfile.name = res.data.data.name;;
-            })
-    }
+    //         await Promise.all([_getUserProfile, _getUserInfor]).then(() => {
+    //             setUserProfile(userProdfile);
+    //             setIsLoading(true);
+    //         })
+    //     }
+    //     )();
+    // }, [])
 
-    const getUserInfor = async () => {
-        await axios.get(`${cansa[1]}/api/user/get/user`)
-            .then(res => {
-                userProdfile.user_key = res.data.data.user_key;
-                userProdfile.user_name = res.data.data.user_name;
-                userProdfile.user_avatar = res.data.data.user_avatar;
-                userProdfile.user_status = res.data.data.user_status;
-                userProdfile.user_last_update = res.data.data.user_last_update;
-                axios.get(`${cansa[0]}/api/image/get/${res.data.data.user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
-                    setImage(res.data.data);
-                })
-            })
-    }
+    // useEffect(() => {
+    //     dispatch(getUserInfo())
+    // }, [check])
+
+
+    // const getUserProfile = async () => {
+    //     await axios.get(`${cansa[1]}/api/user/get/profile`)
+    //         .then(res => {
+    //             userProdfile.phone = res.data.data.phone;
+    //             userProdfile.birthday = res.data.data.birthday;
+    //             userProdfile.name = res.data.data.name;;
+    //         })
+    // }
+
+    // const getUserInfor = async () => {
+    //     await axios.get(`${cansa[1]}/api/user/get/user`)
+    //         .then(res => {
+    //             userProdfile.user_key = res.data.data.user_key;
+    //             userProdfile.user_name = res.data.data.user_name;
+    //             userProdfile.user_avatar = res.data.data.user_avatar;
+    //             userProdfile.user_status = res.data.data.user_status;
+    //             userProdfile.user_last_update = res.data.data.user_last_update;
+    //             axios.get(`${cansa[0]}/api/image/get/${res.data.data.user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
+    //                 setImage(res.data.data);
+    //             })
+    //         })
+    // }
+
 
     return (
         <View style={styles.container}>
-            {!isLoading ?
+            {/* {!isLoading ?
                 (<View style={styles.container}>
                     <ActivityIndicator size="large" color="#00ff00" />
-                </View>) : (
-                    <View>
-                        <View>
-                            <HeaderTitle title={'PROFILE'} />
-                            <View style={styles.header}>
-                                <TouchableOpacity>
-                                    <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigate('EditProfile', { userProfile: userProdfile, avatar: image })}>
-                                    <Feather name="edit" color="white" size={35} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                </View>) : ( */}
+            <View>
+                <View>
+                    <HeaderTitle title={'PROFILE'} />
+                    <View style={styles.header}>
+                        <TouchableOpacity>
+                            <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigate('EditProfile', { userProfile: userProdfile, avatar: image })}>
+                            <Feather name="edit" color="white" size={35} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
-                        <View style={styles.viewAvatar}>
-                            <Avatar
-                                containerStyle={{ marginBottom: 20 }}
-                                rounded
-                                size={200}
-                                source={{
-                                    uri: image,
-                                }} >
-                            </Avatar>
-                        </View>
+                <View style={styles.viewAvatar}>
+                    <Avatar
+                        containerStyle={{ marginBottom: 20 }}
+                        rounded
+                        size={200}
+                        source={{
+                            uri: userInfor.user_avatar_image,
+                        }} >
+                    </Avatar>
+                </View>
 
-                        <View style={styles.viewTxt}>
-                            <View style={styles.txtContainer}>
-                                <Text style={styles.txtTitle}>User full name: {userProdfile.name}</Text>
-                            </View>
+                <View style={styles.viewTxt}>
+                    <View style={styles.txtContainer}>
+                        <Text style={styles.txtTitle}>User full name: {userInfor.user_real_name}</Text>
+                    </View>
 
-                            <View style={styles.txtContainer}>
-                                <Text style={styles.txtTitle}>User nick name: {userProdfile.user_name}</Text>
-                            </View>
+                    <View style={styles.txtContainer}>
+                        <Text style={styles.txtTitle}>User nick name: {userInfor.user_name}</Text>
+                    </View>
 
-                            <View style={styles.txtContainer}>
-                                <Text style={styles.txtTitle}>User phone: {userProdfile.phone}</Text>
-                            </View>
+                    <View style={styles.txtContainer}>
+                        <Text style={styles.txtTitle}>User phone: {userInfor.user_phone}</Text>
+                    </View>
 
-                            <View style={styles.txtContainer}>
-                                <Text style={styles.txtTitle}>User birthday: {moment.utc(userProdfile.birthday).format('DD/MM/YYYY')}</Text>
-                            </View>
+                    <View style={styles.txtContainer}>
+                        <Text style={styles.txtTitle}>User birthday: {moment.utc(userInfor.user_birthday).format('DD/MM/YYYY')}</Text>
+                    </View>
 
-                            <View style={styles.resetPassContainer}>
-                                {
-                                    isLoadingChangePassword &&
-                                    <TouchableOpacity style={styles.touchReset}
-                                        onPress={() => {
-                                            setIsLoadingChangePassword(false);
-                                            let email = getParam('email');
-                                            axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
-                                                Alert.alert('Thông Báo', res.data.message);
-                                                navigate('OTPscreen', { email: email })
-                                            })
-                                        }}>
-                                        <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
-                                        <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
-                                    </TouchableOpacity>
-                                }
+                    <View style={styles.resetPassContainer}>
+                        {
+                            isLoadingChangePassword &&
+                            <TouchableOpacity style={styles.touchReset}
+                                onPress={() => {
+                                    setIsLoadingChangePassword(false);
+                                    let email = getParam('email');
+                                    axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
+                                        Alert.alert('Thông Báo', res.data.message);
+                                        navigate('OTPscreen', { email: email })
+                                    })
+                                }}>
+                                <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
+                                <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
+                            </TouchableOpacity>
+                        }
 
-                            </View>
-                        </View>
-                    </View>)}
+                    </View>
+                </View>
+            </View>
+            {/* )} */}
         </View>
     )
 }

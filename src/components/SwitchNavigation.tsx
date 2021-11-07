@@ -68,6 +68,16 @@ const switchNavigator = createSwitchNavigator({
         })
     },
 
+    shopStack:{
+        screen: createStackNavigator({
+            Shop,
+        }, {
+            defaultNavigationOptions: {
+                headerShown: false
+            }
+        })
+    },
+
     homeStack: createBottomTabNavigator({
         // Home tab Icon
         home: {
@@ -76,6 +86,7 @@ const switchNavigator = createSwitchNavigator({
                 ProductDetail: ProductDetail,
                 Search: Search,
                 Shop: Shop,
+                Complaint:Complaint,
                 Complaint: Complaint,
             }, {
                 defaultNavigationOptions: {

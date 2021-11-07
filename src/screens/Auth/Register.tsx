@@ -57,6 +57,7 @@ export default function Resgister() {
       }
     }
   }
+
   const registerBtn = () => {
     if (email != '' && password != '') {
       axios.get(`${cansa[1]}/api/user/create/1/${name}/${password}/${email}/e4611a028c71342a5b083d2cbf59c494`)
@@ -76,6 +77,7 @@ export default function Resgister() {
       Alert.alert('Thông báo', 'Email hoặc password không hợp lệ!!')
     }
   }
+  
   const Divider = (props: any) => {
     return <View {...props}>
       <View style={styles.line}></View>

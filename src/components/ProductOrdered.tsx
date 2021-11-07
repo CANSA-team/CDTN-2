@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import COLORS from '../consts/Colors';
 import { useNavigation } from '../utils/useNavigation';
@@ -21,14 +21,26 @@ export default function ProductOrdered(props: any) {
         </View>
     ]
 
-    const onTap = ()=>{
-        console.log("tap")
-        navigate('OderDetail', { oder:oder })
+    const onTap = () => {
+        navigate('OderDetail', { oder: oder })
     }
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={()=>onTap()}>
+            {
+                (oder.status == 1) &&
+                <TouchableOpacity onPress={() => props.onTap(oder.oder_id)}>
+                    <View style={{
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                        marginHorizontal: 10,
+                        marginBottom: 5
+                    }}>
+                        <Text style={{ color: 'red', fontSize: 16 }}> Hủy đơn hàng </Text>
+                    </View>
+                </TouchableOpacity>
+            }
+            <TouchableOpacity onPress={() => onTap()}>
                 <View style={styles.productContainer}>
                     <View style={styles.productDetal}>
                         <Text style={styles.productName}>Mã đơn hàng: {SlugStr(oder.oder_id, 60)}</Text>
@@ -48,7 +60,7 @@ export default function ProductOrdered(props: any) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         padding: 15,
         backgroundColor: '#fff',
         marginTop: 3,

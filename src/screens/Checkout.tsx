@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../redux';
 import { checkLogin, getUserInfo } from '../redux/actions/userActions';
 import { addOder } from '../redux/actions/oderActions';
+import { vnd } from '../consts/Selector';
 
 let check = false;
 
@@ -227,6 +228,7 @@ export default function Checkout(props: any) {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.txtPay}>Tổng tiền : </Text>
+                    <Text style={styles.txtPrice}>{vnd(cart.total_price)}đ</Text>
                     <Text style={styles.txtPrice}>{cart.total_price}đ</Text>
                 </View>
             </View>

@@ -3,7 +3,7 @@ import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import NumericInput from 'react-native-numeric-input';
 import COLORS from './../consts/Colors';
-import { SlugStr } from './../consts/Selector';
+import { SlugStr, vnd } from './../consts/Selector';
 import { ProductModel, State } from '../redux';
 import { borderWidth } from 'styled-system';
 import { useDispatch, useSelector } from 'react-redux';
@@ -80,7 +80,7 @@ export default function CartCard(props: any) {
                         }}>
                         <Text>+</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{(product.product_price * (100 - product.product_sale) / 100) * qty}đ</Text>
+                    <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
                 </View>
             </View>
         </View>
