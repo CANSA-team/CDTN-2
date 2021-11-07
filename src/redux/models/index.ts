@@ -28,7 +28,7 @@ export class ProductModel {
     status?: number;
 }
 //Product State
-export interface ProductState{
+export interface ProductState {
     productNew?: [ProductModel];
     productHot?: [ProductModel];
     productCategory?: [ProductModel];
@@ -41,13 +41,18 @@ export interface ProductState{
 /**
  * User
  */
-export class UserModel {
-    user_id?: number;
-    user_key?: null;
-    user_name?: string;
-    user_avatar?: string;
-    user_status?: number;
-    user_last_update?: number;
+export interface UserModel {
+    user_id: number;
+    user_phone: string;
+    user_email: string;
+    user_key: null;
+    user_name: string;
+    user_avatar: string;
+    user_status: number;
+    user_last_update: number;
+    user_real_name: string;
+    user_birthday: Date;
+    user_avatar_image: string;
 }
 
 /**
@@ -99,13 +104,13 @@ export class CartItemModel {
 /**
  * Cart
  */
-export class CartModel{
-    cart?:[CartItemModel];
+export class CartModel {
+    cart?: [CartItemModel];
     sub_price?: number;
     ship?: number;
     total_price?: number;
 }
-export interface CartState{
+export interface CartState {
     cart?: CartModel;
     status?: string;
     error: string | undefined;
@@ -124,73 +129,76 @@ export interface OderItemModel {
  * Oder
 */
 
-export class OderModel{
+export class OderModel {
     oder_id?: string;
     oder_address?: string;
     oder_phone?: string;
     oder_date?: Date;
     oder_customer?: number;
-    product_oder?:OderItemModel[];
+    product_oder?: OderItemModel[];
     status?: number;
 }
 
 
 
-export interface OderState{
+export interface OderState {
     status?: string;
     oderList?: OderModel[];
     oder?: OderModel;
     error: string | undefined;
 }
 
-export interface CategoryState{
+export interface CategoryState {
     categories?: [CategoryModel];
     error: string | undefined;
 }
 
-export interface SliderState{
+export interface SliderState {
     slider?: [SliderModel];
     error: string | undefined;
 }
 
-export interface CommentState{
+export interface CommentState {
     comment?: [CommentModel];
     error: string | undefined;
 }
 
-export interface ShopState{
+export interface ShopState {
     info?: ShopModel;
     error: string | undefined;
 }
 
-export interface AccessState{
+export interface AccessState {
     message?: any;
     error: string | undefined;
 }
 
-export interface userModel{
-    user_id:number,
-    user_name:string,
-    user_avatar:string,
-    user_phone:string,
-    user_profile_name:string,
-    user_email:string,
+export interface userModel {
+    user_id: number,
+    user_name: string,
+    user_avatar: string,
+    user_phone: string,
+    user_profile_name: string,
+    user_email: string,
 
 }
 
-export interface UserStage{
+export interface UserStage {
     check: boolean;
-    userInfor?: UserModel;
+    checkFogotPassword: boolean;
+    userInfor: UserModel;
+    status: string;
+    updateUser: number;
     error: string | undefined;
 }
 
-export interface ComplaintStage{
+export interface ComplaintStage {
     status?: string;
     error: string | undefined;
 }
 
 
-export interface ImageStage{
+export interface ImageStage {
     status?: string;
     image?: string;
     error: string | undefined;

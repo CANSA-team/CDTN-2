@@ -8,10 +8,12 @@ import { useNavigation } from '../utils/useNavigation';
 import HeaderTitle from '../components/HeaderTitle';
 import axios from 'axios';
 import { cansa } from '../consts/Selector'
+import { State, UserModel, UserStage } from '../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkLogin, getUserInfo, logout } from '../redux/actions/userActions';
 
 let user_avatar: any = undefined;
 export default function Account() {
-    const [checkLogin, setCheckLogin] = useState(false);
     const [phone, setPhone] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -20,6 +22,9 @@ export default function Account() {
     const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
     const { navigate } = useNavigation();
     const [isLoading, setisLoading] = useState(false)
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { check, userInfor, status }: { check: boolean, userInfor: UserModel, status: string } = userState;
+    const dispatch = useDispatch();
 
     const onTapProfile = () => {
         navigate('Profile', { email: email })
@@ -27,60 +32,74 @@ export default function Account() {
     const onTapOrdered = () => {
         navigate('Ordered')
     }
-    const logout = () => {
-        axios.get(`${cansa[1]}/api/user/logout`)
-            .then(res => {
-                navigate('homeStack');
-                setCheckLogin(false)
-            })
-            .catch(error => console.log(error));
-    }
+    useEffect(() => {
+        if (status === "Faild" || status === "") {
+            dispatch(checkLogin())
+        }
+    }, [status])
 
     useEffect(() => {
-        axios.get(`${cansa[1]}/api/user/check/login`)
-            .then(res => {
-                //Trạng thái khi đăng nhập thành công
-                if (res.data.data == false) {
-                    navigate('loginStack');
-                } else {
-                    navigate('homeStack');
-                    setCheckLogin(true);
-                    (async () => {
-                        await axios.get(`${cansa[1]}/api/user/get/profile`)
-                            .then(res => {
-                                setPhone(res.data.data.phone)
-                                setName(res.data.data.name)
-                                setEmail(res.data.data.email)
-                                axios.get(`${cansa[1]}/api/user/get/user`)
-                                    .then(res => {
-                                        setNickName(res.data.data.user_name)
-                                        user_avatar = res.data.data.user_avatar;
-                                        axios.get(`${cansa[0]}/api/image/get/${user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
-                                            setImage(res.data.data);
-                                            setisLoading(true)
-                                        })
-                                    })
-                                    .catch(error => console.log(error));
-                            })
-                            .catch(error => console.log(error));
+        if (check) {
+            dispatch(getUserInfo());
+        } else {
+            navigate('loginStack')
+        }
+    }, [check])
 
-                    })();
-                }
-            })
-            .catch(error => console.log(error));
-    }, [checkLogin, isLoading])
-    return isLoading ? (
+    console.log(status)
+    console.log(check)
+    
+
+    const btnLogout = () => {
+        dispatch(logout())
+    }
+
+    // useEffect(() => {
+    //     axios.get(`${cansa[1]}/api/user/check/login`)
+    //         .then(res => {
+    //             //Trạng thái khi đăng nhập thành công
+    //             if (res.data.data == false) {
+    //                 navigate('loginStack');
+    //             } else {
+    //                 navigate('homeStack');
+    //                 setCheckLogin(true);
+    //                 (async () => {
+    //                     await axios.get(`${cansa[1]}/api/user/get/profile`)
+    //                         .then(res => {
+    //                             setPhone(res.data.data.phone)
+    //                             setName(res.data.data.name)
+    //                             setEmail(res.data.data.email)
+    //                             axios.get(`${cansa[1]}/api/user/get/user`)
+    //                                 .then(res => {
+    //                                     setNickName(res.data.data.user_name)
+    //                                     user_avatar = res.data.data.user_avatar;
+    //                                     axios.get(`${cansa[0]}/api/image/get/${user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
+    //                                         setImage(res.data.data);
+    //                                         setisLoading(true)
+    //                                     })
+    //                                 })
+    //                                 .catch(error => console.log(error));
+    //                         })
+    //                         .catch(error => console.log(error));
+
+    //                 })();
+    //             }
+    //         })
+    //         .catch(error => console.log(error));
+    // }, [checkLogin, isLoading])
+
+    return (
         <SafeAreaView style={styles.container}>
             <HeaderTitle title={'ACCOUNT'} />
 
             <View style={styles.accountContainer}>
                 <View>
-                    <Image style={{ width: 100, height: 100, borderRadius: 50 }} source={{ uri: image }} />
+                    <Image style={{ width: 100, height: 100, borderRadius: 50 }} source={{ uri: userInfor.user_avatar_image }} />
                 </View>
                 <View style={styles.actionAccount}>
-                    <Text style={styles.nameUser}>{name}</Text>
-                    <Text style={[styles.nameUserNickName, { color: 'black' }]}>@{nickName}</Text>
-                    <Text style={{ fontSize: 18, color: 'gray' }}>{email}</Text>
+                    <Text style={styles.nameUser}>{userInfor.user_real_name}</Text>
+                    <Text style={[styles.nameUserNickName, { color: 'black' }]}>@{userInfor.user_name}</Text>
+                    <Text style={{ fontSize: 18, color: 'gray' }}>{userInfor.user_email}</Text>
                 </View>
             </View>
 
@@ -100,14 +119,14 @@ export default function Account() {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.viewAction}>
-                    <TouchableOpacity onPress={()=>{navigate('ListChat')}} style={styles.actionTouch}>
+                    <TouchableOpacity onPress={() => { navigate('ListChat') }} style={styles.actionTouch}>
                         <Text style={styles.actionTitle}>Test chat</Text>
                         <SimpleLineIcons name="arrow-right" size={20} color="#333" />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.viewAction}>
                     <TouchableOpacity style={styles.actionTouch}
-                        onPress={() => logout()}>
+                        onPress={() => btnLogout()}>
                         <Text style={{ fontSize: 20, color: 'red' }}>Logout</Text>
                         <MaterialIcons name="exit-to-app" size={35} color='#ec2525' />
                     </TouchableOpacity>
@@ -116,10 +135,11 @@ export default function Account() {
 
             </View>
         </SafeAreaView>
-    ) :
-        (<View style={[styles.container_login, styles.horizontal]}>
-            <ActivityIndicator size="large" color="#FF6F61" />
-        </View>)
+        // ) :
+        //     (<View style={[styles.container_login, styles.horizontal]}>
+        //         <ActivityIndicator size="large" color="#FF6F61" />
+        //     </View>)
+    )
 }
 const styles = StyleSheet.create({
     container: {
@@ -141,6 +161,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     actionAccount: {
+        flex: 1,
         marginLeft: 20,
         flexDirection: 'column',
         justifyContent: 'center',

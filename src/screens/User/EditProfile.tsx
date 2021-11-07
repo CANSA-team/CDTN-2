@@ -13,29 +13,38 @@ import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { cansa } from '../../consts/Selector';
-import {  margin, marginBottom } from 'styled-system';
+import { margin, marginBottom } from 'styled-system';
 import COLORS from '../../consts/Colors';
+import { State, UserModel, UserStage } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfo, updateUserProfile } from '../../redux/actions/userActions';
 
-let user_temp = {
-    "id": 1,
-    "phone": "0968241064",
-    "name": "anh",
-    "birthday": "1999-09-28T17:00:00.000Z"
-}
+
 
 export default function EditProfile(props: any) {
     const { navigate } = useNavigation();
     const { navigation, route } = props;
     const { getParam, goBack } = navigation;
     const userProdfile = getParam('userProfile');
-    const avatar = getParam('avatar');
+    // const avatar = getParam('avatar');
     const [date, setDate] = useState(new Date(userProdfile.birthday));
     const [show, setShow] = useState(false);
-    const [name, setName] = useState(userProdfile.name);
+    // const [name, setName] = useState(userProdfile.name);
     const [nickName, setNickName] = useState(userProdfile.user_name);
-    const [phone, setPhone] = useState(userProdfile.phone);
-    const [image, setImage] = useState(avatar);
+    // const [phone, setPhone] = useState(userProdfile.phone);
+    // const [image, setImage] = useState(avatar);
+    const [image, setimage] = useState<string>("/3.3.jpg");
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor, updateUser }: { userInfor: UserModel, updateUser: number } = userState;
+    const [name, setname] = useState<string>("");
+    const [phone, setphone] = useState<string>("");
+    const [birthday, setbirthday] = useState<Date>(new Date());
+    const [avatar, setavatar] = useState<number | undefined>(undefined);
+    const [checkSave, setcheckSave] = useState<boolean>(false);
+    const dispatch = useDispatch();
+
+
 
     useEffect(() => {
     }, [])
@@ -55,52 +64,62 @@ export default function EditProfile(props: any) {
         setDate(date);
     };
 
-    let getImg = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [3, 3],
-            quality: 1,
-        });
+    // let getImg = async () => {
+    //     let result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //         allowsEditing: true,
+    //         aspect: [3, 3],
+    //         quality: 1,
+    //     });
 
-        if (!result.cancelled) {
-            setImage(result.uri);
+    //     if (!result.cancelled) {
+    //         setImage(result.uri);
+    //     }
+    // };
+    useEffect(() => {
+        if (userInfor) {
+            setname(userInfor.user_real_name);
+            setphone(userInfor.user_phone);
+            setbirthday(userInfor.user_birthday);
+            setavatar(Number(userInfor.user_avatar));
+            setimage(userInfor.user_avatar_image);
         }
-    };
+    }, [userInfor])
+
+    useEffect(() => {
+        console.log(updateUser)
+        if (checkSave) {
+            dispatch(getUserInfo());
+            setcheckSave(false);
+            navigate('Profile');
+        }
+    }, [updateUser]);
+
+    useEffect(() => {
+        if (avatar && checkSave) {
+            dispatch(updateUserProfile(name, phone, birthday, avatar));
+        }
+    }, [avatar])
 
     const save = () => {
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data;'
-            }
-        };
-        var data = new FormData();
-        data.append('file',
-            {
-                uri: image,
-                name: 'userProfile.jpg',
-                type: 'image/jpg'
-            });
 
-        axios.post(`${cansa[0]}/api/image/update/${userProdfile.user_avatar}/e4611a028c71342a5b083d2cbf59c494`, data, config).then((resp) => {
-            const avatar_user = resp.data.data.image_id;
-            const link = `/api/user/update/profile/${name}/${phone}/${moment.utc(date).format('YYYY-MM-DD')}`;
-            axios.get(`${cansa[1]}${link}`).then((res) => {
-                const link = `/api/user/update/user/${userProdfile.user_key}/${nickName}/${avatar_user}/${userProdfile.user_status}`;
-                axios.get(`${cansa[1]}${link}`).then((res) => {
-                   
-                    Alert.alert(
-                        "Thông báo!",
-                        res.data.message,
-                        [
-                            { text: "OK" }
-                        ]
-                    );
-                })
-            })
-        })
     }
 
+
+
+    const getImage = (e: any) => {
+        setFile(e.target.files[0]);
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        var url = reader.readAsDataURL(file);
+
+        reader.onloadend = function (e: any) {
+            reader.result && setimage(reader.result.toString());
+        };
+    }
+
+
+    
     return (
         <View style={styles.container}>
             <View>
@@ -119,9 +138,9 @@ export default function EditProfile(props: any) {
                         rounded
                         size={200}
                         source={{
-                            uri: image,
+                            uri: userInfor.user_avatar_image,
                         }}
-                        onPress={getImg}
+                        onPress={(e: any) => getImage(e)}
                     >
                         <Accessory style={{
                             borderWidth: 2,
@@ -135,23 +154,19 @@ export default function EditProfile(props: any) {
                     <Input
                         value={name}
                         label="Họ và Tên"
-                        onChangeText={setName}
-                    />
-
-                    <Input
-                        value={nickName}
-                        label="Nick Name"
-                        onChangeText={setNickName}
+                        value={userInfor.user_real_name}
+                        onChangeText={(e: any) => setname(e.target.value)}
                     />
 
                     <Input
                         value={phone}
                         keyboardType='numeric'
                         label="Số điện thoại"
-                        onChangeText={setPhone}
+                        value={userInfor.user_phone}
+                        onChangeText={(e: any) => setphone(e.target.value)}
                     />
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>Ngày sinh: {moment.utc(date).format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.txtTitle}>Ngày sinh: {moment.utc(userInfor.user_birthday).format('DD/MM/YYYY')}</Text>
                         <Button onPress={showDatepicker}
                             buttonStyle={{
                                 backgroundColor: COLORS.primary,
