@@ -27,7 +27,7 @@ export default function Account() {
     const dispatch = useDispatch();
 
     const onTapProfile = () => {
-        navigate('Profile', { email: email })
+        navigate('Profile')
     }
     const onTapOrdered = () => {
         navigate('Ordered')
@@ -48,7 +48,7 @@ export default function Account() {
 
     console.log(status)
     console.log(check)
-    
+
 
     const btnLogout = () => {
         dispatch(logout())

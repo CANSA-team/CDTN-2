@@ -203,3 +203,7 @@ export interface ImageStage {
     image?: string;
     error: string | undefined;
 }
+
+export interface ImageId {
+    id: number;
+}
