@@ -11,6 +11,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
 import { State, UserModel, UserStage } from '../../redux';
 import { useSelector } from 'react-redux';
+import { cansa, chatSever } from '../../consts/Selector'
 
 let user_avatar: any = undefined;
 export default function Chat(props: any) {
@@ -18,19 +19,19 @@ export default function Chat(props: any) {
     const {navigation,route} = props;
     const { getParam, goBack } = navigation;
     const [isTyping, setIsTyping] = useState(false)
-    const socket = io("http://192.168.1.93:3002");
+    const socket = io(chatSever);
     const myName = 'Hoàng Anh';
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
     const myID = 'user_' + userInfor.user_id;
     const hisID = getParam('id_user');
-    console.log(hisID.split('shop_')[1])
+    console.log(hisID)
     useEffect(() => {
         setMess([]);
         (async()=>{
-           await axios.get(`http://192.168.1.93:3002/api/chat/getChatHistory/${myID}/${hisID}/1/100`)
+           await axios.get(`${chatSever}/api/chat/getChatHistory/${myID}/${hisID}/1/100`)
             .then(res => {
-                axios.get(`http://192.168.1.93:3002/api/chat/getChatHistory/${hisID}/${myID}/1/100`)
+                axios.get(`${chatSever}/api/chat/getChatHistory/${hisID}/${myID}/1/100`)
                 .then(res2 => {
                     let data_chat_all:any = [];
                     res2.data.data.forEach((element:any) => {
@@ -120,7 +121,7 @@ export default function Chat(props: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderTitle title={'Chat'} />
+            <HeaderTitle title={getParam('user_name')} />
             <GiftedChat
                 inverted={true}
                 messages={mess}

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
 import { Avatar, Badge, withBadge, Icon } from 'react-native-elements';
-import { cansa } from '../../consts/Selector'
+import { cansa, chatSever } from '../../consts/Selector'
 import { State, UserModel, UserStage } from '../../redux';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +18,7 @@ export default function Chat(props: any) {
     const [dataAll, setDataAll]: any = useState([])
     const [dataStatus, setDataStatus]: any = useState([])
     const { navigate } = useNavigation();
-    const socket = io("http://192.168.1.93:3002");
+    const socket = io(chatSever);
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
     const myID = 'user_' + userInfor.user_id;
@@ -71,7 +71,7 @@ export default function Chat(props: any) {
 
     const renderItem = ({ item }: any) => {
         return (
-            <TouchableOpacity style={styles.item} onPress={() => { navigate('Chat', { id_user: item.id_user }) }}>
+            <TouchableOpacity style={styles.item} onPress={() => { navigate('Chat', { id_user: item.id_user,user_name:item.title }) }}>
                 <View style={styles.row}>
                     <Avatar
                         rounded

@@ -120,7 +120,7 @@ export default function Account() {
                 </View>
                 <View style={styles.viewAction}>
                     <TouchableOpacity onPress={() => { navigate('ListChat') }} style={styles.actionTouch}>
-                        <Text style={styles.actionTitle}>Test chat</Text>
+                        <Text style={styles.actionTitle}>Chat</Text>
                         <SimpleLineIcons name="arrow-right" size={20} color="#333" />
                     </TouchableOpacity>
                 </View>
