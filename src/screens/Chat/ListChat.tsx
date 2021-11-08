@@ -11,41 +11,60 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
 import { Avatar, Badge, withBadge, Icon } from 'react-native-elements';
 import { cansa } from '../../consts/Selector'
+import { State, UserModel, UserStage } from '../../redux';
+import { useSelector } from 'react-redux';
 
 export default function Chat(props: any) {
-    const [data, setData]: any = useState([])
+    const [dataAll, setDataAll]: any = useState([])
     const [dataStatus, setDataStatus]: any = useState([])
     const { navigate } = useNavigation();
     const socket = io("http://192.168.1.93:3002");
-    const myID = 1;
-
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
+    const myID = 'user_' + userInfor.user_id;
     useEffect(() => {
-        let temp:any = []
+        let temp: any = []
         socket.on("thread", function (data) {
             if (data.user_to == myID) {
                 socket.emit('roomList', myID)
             }
         });
         socket.emit('roomList', myID)
-        socket.on("roomList", function (data) {
+        socket.on("roomList",async function (data) {
             let tempData: any = [];
-            data.forEach((element: any) => {
-                
-                socket.emit('onlineStatus', element[0].user_to)
+            if (data.length !== 1) {
+                await Promise.all(data.map(async (element: any) => {
+                    socket.emit('onlineStatus', element[0].user_to)
+                    let id = '_' + Math.random().toString(36).substr(2, 16)
+                    let id_shop = (myID != element[0].user_to) ? element[0].user_to : element[0].user_from
+                    let a = await axios.get(`https://103.207.38.200/api/shop/info/${id_shop.split('shop_')[1]}/1/e4611a028c71342a5b083d2cbf59c494`)
+                    tempData.push({
+                        id: id,
+                        title: a.data.data.shop_name,
+                        img: a.data.data.shop_avatar,
+                        id_user: (myID != element[0].user_to) ? element[0].user_to : element[0].user_from,
+                        newStatusMess: (element[0].isWatched == 1) ? false : true,
+                        statusOnline: false,
+                        CreateDate: element[0].CreateDate,
+                        text: element[0].message,
+                    })
+                }));
+            } else {
+                socket.emit('onlineStatus', data[0].user_to)
                 tempData.push({
                     id: '_' + Math.random().toString(36).substr(2, 16),
                     title: 'hoanganh22k',
-                    id_user: (myID != element[0].user_to)?element[0].user_to:element[0].user_from,
-                    newStatusMess: (element[0].isWatched == 1)?false:true,
+                    id_user: (myID != data[0].user_to) ? data[0].user_to : data[0].user_from,
+                    newStatusMess: (data[0].isWatched == 1) ? false : true,
                     statusOnline: false,
-                    CreateDate:element[0].CreateDate,
-                    text: element[0].message,
+                    CreateDate: data[0].CreateDate,
+                    text: data[0].message,
                 })
-            });
-            let temp = tempData.sort((a:any, b:any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
-            setData(temp)
+            }
+           
+            let temp = tempData.sort((a: any, b: any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
+            setDataAll(temp)
         });
-        
     }, [])
 
     const BadgedIcon = withBadge(1)(Icon)
@@ -57,7 +76,7 @@ export default function Chat(props: any) {
                     <Avatar
                         rounded
                         source={{
-                            uri: 'https://randomuser.me/api/portraits/men/41.jpg',
+                            uri: item.img,
                         }}
                         size="large"
                     />
@@ -81,7 +100,7 @@ export default function Chat(props: any) {
         <SafeAreaView style={styles.container}>
             <HeaderTitle title={'List Chat'} />
             <FlatList
-                data={data}
+                data={dataAll}
                 renderItem={renderItem}
                 keyExtractor={(item: any) => item.id}
             />

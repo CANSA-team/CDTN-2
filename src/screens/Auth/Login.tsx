@@ -32,8 +32,7 @@ export default function Login(props: any) {
   const userState: UserStage = useSelector((state: State) => state.userReducer);
   const { check, status }: { check: boolean, status: string } = userState;
   const dispatch = useDispatch();
-
-
+  
   useEffect(() => {
     dispatch(checkLogin());
   }, [status])
@@ -56,7 +55,7 @@ export default function Login(props: any) {
         expirationDate,
         permissions,
         declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
+      }:any = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile', 'email'],
       });
       if (type === 'success') {

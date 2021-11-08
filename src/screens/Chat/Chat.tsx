@@ -9,6 +9,8 @@ import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
 import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
+import { State, UserModel, UserStage } from '../../redux';
+import { useSelector } from 'react-redux';
 
 let user_avatar: any = undefined;
 export default function Chat(props: any) {
@@ -18,11 +20,13 @@ export default function Chat(props: any) {
     const [isTyping, setIsTyping] = useState(false)
     const socket = io("http://192.168.1.93:3002");
     const myName = 'Hoàng Anh';
-    const myID = 1;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
+    const myID = 'user_' + userInfor.user_id;
     const hisID = getParam('id_user');
+    console.log(hisID.split('shop_')[1])
     useEffect(() => {
         setMess([]);
-        
         (async()=>{
            await axios.get(`http://192.168.1.93:3002/api/chat/getChatHistory/${myID}/${hisID}/1/100`)
             .then(res => {
