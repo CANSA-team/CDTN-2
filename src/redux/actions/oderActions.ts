@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
-import { ProductModel, OderModel } from "../models";
+import { OderModel } from "../models";
 import axios from 'axios';
-import { OderActionType, ProductActionType } from "../action-types";
+import { OderActionType } from "../action-types";
 import { cansa } from "../../consts/Selector";
 
 export interface AddOrder {
@@ -44,7 +44,7 @@ export const addOder = (diaChi: string, sdt: string, user_id: number) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: OderActionType.ADD_ORDER,
                     payload: response.data.status
@@ -77,7 +77,7 @@ export const getAllOder = (user_id: number, option: number = 3) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: OderActionType.GET_ALL_ORDER,
                     payload: response.data.data
@@ -109,7 +109,7 @@ export const updateOder = (user_id: number, oder_id: number, status: number = 0)
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: OderActionType.UPDATE_ORDER,
                     payload: response.data.data
@@ -141,7 +141,7 @@ export const updateOderItem = (product_id: number, oder_id: number, status: numb
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: OderActionType.UPDATE_ODER_ITEM,
                     payload: response.data.data

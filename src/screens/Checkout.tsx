@@ -8,12 +8,17 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '../utils/useNavigation';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../redux';
-import { checkLogin, getUserInfo } from '../redux/actions/userActions';
+import { CartModel, CartState, State, UserModel, UserStage } from '../redux';
+import { getUserInfo } from '../redux/actions/userActions';
 import { addOder } from '../redux/actions/oderActions';
 import { vnd } from '../consts/Selector';
 
 let check = false;
+
+interface Data {
+    code: number,
+    name: string
+}
 
 export default function Checkout(props: any) {
     let temp = [
@@ -25,8 +30,8 @@ export default function Checkout(props: any) {
             label: " "
         }
     ]
-    const userState = useSelector((state: State) => state.userReducer);
-    const { userInfor } = userState;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { userInfor: UserModel } = userState;
     const dispatch = useDispatch();
 
     const [thanhPho, setThanhPho] = useState(temp);
@@ -35,21 +40,21 @@ export default function Checkout(props: any) {
     const oderState = useSelector((state: State) => state.oderReducer);
     const { status } = oderState;
 
-    const cartState = useSelector((state: State) => state.cartReducer);
-    const { cart } = cartState;
+    const cartState: CartState = useSelector((state: State) => state.cartReducer);
+    const { cart }: { cart: CartModel } = cartState;
 
-    const [_thanhPho, _setThanhPho] = useState('');
-    const [_quanHuyen, _setQuanHuyen] = useState('');
-    const [_phuongXa, _setPhuongXa] = useState('');
+    const [_thanhPho, _setThanhPho] = useState<Data>({} as Data);
+    const [_quanHuyen, _setQuanHuyen] = useState<Data>({} as Data);
+    const [_phuongXa, _setPhuongXa] = useState<Data>({} as Data);
     const [_soNha, _setSoNha] = useState('');
     const [_sdt, _setsdt] = useState('');
 
-    const { navigation, route } = props;
+    const { navigation } = props;
     const { navigate } = useNavigation();
 
     const onTapCheckoutSuccess = () => {
         check = true;
-        if(userInfor){
+        if (userInfor) {
             if (_quanHuyen && _thanhPho && _soNha && /(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(_sdt)) {
                 let diaChi = `${_soNha},${_phuongXa && _phuongXa.name + ','}${_quanHuyen.name},${_thanhPho.name}`;
                 let user_id = userInfor.user_id;
@@ -64,7 +69,7 @@ export default function Checkout(props: any) {
                     ]
                 );
             }
-        }else{
+        } else {
             Alert.alert(
                 "Thông báo!",
                 "Chưa đăng nhập!",
@@ -76,16 +81,16 @@ export default function Checkout(props: any) {
     }
 
     useEffect(() => {
-        if(status && check){
+        if (status && check) {
             Alert.alert(
                 "Thông báo!",
                 status,
                 [
-                    { text: "OK" , onPress:()=>{navigate('CheckoutSuccess');check=false;}}
+                    { text: "OK", onPress: () => { navigate('CheckoutSuccess'); check = false; } }
                 ]
             );
         }
-    },[oderState]);
+    }, [oderState]);
 
     useEffect(() => {
         (async function () {

@@ -1,7 +1,6 @@
-import { AccessActionType, ImageActionType } from "../action-types";
-import { AccessActions } from "../actions/accessActions";
+import { ImageActionType } from "../action-types";
 import { ImageActions } from "../actions/imageActions";
-import { AccessState,ImageStage } from "../models";
+import { ImageStage } from "../models";
 
 
 const initialState: ImageStage = {

@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Text, FlatList, TouchableOpacity, View, TextInput, StyleSheet, ScrollView } from 'react-native'
+import { Text, FlatList, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
-import COLORS from '../../consts/Colors'
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '../../utils/useNavigation';
 import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
-import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
 import { Avatar, Badge, withBadge, Icon } from 'react-native-elements';
-import { cansa, chatSever } from '../../consts/Selector'
+import { chatSever } from '../../consts/Selector'
 import { State, UserModel, UserStage, ChatStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { chat } from '../../redux/actions/chatActions';
@@ -18,7 +14,6 @@ import { chat } from '../../redux/actions/chatActions';
 
 export default function Chat(props: any) {
     const [dataAll, setDataAll]: any = useState([])
-    const [dataStatus, setDataStatus]: any = useState([])
     const { navigate } = useNavigation();
     const socket = io(chatSever);
     const userState: UserStage = useSelector((state: State) => state.userReducer);
@@ -62,7 +57,7 @@ export default function Chat(props: any) {
                         text: data[0].message,
                     })
                 }
-    
+
                 let temp = tempData.sort((a: any, b: any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
                 setDataAll(temp)
             });

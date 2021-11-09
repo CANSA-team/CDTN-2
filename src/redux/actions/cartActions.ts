@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { ProductModel } from "../models";
 import axios from 'axios';
-import { CartActionType, ProductActionType } from "../action-types";
+import { CartActionType } from "../action-types";
 import { cansa } from "../../consts/Selector";
 
 export interface GetAllCart {
@@ -33,7 +33,7 @@ export const getCart = () => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: CartActionType.GET_ALL_CART,
                     payload: response.data.data
@@ -60,7 +60,7 @@ export const addCart = (product_id: number) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: CartActionType.ADD_TO_CART,
                     payload: response.data.status
@@ -87,7 +87,7 @@ export const updateCart = (product_id: number, qty: number) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: CartActionType.UPDATE_CART,
                     payload: response.data.data

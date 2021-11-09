@@ -8,7 +8,7 @@ import RatingComment from '../components/RatingComment';
 import Comment from '../components/Comment';
 import { useNavigation } from './../utils/useNavigation';
 import { Rating } from 'react-native-elements';
-import { CommentModel, getProduct, ProductModel, State } from '../redux';
+import { CartState, CommentModel, CommentState, getProduct, ProductModel, ProductState, State, UserModel, UserStage } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, getComments } from '../redux/actions/commentActions';
 import { addCart } from '../redux/actions/cartActions';
@@ -16,21 +16,21 @@ import { getUserInfo } from '../redux/actions/userActions';
 import { vnd } from '../consts/Selector';
 export default function ProductDetail(props: any) {
     const { navigate } = useNavigation();
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
+    const { navigation } = props;
+    const { getParam } = navigation;
     const id = getParam('id');
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingComment, setIsLoadingComment] = useState(false);
+    const [isLoadingComment, setIsLoadingComment] = useState(true);
     const [isLoadingAddCart, setIsLoadingAddCart] = useState(false);
-    const productState = useSelector((state: State) => state.productReducer);
-    const commentState = useSelector((state: State) => state.commentReducer);
-    const cartState = useSelector((state: State) => state.cartReducer);
-    const { product } = productState;
-    const { comment } = commentState;
-    const { status } = cartState;
+    const productState: ProductState = useSelector((state: State) => state.productReducer);
+    const commentState: CommentState = useSelector((state: State) => state.commentReducer);
+    const cartState: CartState = useSelector((state: State) => state.cartReducer);
+    const { product }: { product: ProductModel } = productState;
+    const { comment }: { comment: CommentModel[] } = commentState;
+    const { status }: { status: string | undefined } = cartState;
     const dispatch = useDispatch();
-    const userState = useSelector((state: State) => state.userReducer);
-    const { userInfor } = userState;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { userInfor: UserModel } = userState;
 
     useEffect(() => {
         dispatch(getProduct(id));
@@ -67,6 +67,7 @@ export default function ProductDetail(props: any) {
 
     const onTap = (comment_content: string, comment_rating: number) => {
         if (userInfor) {
+            setIsLoadingComment(false);
             dispatch(addComment(id, userInfor.user_id, comment_content, comment_rating));
         } else {
             Alert.alert(
@@ -81,7 +82,7 @@ export default function ProductDetail(props: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {!isLoading ?
+            {!isLoading && product ?
                 (<View style={styles.container}>
                     <ActivityIndicator size="large" color="#00ff00" />
                 </View>) :
@@ -100,8 +101,8 @@ export default function ProductDetail(props: any) {
                     <View style={styles.detailContainer}>
                         {(product && product.product_rating) ?
                             <View style={{ alignItems: 'center', flexDirection: 'row', marginBottom: 10 }}>
-                                <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating!.toFixed(1)} />
-                                <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating!.toFixed(1)}</Text>
+                                <Rating readonly imageSize={28} fractions="{1}" startingValue={product.product_rating.toFixed(1)} />
+                                <Text style={{ marginLeft: 20, color: '#444', fontSize: 22 }}>{product.product_rating.toFixed(1)}</Text>
                             </View>
                             :
                             <Text style={{ color: '#222', fontSize: 16 }}>
@@ -111,8 +112,8 @@ export default function ProductDetail(props: any) {
                         {product && <Text style={styles.title}>{product.product_title}</Text>}
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
-                                {product && product.product_sale! != 0 && <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 25 }}>{vnd(product.product_price)}đ</Text>}
-                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 29 }}>{vnd(product.product_price! * (100 - product.product_sale!) / 100)}đ</Text>}
+                                {product && product.product_sale! != 0 && <Text style={{ textDecorationLine: 'line-through', color: 'gray', fontSize: 25 }}>{product.product_price && vnd(product.product_price)}đ</Text>}
+                                {product && <Text style={{ marginBottom: 10, color: 'red', fontSize: 29 }}>{(product.product_price) && vnd(product.product_price * (100 - product.product_sale) / 100)}đ</Text>}
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                 {
@@ -125,7 +126,7 @@ export default function ProductDetail(props: any) {
                                     </TouchableOpacity>
                                 }
                                 <TouchableOpacity onPress={() => {
-                                    navigate('Shop', { shop_id: product!.shop_id });
+                                    navigate('Shop', { shop_id: product.shop_id });
                                 }}>
                                     <Text style={styles.btnBuy}>Shop</Text>
                                 </TouchableOpacity>

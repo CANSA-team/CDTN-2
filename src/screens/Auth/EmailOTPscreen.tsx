@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import {
     StyleSheet,
     Text,
@@ -19,6 +19,7 @@ export default function EmailOTPscreen() {
     const { navigate } = useNavigation();
     const [emailValdate, setEmailValdate] = useState(true)
     const [email, setEmail] = useState('')
+
     const valiDate = (text: any, type: any) => {
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
         if (type == 'email') {
@@ -31,6 +32,7 @@ export default function EmailOTPscreen() {
             }
         }
     }
+    
     const continueBtn = () => {
         if (email != '') {
             axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res)=>{

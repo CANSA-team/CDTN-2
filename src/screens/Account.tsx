@@ -1,27 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { Image, Text, TouchableOpacity, View, ActivityIndicator, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
+import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
-import COLORS from '../consts/Colors'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '../utils/useNavigation';
 import HeaderTitle from '../components/HeaderTitle';
-import axios from 'axios';
-import { cansa } from '../consts/Selector'
 import { State, UserModel, UserStage } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkLogin, getUserInfo, logout } from '../redux/actions/userActions';
 
-let user_avatar: any = undefined;
 export default function Account() {
-    const [phone, setPhone] = useState('')
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [nickName, setNickName] = useState('')
-    const [birthday, setBirthday] = useState('')
-    const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
     const { navigate } = useNavigation();
-    const [isLoading, setisLoading] = useState(false)
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { check, userInfor, status }: { check: boolean, userInfor: UserModel, status: string } = userState;
     const dispatch = useDispatch();
@@ -46,47 +35,9 @@ export default function Account() {
         }
     }, [check])
 
-    console.log(status)
-    console.log(check)
-
-
     const btnLogout = () => {
         dispatch(logout())
     }
-
-    // useEffect(() => {
-    //     axios.get(`${cansa[1]}/api/user/check/login`)
-    //         .then(res => {
-    //             //Trạng thái khi đăng nhập thành công
-    //             if (res.data.data == false) {
-    //                 navigate('loginStack');
-    //             } else {
-    //                 navigate('homeStack');
-    //                 setCheckLogin(true);
-    //                 (async () => {
-    //                     await axios.get(`${cansa[1]}/api/user/get/profile`)
-    //                         .then(res => {
-    //                             setPhone(res.data.data.phone)
-    //                             setName(res.data.data.name)
-    //                             setEmail(res.data.data.email)
-    //                             axios.get(`${cansa[1]}/api/user/get/user`)
-    //                                 .then(res => {
-    //                                     setNickName(res.data.data.user_name)
-    //                                     user_avatar = res.data.data.user_avatar;
-    //                                     axios.get(`${cansa[0]}/api/image/get/${user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
-    //                                         setImage(res.data.data);
-    //                                         setisLoading(true)
-    //                                     })
-    //                                 })
-    //                                 .catch(error => console.log(error));
-    //                         })
-    //                         .catch(error => console.log(error));
-
-    //                 })();
-    //             }
-    //         })
-    //         .catch(error => console.log(error));
-    // }, [checkLogin, isLoading])
 
     return (
         <SafeAreaView style={styles.container}>

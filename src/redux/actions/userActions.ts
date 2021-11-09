@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { CommentModel, UserModel } from "../models";
+import { UserModel } from "../models";
 import axios from 'axios';
 import { UserActionType } from "../action-types";
 import { cansa } from "../../consts/Selector";
@@ -66,7 +66,7 @@ export const checkLogin = () => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.CHECK_LOGIN,
                     payload: response.data.data
@@ -93,7 +93,7 @@ export const getUserInfo = () => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.GET_USER_INFO,
                     payload: response.data.data
@@ -129,7 +129,7 @@ export const LoginFacebook = (email: string, token: string, username: string, fu
                 if (response.data.status === "Faild" || response.data.status === "") {
                     alert("Tài khoản hoặc mật khẩu không đúng!")
                 }
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.LOGIN,
                     payload: response.data.status
@@ -159,7 +159,7 @@ export const login = (email: string, password: string) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.LOGIN,
                     payload: response.data.status
@@ -180,7 +180,6 @@ export const register = (email: string, password: string, name_full: string) => 
         try {
             const response = await axios.get<any>(`${cansa[1]}/api/user/create/1/${name_full}/${password}/${email}/e4611a028c71342a5b083d2cbf59c494`)
             alert(response.data.message)
-            console.log(response)
             if (!response) {
                 dispatch({
                     type: UserActionType.ON_LOGIN_ERROR,
@@ -190,7 +189,7 @@ export const register = (email: string, password: string, name_full: string) => 
                 if (response.data.status === "Faild" || response.data.status === "") {
                     alert("Tài khoản hoặc mật khẩu không đúng!")
                 }
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.REGISTER,
                     payload: response.data.status
@@ -220,7 +219,7 @@ export const logout = () => {
                 if (response.data.status == 'success') {
                     status = 'Faild';
                 }
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.LOGOUT,
                     payload: status
@@ -247,7 +246,7 @@ export const ForgottPassword = (email: string) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.FORGOTT_PASSWORD,
                     payload: response.data.status
@@ -274,7 +273,7 @@ export const ForgottPasswordOTP = (email: string, OTP: string) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.FORGOTT_PASSWORD_OTP,
                     payload: response.data.data
@@ -301,7 +300,7 @@ export const ForgottPasswordCenter = (email: string, password: string) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.FORGOTT_PASSWORD_CENTER,
                     payload: response.data.data
@@ -327,8 +326,7 @@ export const updateUserProfile = (profile_name: string, profile_phone: string, p
                     payload: 'Product list error'
                 })
             } else {
-                console.log(response.data.data)
-                // save our location in local storage
+
                 dispatch({
                     type: UserActionType.UPDATE_USER_PROFILE,
                     payload: response.data.data

@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -48,7 +48,7 @@ export default function Resgister() {
         setPasswordValdate(false)
       }
     } else if (type == 'nickname') {
-      if (text!=null) {
+      if (text != null) {
         setName(text)
         setNameValdate(true)
       }
@@ -62,8 +62,6 @@ export default function Resgister() {
     if (email != '' && password != '') {
       axios.get(`${cansa[1]}/api/user/create/1/${name}/${password}/${email}/e4611a028c71342a5b083d2cbf59c494`)
         .then(res => {
-          console.log(res.data.status)
-          //Trạng thái khi đăng nhập thành công
           if (res.data.status == 'success') {
             navigate('Login');
             Alert.alert('Thông báo', res.data.message);
@@ -77,7 +75,7 @@ export default function Resgister() {
       Alert.alert('Thông báo', 'Email hoặc password không hợp lệ!!')
     }
   }
-  
+
   const Divider = (props: any) => {
     return <View {...props}>
       <View style={styles.line}></View>
@@ -86,7 +84,6 @@ export default function Resgister() {
     </View>
   }
   return (
-    //Donot dismis Keyboard when click outside of TextInput
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.header}>

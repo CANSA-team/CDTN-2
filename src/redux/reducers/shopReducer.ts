@@ -1,10 +1,10 @@
 import { ShopActionType } from "../action-types";
 import { ShopActions } from "../actions/shopActions";
-import { CommentState, CommentModel, ShopState, ShopModel } from "../models";
+import { ShopState, ShopModel } from "../models";
 
 
 const initialState: ShopState = {
-    info: undefined,
+    info: {} as ShopModel,
     error: undefined
 }
 

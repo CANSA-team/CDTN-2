@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Platform, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Button, Text, Input, Avatar, Accessory } from 'react-native-elements';
 import moment from 'moment';
 
@@ -8,37 +8,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '../../utils/useNavigation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Feather from 'react-native-vector-icons/Feather';
 import HeaderTitle from '../../components/HeaderTitle';
-import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-import { cansa, saveImage, updateImage } from '../../consts/Selector';
-import { margin, marginBottom } from 'styled-system';
+import { saveImage, updateImage } from '../../consts/Selector';
 import COLORS from '../../consts/Colors';
 import { ImageId, State, UserModel, UserStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile, getUserInfo } from '../../redux/actions/userActions';
 
-let user_temp = {
-    "id": 1,
-    "phone": "0968241064",
-    "name": "anh",
-    "birthday": "1999-09-28T17:00:00.000Z"
-}
 
 export default function EditProfile(props: any) {
     const { navigate } = useNavigation();
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
+    const { navigation } = props;
+    const { getParam } = navigation;
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor, updateUser }: { userInfor: UserModel, updateUser: number } = userState;
-    const userProdfile = getParam('userProfile');
     const [date, setDate] = useState(new Date(userInfor.user_birthday));
     const [show, setShow] = useState(false);
     const [name, setName] = useState(userInfor.user_real_name);
     const [phone, setPhone] = useState(userInfor.user_phone);
     const [image, setImage] = useState(userInfor.user_avatar_image);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [avatar, setavatar] = useState<number | undefined>(undefined);
     const [checkSave, setcheckSave] = useState<boolean>(false);
     const dispatch = useDispatch();
@@ -90,13 +79,12 @@ export default function EditProfile(props: any) {
 
         if (!result.cancelled) {
             setImage(result.uri);
-            console.log(result.uri)
         }
     };
 
     const save = () => {
         if (/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone) && name && date && image) {
-            if (userInfor.user_avatar) {
+            if (!userInfor.user_avatar) {
                 //them hinh
                 let _avatar: ImageId = { id: 0 };
                 const avatar_img = {
@@ -108,6 +96,7 @@ export default function EditProfile(props: any) {
 
                 Promise.all([saveAvt]).then(() => {
                     dispatch(updateUserProfile(name, phone, date, _avatar.id));
+                    setcheckSave(true);
                 })
             }
             else {
@@ -126,24 +115,25 @@ export default function EditProfile(props: any) {
                 }
                 Promise.all([saveAvt]).then(() => {
                     dispatch(updateUserProfile(name, phone, date, _avatar.id));
+                    setcheckSave(true);
                 })
             }
         }
     }
 
     useEffect(() => {
-        if (updateUser) {
+        if (updateUser && checkSave) {
             dispatch(getUserInfo());
+            setcheckSave(false);
             navigate('Profile')
         }
-
     }, [updateUser])
 
     return (
         <View style={styles.container}>
             <View>
                 <View>
-                    <HeaderTitle title={'EDIT PROFILE'} />
+                    <HeaderTitle title={'Cập nhật'} />
                     <View style={styles.header}>
                         <TouchableOpacity>
                             <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />

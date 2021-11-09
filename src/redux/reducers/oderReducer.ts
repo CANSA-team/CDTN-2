@@ -1,13 +1,12 @@
-import { CommentActionType, OderActionType, SliderActionType } from "../action-types";
-import { CommentActions } from "../actions/commentActions";
+import { OderActionType } from "../action-types";
 import { OrderActions } from "../actions/oderActions";
-import { CommentState, CommentModel, OderState } from "../models";
+import { OderState, OderModel } from "../models";
 
 
 const initialState: OderState = {
     status: undefined,
-    oderList: undefined,
-    oder: undefined,
+    oderList: [] as OderModel[],
+    oder: {} as OderModel,
     error: undefined
 }
 

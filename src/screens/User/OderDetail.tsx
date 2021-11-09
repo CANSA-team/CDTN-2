@@ -1,42 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import COLORS from '../../consts/Colors';
 import { SafeAreaView } from 'react-navigation';
 import HeaderTitle from '../../components/HeaderTitle';
-import { useNavigation } from '../..//utils/useNavigation';
-import { CartItemModel, CartModel, State } from '../../redux';
-import axios from 'axios';
-import { withNavigationFocus } from 'react-navigation';
+import { OderModel, OderState, State } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
-import CartCard from '../../components/CartCard';
 import OderCard from '../../components/OderCard';
 import { updateOderItem } from '../../redux/actions/oderActions';
 import { vnd } from '../../consts/Selector';
 
 
-let check = true;
 
 export default function oderDetail(props: any) {
-    const { navigate } = useNavigation();
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
-    // const _oder = getParam('oder');
-    const [_oder,setOder] = useState(getParam('oder'));
+    const { navigation } = props;
+    const { getParam } = navigation;
+    const [_oder, setOder] = useState(getParam('oder'));
+    const [check, setCheck] = useState(false)
     const dispatch = useDispatch();
-    const orderState = useSelector((state: State) => state.oderReducer);
-    const { oder } = orderState;
+    const orderState: OderState = useSelector((state: State) => state.oderReducer);
+    const { oder }: { oder: OderModel } = orderState;
     let sub_price = 0;
     let ship = 20000;
     let total_price = 0;
 
     useEffect(() => {
-        if(oder){
+        if (oder && check) {
             setOder(oder);
+            setCheck(false);
         }
-    },[orderState])
+    }, [orderState])
 
-    for (const item of _oder.product_oder) {
+    if (_oder) for (const item of _oder.product_oder) {
         sub_price += (item.product.product_price * (100 - item.product.product_sale) / 100) * item.product_quantity;
     }
 
@@ -60,7 +54,7 @@ export default function oderDetail(props: any) {
             "Hủy đơn hàng ?",
             [
                 { text: "Cancel" },
-                { text: "Yes", onPress: () => { dispatch(updateOderItem(product_id, _oder.oder_id)) } },
+                { text: "Yes", onPress: () => { setCheck(true); dispatch(updateOderItem(product_id, _oder.oder_id)) } },
             ]
         );
     }
@@ -72,10 +66,10 @@ export default function oderDetail(props: any) {
                     <View style={{ flex: 1, marginBottom: 10 }}>
                         <ScrollView>
                             {
-                                _oder.product_oder.map((cart: any, index: number) => {
+                                _oder && _oder.product_oder.map((cart: any, index: number) => {
                                     return (
                                         < View key={index} >
-                                            <OderCard qty={cart.product_quantity} product={cart.product} oderStatus={cart.status} status={_oder.status} onTap={changeStatus}/>
+                                            <OderCard qty={cart.product_quantity} product={cart.product} oderStatus={cart.status} status={_oder.status} onTap={changeStatus} />
                                         </View>)
                                 })
                             }
@@ -135,21 +129,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'blue',
         padding: 8,
         borderRadius: 10,
-        margin:10
+        margin: 10
     },
     statusDes: {
         marginTop: 8,
         backgroundColor: 'red',
         padding: 8,
         borderRadius: 10,
-        margin:10
+        margin: 10
     },
     statusAccept: {
         marginTop: 8,
         backgroundColor: COLORS.primary,
         padding: 8,
         borderRadius: 10,
-        margin:10
+        margin: 10
     },
     txtStatus: {
         color: '#fff',

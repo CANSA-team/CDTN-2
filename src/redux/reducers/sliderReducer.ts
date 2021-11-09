@@ -1,10 +1,10 @@
-import {SliderActionType } from "../action-types";
+import { SliderActionType } from "../action-types";
 import { SliderActions } from "../actions/sliderActions";
 import { SliderState, SliderModel } from "../models";
 
 
 const initialState: SliderState = {
-    slider: undefined,
+    slider: [] as SliderModel[],
     error: undefined
 }
 

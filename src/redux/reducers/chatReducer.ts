@@ -1,12 +1,10 @@
-import { Chat, ShopActionType } from "../action-types";
+import { Chat } from "../action-types";
 import { ChatAction } from "../actions/chatActions";
-import { ShopActions } from "../actions/shopActions";
-import { CommentState, CommentModel, ChatStage, ShopModel } from "../models";
+import { ChatStage } from "../models";
 
 
 const initialState: ChatStage = {
     isChat: undefined,
-
 }
 
 const chatReducer = (state: ChatStage = initialState, action: ChatAction) => {

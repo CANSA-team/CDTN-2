@@ -1,32 +1,30 @@
 import { Dispatch } from "redux";
-import { CommentModel, ShopModel } from "../models";
-import  axios  from 'axios';
-import {  AccessActionType, CommentActionType, ImageActionType, ShopActionType } from "../action-types";
-import {cansa} from "../../consts/Selector";
+import axios from 'axios';
+import { ImageActionType } from "../action-types";
+import { cansa } from "../../consts/Selector";
 
-export interface GetImage{
+export interface GetImage {
     readonly type: ImageActionType.GET_IMAGE,
     payload?: any
 }
 
-export interface ImageErrorAction{
+export interface ImageErrorAction {
     readonly type: ImageActionType.ON_IMAGE_ERROR,
     payload: any
 }
 
 export type ImageActions = GetImage | ImageErrorAction;
 
-export const getImage = (img_id:number) => {
-    return async ( dispatch: Dispatch<ImageActions>) => {
+export const getImage = (img_id: number) => {
+    return async (dispatch: Dispatch<ImageActions>) => {
         try {
             const response = await axios.get(`${cansa[0]}/api/image/get/${img_id}/e4611a028c71342a5b083d2cbf59c494`);
-            if(!response){
+            if (!response) {
                 dispatch({
                     type: ImageActionType.ON_IMAGE_ERROR,
                     payload: 'Product list error'
                 })
-            }else{
-                // save our location in local storage
+            } else {
                 dispatch({
                     type: ImageActionType.GET_IMAGE,
                     payload: response.data.data

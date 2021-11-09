@@ -9,7 +9,6 @@ import {
     Keyboard,
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default class PasswordInformation extends Component {
 
@@ -20,6 +19,7 @@ export default class PasswordInformation extends Component {
             passwordValdate: true
         }
     }
+
     valiDate(text: any, type: any) {
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
         if (type == 'password') {
@@ -27,13 +27,11 @@ export default class PasswordInformation extends Component {
                 this.setState({
                     passwordValdate: true,
                 })
-                console.warn('Password hợp lệ')
             }
             else {
                 this.setState({
                     passwordValdate: false
                 })
-                console.warn('Password chưa hợp lệ gồm 6 kí tự ,chữ cái hoa đầu')
             }
         }
     }
@@ -47,7 +45,6 @@ export default class PasswordInformation extends Component {
             </View>
         }
         return (
-            //Donot dismis Keyboard when click outside of TextInput
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <View style={styles.up}>
@@ -62,9 +59,9 @@ export default class PasswordInformation extends Component {
                     </View>
                     <View style={styles.down}>
                         <View style={styles.textInputContainer}>
-                            <TextInput                            
-                               style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
-                               onChangeText = {(text) => this.valiDate(text, 'password')}
+                            <TextInput
+                                style={[styles.textInput, !this.state.passwordValdate ? styles.error : null]}
+                                onChangeText={(text) => this.valiDate(text, 'password')}
                                 placeholder="Current password"
                                 secureTextEntry={true}
                             >
@@ -73,8 +70,8 @@ export default class PasswordInformation extends Component {
 
                         <View style={styles.textInputContainer}>
                             <TextInput
-                                style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
-                                onChangeText = {(text) => this.valiDate(text, 'password')}
+                                style={[styles.textInput, !this.state.passwordValdate ? styles.error : null]}
+                                onChangeText={(text) => this.valiDate(text, 'password')}
                                 placeholder="Import password new"
                                 secureTextEntry={true}
                             >
@@ -82,8 +79,8 @@ export default class PasswordInformation extends Component {
                         </View>
                         <View style={styles.textInputContainer}>
                             <TextInput
-                                style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
-                                onChangeText = {(text) => this.valiDate(text, 'password')}
+                                style={[styles.textInput, !this.state.passwordValdate ? styles.error : null]}
+                                onChangeText={(text) => this.valiDate(text, 'password')}
                                 placeholder="Confirm password new"
                                 secureTextEntry={true}
                             >
@@ -190,5 +187,5 @@ const styles = StyleSheet.create({
     error: {
         borderColor: 'red',
         borderWidth: 1
-      }
+    }
 })

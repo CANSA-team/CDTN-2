@@ -1,24 +1,23 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, FlatList, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import Category from '../components/Category';
 import CategorySub from '../components/CategorySub';
 import SearchBarTop from '../components/SearchBarTop';
-import {getCategory, State } from '../redux';
+import { CategoryModel, CategoryState, getCategory, State } from '../redux';
 import { useNavigation } from '../utils/useNavigation';
 import COLORS from './../consts/Colors';
 
 export default function Categories() {
     const [catergoryIndex, setCategoryIndex] = useState(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const categoryState = useSelector((state: State) => state.categoryReducer);
-    const { categories } = categoryState;
+    const categoryState: CategoryState = useSelector((state: State) => state.categoryReducer);
+    const { categories }: { categories: CategoryModel[] } = categoryState;
     const dispatch = useDispatch();
     const { navigate } = useNavigation();
     const searchProduct = (data: any) => {
-        navigate('Search', { data:data,title:'Tìm kiếm' })
+        navigate('Search', { data: data, title: 'Tìm kiếm' })
     }
 
     useEffect(() => {
@@ -26,13 +25,13 @@ export default function Categories() {
     }, [])
 
     useEffect(() => {
-        if(categories){
+        if (categories) {
             setIsLoading(true);
         }
-    },[categoryState])
+    }, [categoryState])
 
-    const onTap = (id:number,title:string) => {
-        navigate('Search', { data:id,title:title })
+    const onTap = (id: number, title: string) => {
+        navigate('Search', { data: id, title: title })
     }
 
     return (
@@ -58,9 +57,9 @@ export default function Categories() {
                             </View>
                             <View style={styles.categoriesLeft}>
                                 {
-                                    categories && categories![catergoryIndex].categories!.map((category, index) => (
-                                        <View key={index} style={{ flex: 1, minWidth: '30%',marginBottom:20  }}>
-                                            <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} onTap={onTap}/>
+                                    categories && categories[catergoryIndex].categories.map((category, index) => (
+                                        <View key={index} style={{ flex: 1, minWidth: '30%', marginBottom: 20 }}>
+                                            <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} onTap={onTap} />
                                         </View>
                                     ))
                                 }
@@ -100,6 +99,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'white',
         padding: 10,
-        flexWrap:'wrap' 
+        flexWrap: 'wrap'
     }
 });

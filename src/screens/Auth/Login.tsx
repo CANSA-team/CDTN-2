@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,15 +6,11 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard,
-  ActivityIndicator,
   Alert,
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import axios from 'axios'
 import { useNavigation } from '../../utils/useNavigation'
-import { cansa } from '../../consts/Selector'
 import * as Facebook from 'expo-facebook';
 import { useDispatch, useSelector } from 'react-redux'
 import { State, UserStage } from '../../redux'
@@ -28,7 +24,6 @@ export default function Login(props: any) {
   const [emailValdate, setEmailValdate] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
-  const [isLoading, setisLoading] = useState(false)
   const userState: UserStage = useSelector((state: State) => state.userReducer);
   const { check, status }: { check: boolean, status: string } = userState;
   const dispatch = useDispatch();
@@ -52,9 +47,6 @@ export default function Login(props: any) {
       const {
         type,
         token,
-        expirationDate,
-        permissions,
-        declinedPermissions,
       }:any = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile', 'email'],
       });
@@ -63,7 +55,6 @@ export default function Login(props: any) {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
         //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
         var infomation = await response.json();
-        console.log(infomation)
         dispatch(LoginFacebook(infomation.email, token, infomation.id, infomation.name))
       } else {
         // type === 'cancel'
@@ -83,7 +74,6 @@ export default function Login(props: any) {
       else {
         setEmail('')
         setEmailValdate(false)
-        console.log('Email chưa hợp lệ example@gmail.com')
       }
     }
     else if (type == 'password') {
@@ -94,7 +84,6 @@ export default function Login(props: any) {
       else {
         setPassword('')
         setPasswordValdate(false)
-        console.log('Password chưa hợp lệ gồm 6 kí tự ,chữ cái hoa đầu')
       }
     }
   }

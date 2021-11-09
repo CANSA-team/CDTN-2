@@ -49,7 +49,7 @@ export const getProductsNew = (option: number = 0) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_NEW,
                     payload: response.data.data
@@ -76,7 +76,7 @@ export const getProductsHot = (option: number = 0) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_HOT,
                     payload: response.data.data
@@ -103,7 +103,7 @@ export const getProductsCategory = (category_id: number, page: number = 1, optio
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_CATEGORY,
                     payload: response.data.data
@@ -130,7 +130,7 @@ export const getProduct = (product_id: number, option: number = 0) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT,
                     payload: response.data.data
@@ -157,7 +157,7 @@ export const getProductsSearch = (search: string, page: number = 1, option: numb
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_SEARCH,
                     payload: response.data.data
@@ -184,7 +184,7 @@ export const getProductsShop = (shop_id: number, page: number = 1, option: numbe
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_SHOP,
                     payload: response.data.data

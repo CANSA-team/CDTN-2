@@ -41,11 +41,11 @@ export default function Product(props: any) {
             <View style={styles.imgContainer}>
                 <Image style={styles.img} source={{ uri: product.product_avatar }} />
             </View>
-            <Text style={styles.txtTitle}>{SlugStr(product.product_title!, 30)}</Text>
+            <Text style={styles.txtTitle}>{SlugStr(product.product_title!, 21)}</Text>
             <View style={{ alignItems: 'center', flexDirection: 'row', }}>
                 {
-                    product.product_rating == -1 ?
-                        <Text style={{ color: '#222'}}>
+                    !product.product_rating ?
+                        <Text style={{ color: '#222' }}>
                             Chưa đánh giá
                         </Text>
                         :

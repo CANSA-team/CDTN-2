@@ -1,10 +1,7 @@
 import { Dispatch } from "redux";
-import { CommentModel, ShopModel } from "../models";
-import  axios  from 'axios';
-import {  Chat } from "../action-types";
-import {cansa} from "../../consts/Selector";
+import { Chat } from "../action-types";
 
-export interface ChatAction{
+export interface ChatAction {
     readonly type: Chat.CHAT_IS_UPDATE,
     payload?: boolean
 }
@@ -12,8 +9,8 @@ export interface ChatAction{
 
 export type chatActions = ChatAction;
 
-export const chat = (isUpdate:boolean) => {
-    return ( dispatch: Dispatch<ChatAction>) => {
+export const chat = (isUpdate: boolean) => {
+    return (dispatch: Dispatch<ChatAction>) => {
         dispatch({
             type: Chat.CHAT_IS_UPDATE,
             payload: isUpdate

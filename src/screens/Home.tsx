@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { get } from 'styled-system';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
-import { State, getProductsHot, getProductsNew, getProductsCategory, getSlider } from '../redux';
+import { State, getProductsHot, getProductsNew, getProductsCategory, getSlider, ProductState, SliderState, CategoryState, CategoryModel, ProductModel, SliderModel } from '../redux';
 import { getCategory } from '../redux/actions/categoryActions';
-import { getUserInfo } from '../redux/actions/userActions';
 import Carousel from './../components/Carousel';
 import Product from './../components/Product';
 import { useNavigation } from './../utils/useNavigation';
 
 const WIDTH = Dimensions.get('window').width;
-
+//Màn hình chính
 export default function Home() {
     const [catergoryIndex, setCategoryIndex] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isLoadingCategory, setIsLoadingCategory] = useState<boolean>(true);
-    const productState = useSelector((state: State) => state.productReducer);
-    const sliderState = useSelector((state: State) => state.sliderReducer);
-    const categoryState = useSelector((state: State) => state.categoryReducer);
-    const { categories } = categoryState;
-    const { productHot, productNew, productCategory } = productState;
-    const { slider } = sliderState;
+    const productState: ProductState = useSelector((state: State) => state.productReducer);
+    const sliderState: SliderState = useSelector((state: State) => state.sliderReducer);
+    const categoryState: CategoryState = useSelector((state: State) => state.categoryReducer);
+    const { categories }: { categories: CategoryModel[] } = categoryState;
+    const { productHot, productNew, productCategory }: { productHot: ProductModel[], productNew: ProductModel[], productCategory: ProductModel[] } = productState;
+    const { slider }: { slider: SliderModel[] } = sliderState;
     const [_slider, _setSlider] = useState<string[]>([]);
     const dispatch = useDispatch();
     const { navigate } = useNavigation();
@@ -35,7 +33,6 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
- 
         if (productHot && productNew && productCategory && slider && isLoadingCategory) {
             let tempArr: any[] = [];
             for (const iterator of slider!) {
@@ -43,6 +40,7 @@ export default function Home() {
             }
             _setSlider(tempArr);
             setIsLoading(true);
+            setIsLoadingCategory(true);
         }
         if (!isLoadingCategory) {
             setIsLoadingCategory(true);
@@ -50,8 +48,8 @@ export default function Home() {
     }, [productState, sliderState])
 
     useEffect(() => {
-        if (categories && !productCategory) {
-            dispatch(getProductsCategory(categories![0].category_id!));
+        if (categories.length && !productCategory.length) {
+            dispatch(getProductsCategory(categories[0].category_id));
         }
     }, [categoryState])
 
@@ -67,7 +65,7 @@ export default function Home() {
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
-            <View style={{ marginTop: 40,marginBottom:20 }}>
+            <View style={{ marginTop: 40, marginBottom: 20 }}>
                 <HeaderBar onSearch={searchProduct} />
             </View>
             {

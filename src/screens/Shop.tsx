@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert, Image } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Carousel from './../components/Carousel';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator, Image } from 'react-native';
 import COLORS from '../consts/Colors';
-import RatingComment from '../components/RatingComment';
-import Comment from '../components/Comment';
 import { useNavigation } from './../utils/useNavigation';
-import { Rating } from 'react-native-elements';
-import { CommentModel, getProductsShop, ProductModel, State } from '../redux';
+import { getProductsShop, ProductModel, ProductState, ShopModel, ShopState, State } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { getComments } from '../redux/actions/commentActions';
-import { addCart } from '../redux/actions/cartActions';
 import { getShopInfo } from '../redux/actions/shopActions';
 import RNPickerSelect from 'react-native-picker-select';
 import Product from '../components/Product';
@@ -19,18 +12,17 @@ import Product from '../components/Product';
 export default function ProductDetail(props: any) {
     const [page, setPage] = useState<number>(1);
     const { navigate } = useNavigation();
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
+    const { navigation } = props;
+    const { getParam } = navigation;
     const shop_id = getParam('shop_id');
-    const productState = useSelector((state: State) => state.productReducer);
-    const shopState = useSelector((state: State) => state.shopReducer);
+    const productState: ProductState = useSelector((state: State) => state.productReducer);
+    const shopState: ShopState = useSelector((state: State) => state.shopReducer);
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
-    const { info } = shopState;
-    const { productShop } = productState;
+    const { info }: { info: ShopModel } = shopState;
+    const { productShop }: { productShop: ProductModel[] } = productState;
     const [_productShop, setProductShop] = useState<any>();
-    const [selectedSort, setSelectedSort] = useState();
-    const [selectedPrice, setSelectedPrice] = useState();
+
     const onTapDetail = (id: number) => {
         navigate('ProductDetail', { id })
     }
@@ -51,6 +43,7 @@ export default function ProductDetail(props: any) {
         return layoutMeasurement.height + contentOffset.y >=
             contentSize.height - paddingToBottom;
     };
+
     useEffect(() => {
         dispatch(getProductsShop(shop_id, page));
     }, [page])
