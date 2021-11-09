@@ -73,3 +73,8 @@ export enum ImageActionType {
     UPDATE_IMAGE = 'UPDATE_IMAGE',
     ON_IMAGE_ERROR = 'ON_IMAGE_ERROR'
 }
+export enum Chat {
+    CHAT_IS_UPDATE = 'CHAT_IS_UPDATE',
+    UPDATE_IMAGE = 'UPDATE_IMAGE',
+    ON_IMAGE_ERROR = 'ON_IMAGE_ERROR'
+}

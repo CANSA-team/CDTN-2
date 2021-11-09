@@ -10,8 +10,9 @@ import axios from 'axios';
 import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
 import { State, UserModel, UserStage } from '../../redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { cansa, chatSever } from '../../consts/Selector'
+import { chat } from '../../redux/actions/chatActions';
 
 let user_avatar: any = undefined;
 export default function Chat(props: any) {
@@ -25,7 +26,8 @@ export default function Chat(props: any) {
     const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
     const myID = 'user_' + userInfor.user_id;
     const hisID = getParam('id_user');
-    console.log(hisID)
+    const dispatch = useDispatch();
+
     useEffect(() => {
         setMess([]);
         (async()=>{
@@ -94,7 +96,8 @@ export default function Chat(props: any) {
             image: '',
             base64: ''
         };
-
+        console.log()
+        dispatch(chat(true))
         socket.emit("messages", msgDetails);
     }
     var timeout:any;

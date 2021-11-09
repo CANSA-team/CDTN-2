@@ -11,8 +11,10 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
 import { Avatar, Badge, withBadge, Icon } from 'react-native-elements';
 import { cansa, chatSever } from '../../consts/Selector'
-import { State, UserModel, UserStage } from '../../redux';
-import { useSelector } from 'react-redux';
+import { State, UserModel, UserStage, ChatStage } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { chat } from '../../redux/actions/chatActions';
+
 
 export default function Chat(props: any) {
     const [dataAll, setDataAll]: any = useState([])
@@ -21,16 +23,66 @@ export default function Chat(props: any) {
     const socket = io(chatSever);
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
+    const chatState: ChatStage = useSelector((state: State) => state.chatReducer);
+    const { isChat }: { isChat?: boolean } = chatState;
     const myID = 'user_' + userInfor.user_id;
+    const dispatch = useDispatch();
+
     useEffect(() => {
+        if (isChat) {
+            socket.emit('roomList', myID)
+            socket.on("roomList", async function (data) {
+                let tempData: any = [];
+                if (data.length !== 1) {
+                    await Promise.all(data.map(async (element: any) => {
+                        socket.emit('onlineStatus', element[0].user_to)
+                        let id = '_' + Math.random().toString(36).substr(2, 16)
+                        let id_shop = (myID != element[0].user_to) ? element[0].user_to : element[0].user_from
+                        let a = await axios.get(`https://103.207.38.200/api/shop/info/${id_shop.split('shop_')[1]}/1/e4611a028c71342a5b083d2cbf59c494`)
+                        tempData.push({
+                            id: id,
+                            title: a.data.data.shop_name,
+                            img: a.data.data.shop_avatar,
+                            id_user: (myID != element[0].user_to) ? element[0].user_to : element[0].user_from,
+                            newStatusMess: (element[0].isWatched == 1) ? false : true,
+                            statusOnline: false,
+                            CreateDate: element[0].CreateDate,
+                            text: element[0].message,
+                        })
+                    }));
+                } else {
+                    socket.emit('onlineStatus', data[0].user_to)
+                    tempData.push({
+                        id: '_' + Math.random().toString(36).substr(2, 16),
+                        title: 'hoanganh22k',
+                        id_user: (myID != data[0].user_to) ? data[0].user_to : data[0].user_from,
+                        newStatusMess: (data[0].isWatched == 1) ? false : true,
+                        statusOnline: false,
+                        CreateDate: data[0].CreateDate,
+                        text: data[0].message,
+                    })
+                }
+    
+                let temp = tempData.sort((a: any, b: any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
+                setDataAll(temp)
+            });
+            dispatch(chat(false))
+
+        }
+    }, [isChat])
+
+
+    useEffect(() => {
+
         let temp: any = []
         socket.on("thread", function (data) {
             if (data.user_to == myID) {
                 socket.emit('roomList', myID)
             }
         });
+
         socket.emit('roomList', myID)
-        socket.on("roomList",async function (data) {
+        socket.on("roomList", async function (data) {
             let tempData: any = [];
             if (data.length !== 1) {
                 await Promise.all(data.map(async (element: any) => {
@@ -61,7 +113,7 @@ export default function Chat(props: any) {
                     text: data[0].message,
                 })
             }
-           
+
             let temp = tempData.sort((a: any, b: any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
             setDataAll(temp)
         });
@@ -71,7 +123,7 @@ export default function Chat(props: any) {
 
     const renderItem = ({ item }: any) => {
         return (
-            <TouchableOpacity style={styles.item} onPress={() => { navigate('Chat', { id_user: item.id_user,user_name:item.title }) }}>
+            <TouchableOpacity style={styles.item} onPress={() => { navigate('Chat', { id_user: item.id_user, user_name: item.title }) }}>
                 <View style={styles.row}>
                     <Avatar
                         rounded

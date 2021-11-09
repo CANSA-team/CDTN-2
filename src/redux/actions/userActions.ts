@@ -53,6 +53,7 @@ export interface UpdateUserProfile {
 }
 
 
+
 export type UserActions = CheckLogin | UserErrorAction | GetUserInfor | Login | Logout | LoginFacebook | Register | ForgottPassword | ForgottPasswordOTP | ForgottPasswordCenter | UpdateUserProfile;
 
 export const checkLogin = () => {

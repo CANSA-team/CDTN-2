@@ -203,6 +203,9 @@ export interface ImageStage {
     image?: string;
     error: string | undefined;
 }
+export interface ChatStage {
+    isChat?: boolean;
+}
 
 export interface ImageId {
     id: number;
