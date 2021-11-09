@@ -17,67 +17,79 @@ import { useNavigation } from '../../utils/useNavigation'
 import { cansa } from '../../consts/Selector'
 import * as Facebook from 'expo-facebook';
 import { useDispatch, useSelector } from 'react-redux'
-import { State } from '../../redux'
-import { checkLogin } from '../../redux/actions/userActions'
-import  MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
+import { State, UserStage } from '../../redux'
+import { checkLogin, login, LoginFacebook } from '../../redux/actions/userActions'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 
-
-export default function Login(props:any) {
+export default function Login(props: any) {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState('')
   const [emailValdate, setEmailValdate] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
   const [isLoading, setisLoading] = useState(false)
-  const userState = useSelector((state: State) => state.userReducer);
-  const { check } = userState;
+  const userState: UserStage = useSelector((state: State) => state.userReducer);
+  const { check, status }: { check: boolean, status: string } = userState;
   const dispatch = useDispatch();
+
+ 
+  // useEffect(() => {
+  //   dispatch(checkLogin());
+  // }, [isLoading])
+
+  // useEffect(() => {
+  //   if (!check) {
+  //     setisLoading(true)
+  //   } else {
+  //     navigate('homeStack');
+  //   }
+  // }, [userState])
+
   useEffect(() => {
     dispatch(checkLogin());
-  }, [isLoading])
+  }, [status])
 
   useEffect(() => {
-    if (!check) {
-      setisLoading(true)
-    } else {
+    if (check) {
+      dispatch(checkLogin())
       navigate('homeStack');
     }
-  }, [userState])
+  }, [check])
 
-  const logInFB = async () => {
-    try {
-      await Facebook.initializeAsync({
-        appId: '994248931143640',
-      });
-      const {
-        type,
-        token,
-        expirationDate,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile', 'email'],
-      });
-      if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
-        //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-        var infomation = await response.json();
-        console.log(infomation)
-        axios.post(`${cansa[1]}/api/user/login/facebook/e4611a028c71342a5b083d2cbf59c494`,{user_permission:'1',tocken:token,user_email:infomation.email,user_name:infomation.id,full_name:infomation.name})
-          .then(res => {
-            setisLoading(true)
-            navigate('homeStack');
-          })
-          .catch(error => console.log(error));
-      } else {
-        // type === 'cancel'
-      }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
-    }
-  }
+  // const logInFB = async () => {
+  //   try {
+  //     await Facebook.initializeAsync({
+  //       appId: '994248931143640',
+  //     });
+  //     const {
+  //       type,
+  //       token,
+  //       expirationDate,
+  //       permissions,
+  //       declinedPermissions,
+  //     } = await Facebook.logInWithReadPermissionsAsync({
+  //       permissions: ['public_profile', 'email'],
+  //     });
+  //     if (type === 'success') {
+  //       // Get the user's name using Facebook's Graph API
+  //       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
+  //       //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+  //       var infomation = await response.json();
+  //       console.log(infomation)
+  //       axios.post(`${cansa[1]}/api/user/login/facebook/e4611a028c71342a5b083d2cbf59c494`,{user_permission:'1',tocken:token,user_email:infomation.email,user_name:infomation.id,full_name:infomation.name})
+  //         .then(res => {
+  //           setisLoading(true)
+  //           navigate('homeStack');
+  //         })
+  //         .catch(error => console.log(error));
+  //     } else {
+  //       // type === 'cancel'
+  //     }
+  //   } catch ({ message }) {
+  //     alert(`Facebook Login Error: ${message}`);
+  //   }
+  // }
   const valiDate = (text: any, type: any) => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
@@ -104,22 +116,14 @@ export default function Login(props:any) {
       }
     }
   }
-  const loginBtn = () => {
-    if (email != '' && password != '') {
-      axios.post(`${cansa[1]}/api/user/login/123`,{email:email,password:password})
-        .then(res => {
-          //Trạng thái khi đăng nhập thành công
-          if (res.data.status != 'Faild') {
-            navigate('homeStack');
-            Alert.alert('Thông báo', res.data.message);
-          } else {
-            Alert.alert('Thông báo', res.data.message);
-          }
 
-        })
-        .catch(error => console.log(error));
-    } else {
-      Alert.alert('Thông báo', 'Email hoặc password không hợp lệ!!')
+  const loginBtn = (e: any) => {
+    e.preventDefault()
+    if (email !== '' && password !== '') {
+      dispatch(login(email, password));
+    }
+    else if (status === "Faild" || status === "") {
+      Alert.alert("Tài khoản hoặc mật khẩu không đúng!")
     }
   }
 
@@ -131,10 +135,10 @@ export default function Login(props:any) {
     </View>
   }
 
-  return isLoading ? (
+  return (
 
     //Donot dismis Keyboard when click outside of TextInput
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={(e) => loginBtn(e)}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity>
@@ -178,7 +182,7 @@ export default function Login(props:any) {
 
 
           <TouchableOpacity style={styles.loginButton}
-            onPress={() => loginBtn()}
+            onPress={(e) => loginBtn(e)}
           >
             <Text style={styles.loginButtonTitle}>Sign In</Text>
           </TouchableOpacity>
@@ -199,7 +203,7 @@ export default function Login(props:any) {
               backgroundColor="#3b5998"
             >
               <Text style={styles.loginButtonTitle}
-                onPress={() => logInFB()}
+
               >Login with Facebook</Text>
             </FontAwesome.Button>
           </View>
@@ -213,7 +217,7 @@ export default function Login(props:any) {
             </FontAwesome.Button>
           </View>
           <TouchableOpacity style={styles.forgotButton}
-            onPress={() => {  navigate('Register') }}
+            onPress={() => { navigate('Register') }}
           >
             <Text style={styles.navButtonText1}>
               Don't have an account? Create here
@@ -222,10 +226,8 @@ export default function Login(props:any) {
         </View>
       </View>
     </TouchableWithoutFeedback>
-  ) :
-    (<View style={[styles.container, styles.horizontal]}>
-      <ActivityIndicator size="large" color="#FF6F61" />
-    </View>)
+
+  )
 }
 
 
