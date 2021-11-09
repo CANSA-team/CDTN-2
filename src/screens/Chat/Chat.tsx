@@ -9,24 +9,32 @@ import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
 import { GiftedChat } from 'react-native-gifted-chat';
 import io from "socket.io-client";
+import { State, UserModel, UserStage } from '../../redux';
+import { useSelector } from 'react-redux';
+import { cansa, chatSever } from '../../consts/Selector'
 
 let user_avatar: any = undefined;
 export default function Chat(props: any) {
     const [mess, setMess] = useState([])
+    const {navigation,route} = props;
+    const { getParam, goBack } = navigation;
     const [isTyping, setIsTyping] = useState(false)
-    const socket = io("http://192.168.1.93:3002");
+    const socket = io(chatSever);
     const myName = 'Hoàng Anh';
-    const myID = 1;
-    const hisID = 2;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
+    const myID = 'user_' + userInfor.user_id;
+    const hisID = getParam('id_user');
+    console.log(hisID)
     useEffect(() => {
         setMess([]);
         (async()=>{
-           await axios.get(`http://192.168.1.93:3002/api/chat/getChatHistory/${myID}/${hisID}/1/100`)
+           await axios.get(`${chatSever}/api/chat/getChatHistory/${myID}/${hisID}/1/100`)
             .then(res => {
-                axios.get(`http://192.168.1.93:3002/api/chat/getChatHistory/${hisID}/${myID}/1/100`)
+                axios.get(`${chatSever}/api/chat/getChatHistory/${hisID}/${myID}/1/100`)
                 .then(res2 => {
-                    let data_chat_all = [];
-                    res2.data.data.forEach(element => {
+                    let data_chat_all:any = [];
+                    res2.data.data.forEach((element:any) => {
                         let dataMesss = {
                             "_id": '' + Math.random().toString(36).substr(2, 16),
                             "createdAt": element.CreateDate,
@@ -34,7 +42,7 @@ export default function Chat(props: any) {
                         }
                         data_chat_all.push(dataMesss);
                     });
-                    res.data.data.forEach(element => {
+                    res.data.data.forEach((element:any) => {
                         let dataMesss = {
                             "_id": '' + Math.random().toString(36).substr(2, 16),
                             "createdAt": element.CreateDate,
@@ -43,15 +51,14 @@ export default function Chat(props: any) {
                         }
                         data_chat_all.push(dataMesss);
                     });
-                    let temp = data_chat_all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    let temp = data_chat_all.sort((a:any, b:any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                     setMess(temp);
                 })
                 .catch(error => console.log(error));
             })
             .catch(error => console.log(error));
-            
         })()
-       
+        socket.emit('watched', myID,hisID)
         socket.on("typing", function (data) {
             if (data.user_to == myID && data.user_id == hisID) {
                 if (data.status === true) {
@@ -63,7 +70,7 @@ export default function Chat(props: any) {
         });
         socket.on("thread", function (data) {
             if (data.user_to == myID && data.user_id == hisID) {
-                let dataMesss = {
+                let dataMesss:any = {
                     "_id": '' + Math.random().toString(36).substr(2, 16),
                     "createdAt": new Date,
                     "text": data.message,
@@ -77,7 +84,7 @@ export default function Chat(props: any) {
             }
         });
     }, []);
-    const onSend = (messNew) => {
+    const onSend = (messNew:any) => {
         setMess(prevState => GiftedChat.append(prevState, messNew))
         var msgDetails = {
             user_id: myID,
@@ -90,7 +97,7 @@ export default function Chat(props: any) {
 
         socket.emit("messages", msgDetails);
     }
-    var timeout;
+    var timeout:any;
     function timeoutFunction() {
         var typo = {
             user_to: hisID,
@@ -114,7 +121,7 @@ export default function Chat(props: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderTitle title={'Chat'} />
+            <HeaderTitle title={getParam('user_name')} />
             <GiftedChat
                 inverted={true}
                 messages={mess}

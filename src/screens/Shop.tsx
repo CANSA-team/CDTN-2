@@ -34,8 +34,6 @@ export default function ProductDetail(props: any) {
     const onTapDetail = (id: number) => {
         navigate('ProductDetail', { id })
     }
-
-
     useEffect(() => {
         dispatch(getShopInfo(shop_id));
         dispatch(getProductsShop(shop_id));
@@ -121,6 +119,9 @@ export default function ProductDetail(props: any) {
                         <View style={styles.actionAccount}>
                             {info && <Text style={styles.nameUser}>{info.shop_name}</Text>}
                             {info && <Text style={{ fontSize: 18, color: '#333' }}>{info.shop_description}</Text>}
+                            <TouchableOpacity style={{ marginTop: 10, marginBottom: 10 }} onPress={() => { navigate('Chat', { id_user: 'shop_' + shop_id }) }}>
+                                <Text style={{ fontSize: 18, color: '#FFF' }}>Nhắn Tin</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={{ flex: 1, marginTop: 30, backgroundColor: '#E5E5E5' }}>

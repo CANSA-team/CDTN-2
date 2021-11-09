@@ -71,6 +71,7 @@ const switchNavigator = createSwitchNavigator({
     shopStack:{
         screen: createStackNavigator({
             Shop,
+            Chat,
         }, {
             defaultNavigationOptions: {
                 headerShown: false

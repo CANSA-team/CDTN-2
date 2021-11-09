@@ -32,20 +32,7 @@ export default function Login(props: any) {
   const userState: UserStage = useSelector((state: State) => state.userReducer);
   const { check, status }: { check: boolean, status: string } = userState;
   const dispatch = useDispatch();
-
- 
-  // useEffect(() => {
-  //   dispatch(checkLogin());
-  // }, [isLoading])
-
-  // useEffect(() => {
-  //   if (!check) {
-  //     setisLoading(true)
-  //   } else {
-  //     navigate('homeStack');
-  //   }
-  // }, [userState])
-
+  
   useEffect(() => {
     dispatch(checkLogin());
   }, [status])
@@ -57,39 +44,34 @@ export default function Login(props: any) {
     }
   }, [check])
 
-  // const logInFB = async () => {
-  //   try {
-  //     await Facebook.initializeAsync({
-  //       appId: '994248931143640',
-  //     });
-  //     const {
-  //       type,
-  //       token,
-  //       expirationDate,
-  //       permissions,
-  //       declinedPermissions,
-  //     } = await Facebook.logInWithReadPermissionsAsync({
-  //       permissions: ['public_profile', 'email'],
-  //     });
-  //     if (type === 'success') {
-  //       // Get the user's name using Facebook's Graph API
-  //       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
-  //       //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-  //       var infomation = await response.json();
-  //       console.log(infomation)
-  //       axios.post(`${cansa[1]}/api/user/login/facebook/e4611a028c71342a5b083d2cbf59c494`,{user_permission:'1',tocken:token,user_email:infomation.email,user_name:infomation.id,full_name:infomation.name})
-  //         .then(res => {
-  //           setisLoading(true)
-  //           navigate('homeStack');
-  //         })
-  //         .catch(error => console.log(error));
-  //     } else {
-  //       // type === 'cancel'
-  //     }
-  //   } catch ({ message }) {
-  //     alert(`Facebook Login Error: ${message}`);
-  //   }
-  // }
+  const logInFB = async () => {
+    try {
+      await Facebook.initializeAsync({
+        appId: '994248931143640',
+      });
+      const {
+        type,
+        token,
+        expirationDate,
+        permissions,
+        declinedPermissions,
+      }:any = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile', 'email'],
+      });
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`);
+        //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+        var infomation = await response.json();
+        console.log(infomation)
+        dispatch(LoginFacebook(infomation.email, token, infomation.id, infomation.name))
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  }
   const valiDate = (text: any, type: any) => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
@@ -198,6 +180,7 @@ export default function Login(props: any) {
           <Divider style={styles.divider}></Divider>
           <View style={{ marginBottom: 10 }}>
             <FontAwesome.Button
+              onPress={()=>{logInFB()}}
               style={styles.facebookButton}
               name="facebook"
               backgroundColor="#3b5998"
