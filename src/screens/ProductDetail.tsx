@@ -64,7 +64,6 @@ export default function ProductDetail(props: any) {
         }
     }, [cartState])
 
-
     const onTap = (comment_content: string, comment_rating: number) => {
         if (userInfor) {
             setIsLoadingComment(false);

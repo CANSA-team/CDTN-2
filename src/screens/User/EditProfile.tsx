@@ -20,7 +20,6 @@ import { updateUserProfile, getUserInfo } from '../../redux/actions/userActions'
 export default function EditProfile(props: any) {
     const { navigate } = useNavigation();
     const { navigation } = props;
-    const { getParam } = navigation;
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor, updateUser }: { userInfor: UserModel, updateUser: number } = userState;
     const [date, setDate] = useState(new Date(userInfor.user_birthday));
@@ -32,24 +31,10 @@ export default function EditProfile(props: any) {
     const [checkSave, setcheckSave] = useState<boolean>(false);
     const dispatch = useDispatch();
 
-
-
-    useEffect(() => {
-    }, [])
-
-    const onChange = (event: any, selectedDate: Date) => {
-        selectedDate = selectedDate || date;
+    const onChange = (event: any, selectedDate: any) => {
+        const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
-        setDate(selectedDate);
-    };
-
-    const showMode = (currentMode: any) => {
-        setShow(true);
-    };
-
-    const showDatepicker = () => {
-        showMode('date');
-        setDate(date);
+        setDate(currentDate);
     };
 
     useEffect(() => {
@@ -175,7 +160,7 @@ export default function EditProfile(props: any) {
                     />
                     <View style={styles.txtContainer}>
                         <Text style={styles.txtTitle}>Ngày sinh: {moment.utc(date).format('DD/MM/YYYY')}</Text>
-                        <Button onPress={showDatepicker}
+                        <Button onPress={() => setShow(true)}
                             buttonStyle={{
                                 backgroundColor: COLORS.primary,
                             }}
@@ -186,8 +171,10 @@ export default function EditProfile(props: any) {
                         {show && (
                             <DateTimePicker
                                 testID="dateTimePicker"
-                                value={date}
+                                value={new Date(date)}
                                 mode={'date'}
+                                is24Hour={true}
+                                display="default"
                                 onChange={onChange}
                             />
                         )}
