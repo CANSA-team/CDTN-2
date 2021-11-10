@@ -150,7 +150,7 @@ export default function ProductDetail(props: any) {
 
                         <View>
                             {
-                                comment && comment.map((comment: CommentModel, index: number) =>
+                                comment && comment.map((comment: any, index: number) =>
                                     <View key={index}>
                                         <Comment starNumber={comment.comment_rating} user={comment.user} comment_content={comment.comment_content} />
                                     </View>

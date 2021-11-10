@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import Category from '../components/Category';
@@ -46,7 +46,7 @@ export default function Categories() {
                     </View>) :
                     (
                         <View style={styles.categories}>
-                            <View style={styles.categoriesRight}>
+                            <ScrollView style={styles.categoriesRight}>
                                 {
                                     categories && categories!.map((category, index) => (
                                         <View key={index}>
@@ -54,7 +54,7 @@ export default function Categories() {
                                         </View>
                                     ))
                                 }
-                            </View>
+                            </ScrollView>
                             <View style={styles.categoriesLeft}>
                                 {
                                     categories && categories[catergoryIndex].categories.map((category, index) => (
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         padding: 5,
-        justifyContent: 'flex-start',
         backgroundColor: '#e7f0ee',
         borderRightColor: '#ccc',
         borderRightWidth: 1

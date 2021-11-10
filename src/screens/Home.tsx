@@ -79,7 +79,7 @@ export default function Home() {
                                 {_slider && <Carousel images={_slider} auto={true} />}
                             </View>
                             {/* Category */}
-                            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+                            <ScrollView horizontal>
                                 {
 
                                     categories && categories.map((item, index) =>
@@ -94,7 +94,7 @@ export default function Home() {
                                     )
                                 }
 
-                            </View>
+                            </ScrollView>
                             <View style={styles.productList}>
                                 {
                                     !isLoadingCategory ?
