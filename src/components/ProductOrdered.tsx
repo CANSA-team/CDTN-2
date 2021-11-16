@@ -16,6 +16,12 @@ export default function ProductOrdered(props: any) {
         <View style={styles.statusPending}>
             <Text style={styles.txtStatus}>Đang xử lí</Text>
         </View>,
+        <View style={styles.statusPending}>
+            <Text style={styles.txtStatus}>Đang xử lí</Text>
+        </View>,
+        <View style={styles.statusPending}>
+            <Text style={styles.txtStatus}>Đang xử lí</Text>
+        </View>,
         <View style={styles.statusAccept}>
             <Text style={styles.txtStatus}>Đã nhận</Text>
         </View>
@@ -48,7 +54,7 @@ export default function ProductOrdered(props: any) {
                     <View style={styles.productDetal}>
                         <Text style={styles.productName}>Ngày đặt hàng: {moment.utc(oder.oder_date).format('DD/MM/YYYY')}</Text>
                     </View>
-                    <Text style={{ color: '#222', fontSize: 18, fontWeight: 'bold' }}>Trạng thái :</Text>
+                    <Text style={{ color: 'gray', fontSize: 18 }}>Trạng thái :</Text>
                     {
                         OderStatus[oder.status]
                     }
@@ -87,24 +93,24 @@ const styles = StyleSheet.create({
     },
     productName: {
         fontSize: 20,
-        fontWeight: 'bold',
-        color: COLORS.primary
+        fontWeight:'700',
+        color: '#333'
     },
     statusPending: {
         marginTop: 8,
-        backgroundColor: 'blue',
+        backgroundColor: '#007bff',
         padding: 8,
         borderRadius: 10
     },
     statusDes: {
         marginTop: 8,
-        backgroundColor: 'red',
+        backgroundColor: '#dc3545',
         padding: 8,
         borderRadius: 10
     },
     statusAccept: {
         marginTop: 8,
-        backgroundColor: COLORS.primary,
+        backgroundColor: '#28a745',
         padding: 8,
         borderRadius: 10
     },

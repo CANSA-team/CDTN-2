@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, View, StyleSheet, Text, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
 import SearchBarTop from '../components/SearchBarTop'
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from '../consts/Colors';
@@ -18,7 +18,7 @@ export default function Search(props: any) {
     const { getParam } = navigation;
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
-    const [products, setProducts] = useState<any>([]);
+    const [products, setProducts] = useState<ProductModel[]>([] as ProductModel[]);
     const title = getParam('title');
     const data = getParam('data');
     const { navigate } = useNavigation();
@@ -93,21 +93,17 @@ export default function Search(props: any) {
             case 'Tìm kiếm':
                 if (productSearch) {
                     setProducts(productSearch!);
-                    setIsLoading(true);
                 }
                 else {
                     setProducts([]);
-                    setIsLoading(true);
                 }
                 break;
             default:
                 if (productCategory) {
                     setProducts(productCategory!);
-                    setIsLoading(true);
                 }
                 else {
                     setProducts([]);
-                    setIsLoading(true);
                 }
                 break;
         }
@@ -122,25 +118,26 @@ export default function Search(props: any) {
             case 'Tìm kiếm':
                 if (productSearch) {
                     setProducts(productSearch!);
-                    setIsLoading(true);
                 }
                 else {
                     setProducts([]);
-                    setIsLoading(true);
                 }
                 break;
             default:
                 if (productCategory) {
                     setProducts(productCategory!);
-                    setIsLoading(true);
                 }
                 else {
                     setProducts([]);
-                    setIsLoading(true);
                 }
                 break;
         }
+       
     }, [productState])
+
+    useEffect(() => {
+        setIsLoading(true);
+    }, [products])
 
     useEffect(() => {
         switch (title) {
@@ -154,7 +151,7 @@ export default function Search(props: any) {
     }, [page])
 
     const searchProduct = (data: any) => {
-        navigate('Search', { data: data, title: 'Tìm kiếm' })
+        dispatch(getProductsSearch(data));
     }
 
     const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
@@ -166,15 +163,15 @@ export default function Search(props: any) {
     return (
         !isLoading ?
             (<SafeAreaView style={styles.container}>
-                <ActivityIndicator size="large" color="#00ff00" />
+                <Image source={require('../images/loader.gif')} />
             </SafeAreaView>) : (
                 <SafeAreaView style={styles.container}>
-
-                    <View style={styles.searchContainer}>
-                        <SearchBarTop onSearch={searchProduct} />
+                    <View style={{backgroundColor: COLORS.primary}}>    
+                        <View style={[styles.searchContainer,{paddingBottom:30}]}>
+                            <SearchBarTop onSearch={searchProduct} />
+                        </View>
                     </View>
-
-                    <View style={{ flex: 1, marginTop: 30, backgroundColor: '#E5E5E5' }}>
+                    <View style={{ flex: 1, backgroundColor: '#E5E5E5' }}>
                         <View style={{ paddingVertical: 10, backgroundColor: '#ffffff', marginBottom: 15 }}>
                             <Text style={{ textAlign: 'center', fontSize: 18, color: '#222' }}>{title}</Text>
                             <View style={styles.header}>
@@ -223,7 +220,8 @@ export default function Search(props: any) {
                         >
                             <View style={styles.productList}>
                                 {
-                                    products.length > 0 ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
+                                       
+                                        products.length > 0 ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
                                         :
                                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ fontSize: 20, color: '#222' }}>Không có sản phẩm</Text>
@@ -256,7 +254,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: COLORS.primary,
     },
     searchContainer: {
         marginTop: 30,

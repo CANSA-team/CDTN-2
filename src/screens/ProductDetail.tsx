@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
@@ -39,7 +39,7 @@ export default function ProductDetail(props: any) {
     }, []);
 
     useEffect(() => {
-        if (product) {
+        if (Object.keys(product).length) {
             setIsLoading(true);
         }
     }, [productState, commentState])
@@ -81,9 +81,9 @@ export default function ProductDetail(props: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {!isLoading && product ?
+            {!isLoading && Object.keys(product).length === 0 ?
                 (<View style={styles.container}>
-                    <ActivityIndicator size="large" color="#00ff00" />
+                    <Image source={require('../images/loader.gif')} />
                 </View>) :
                 (<ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.header}>
@@ -95,7 +95,7 @@ export default function ProductDetail(props: any) {
                         </TouchableOpacity>
                     </View>
                     <View >
-                        {product && <Carousel images={product.product_image} auto={false} />}
+                        {product && <Carousel type="product" images={product.product_image} auto={false} />}
                     </View>
                     <View style={styles.detailContainer}>
                         {(product && product.product_rating) ?

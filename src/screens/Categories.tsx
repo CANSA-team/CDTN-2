@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import Category from '../components/Category';
@@ -36,33 +36,43 @@ export default function Categories() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.searchContainer}>
-                <SearchBarTop onSearch={searchProduct} />
+            <View style={{backgroundColor:COLORS.primary,paddingBottom:20}}>
+                <View style={styles.searchContainer}>
+                    <SearchBarTop onSearch={searchProduct} />
+                </View>
             </View>
+           
             {
                 !isLoading ?
                     (<View style={styles.container}>
-                        <ActivityIndicator size="large" color="#00ff00" />
+                        <Image source={require('../images/loader.gif')} />
                     </View>) :
                     (
                         <View style={styles.categories}>
-                            <ScrollView style={styles.categoriesRight}>
-                                {
-                                    categories && categories!.map((category, index) => (
-                                        <View key={index}>
-                                            <Category style={{ marginBottom: 10, padding: 2, flex: 1 }} item={category} index={index} catergoryIndex={catergoryIndex} onTap={() => setCategoryIndex(index)} />
+                            <View style={{flex:1}}>
+                                <ScrollView showsVerticalScrollIndicator={false} style={styles.categoriesRight}>
+                                    {
+                                        categories && categories!.map((category, index) => (
+                                            <View key={index}>
+                                                <Category style={{ marginBottom: 10, padding: 2, flex: 1 }} type="cat" item={category} index={index} catergoryIndex={catergoryIndex} onTap={() => setCategoryIndex(index)} />
+                                            </View>
+                                        ))
+                                    }
+                                </ScrollView>
+                            </View>
+                            
+                            <View style={{flex:3}}>
+                                <ScrollView style={{flex:1,backgroundColor:'#fff'}} showsVerticalScrollIndicator={false}>
+                                       <View style={styles.categoriesLeft}>
+                                        {
+                                            categories && categories[catergoryIndex].categories.map((category, index) => (
+                                                <View key={index} style={{width: '48%', marginBottom: 20 }}>
+                                                    <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} onTap={onTap} />
+                                                </View>
+                                            ))
+                                        }
                                         </View>
-                                    ))
-                                }
-                            </ScrollView>
-                            <View style={styles.categoriesLeft}>
-                                {
-                                    categories && categories[catergoryIndex].categories.map((category, index) => (
-                                        <View key={index} style={{ flex: 1, minWidth: '30%', marginBottom: 20 }}>
-                                            <CategorySub style={{ marginBottom: 30, flex: 1, marginLeft: 5, padding: 2 }} item={category} onTap={onTap} />
-                                        </View>
-                                    ))
-                                }
+                                </ScrollView>
                             </View>
                         </View>
                     )}
@@ -73,7 +83,6 @@ export default function Categories() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.primary,
     },
     searchContainer: {
         marginTop: 30
@@ -81,12 +90,11 @@ const styles = StyleSheet.create({
     categories: {
         flexDirection: 'row',
         flex: 1,
-        marginTop: 20,
         borderTopColor: '#ccc',
         borderTopWidth: 1
     },
     categoriesRight: {
-        flex: 1,
+       
         flexDirection: 'column',
         padding: 5,
         backgroundColor: '#e7f0ee',
@@ -94,10 +102,10 @@ const styles = StyleSheet.create({
         borderRightWidth: 1
     },
     categoriesLeft: {
-        flex: 3,
         flexDirection: 'row',
         backgroundColor: 'white',
         padding: 10,
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        justifyContent:'space-between'
     }
 });

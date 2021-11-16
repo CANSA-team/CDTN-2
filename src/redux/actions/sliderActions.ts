@@ -19,7 +19,8 @@ export type SliderActions = GetSlider | SliderErrorAction;
 export const getSlider = () => {
     return async (dispatch: Dispatch<SliderActions>) => {
         try {
-            const response = await axios.get<any>(`${cansa[0]}/api/slider/all/e4611a028c71342a5b083d2cbf59c494`)
+            const response = await axios.get<any>(`${cansa[0]}/api/slider/all/0/e4611a028c71342a5b083d2cbf59c494`)
+            
             if (!response) {
                 dispatch({
                     type: SliderActionType.ON_SLIDER_ERROR,

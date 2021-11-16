@@ -11,6 +11,7 @@ export default function SearchBarTop(props: any) {
         setData(search);
     };
 
+    
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
@@ -70,7 +71,6 @@ const styles = StyleSheet.create({
         flex: 1,
         fontWeight: '500',
         backgroundColor: 'white',
-
     },
     searchIcon: {
         backgroundColor: COLORS.primary,

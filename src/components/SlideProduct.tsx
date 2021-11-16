@@ -1,8 +1,10 @@
 import React from 'react'
-import { Image, View, StyleSheet } from 'react-native'
+import { Dimensions, Image, View, StyleSheet } from 'react-native'
 
+const HEIGHT = Dimensions.get('window').height;
+const WIDTH = Dimensions.get('window').width;
 
-export default function SlideItem(props:any) {
+export default function SlideProduct(props:any) {
     const {item} = props;
     return (
         <View style={styles.cardView} >
@@ -13,8 +15,8 @@ export default function SlideItem(props:any) {
 const styles = StyleSheet.create({
     cardView:{
         flex: 1,
-        width: '100%',
-        height: '100%',
+        width: WIDTH,
+        height: HEIGHT / 3.8,
         backgroundColor:'transparent',
         shadowColor:'#000',
         shadowOffset: {width:0.5,height:0.5},
@@ -31,9 +33,8 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     image:{
-        width: '100%',
-        height: '100%',
-        resizeMode:'contain'
+        width: WIDTH,
+        height: HEIGHT / 2.8,
     },
     itemTitle:{
         color: 'white',
@@ -53,4 +54,3 @@ const styles = StyleSheet.create({
         borderBottomRightRadius:50
     },
 });
-  

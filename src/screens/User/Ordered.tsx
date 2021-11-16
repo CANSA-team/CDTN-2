@@ -89,7 +89,9 @@ export default function Ordered(props: any) {
                     onValueChange={(data) => filterStatus(data)}
                     items={[
                         { label: 'Đang sử lý', value: 1 },
-                        { label: 'Đã nhận', value: 2 },
+                        { label: 'Đang sử lý', value: 2 },
+                        { label: 'Đang sử lý', value: 3 },
+                        { label: 'Đã nhận', value: 4 },
                         { label: 'Đã hủy', value: 0 },
                     ]}
                 />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Dimensions, Image, SafeAreaView, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Category from '../components/Category';
 import HeaderBar from '../components/HeaderBar';
@@ -48,7 +48,7 @@ export default function Home() {
     }, [productState, sliderState])
 
     useEffect(() => {
-        if (categories.length && !productCategory.length) {
+        if (categories.length && !productCategory?.length) {
             dispatch(getProductsCategory(categories[0].category_id));
         }
     }, [categoryState])
@@ -65,66 +65,77 @@ export default function Home() {
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
-            <View style={{ marginTop: 40, marginBottom: 20 }}>
+            <View style={{ marginTop: 40}}>
                 <HeaderBar onSearch={searchProduct} />
             </View>
             {
                 !isLoading ?
                     (<View style={styles.container}>
-                        <ActivityIndicator size="large" color="#00ff00" />
+                       <Image source={require('../images/loader.gif')} />
                     </View>) : (
                         <ScrollView showsVerticalScrollIndicator={false} >
                             {/* Slider */}
-                            <View >
+                            <View style={{marginBottom:5,marginTop:15,borderWidth:1,borderColor:'#ccc'}}> 
                                 {_slider && <Carousel images={_slider} auto={true} />}
                             </View>
                             {/* Category */}
-                            <ScrollView horizontal>
-                                {
+                           
+                            <ScrollView style={{marginBottom:10}} horizontal showsHorizontalScrollIndicator={false}>
+                                <View style={{backgroundColor:'#eee',flexDirection:'row',alignItems:'center'}}>
+                                    {
+                                        categories && categories.map((item, index) =>
+                                            <View key={index} style={{ marginLeft: 20,marginTop:20 }}>
+                                                <Category type="home" item={item} index={index} catergoryIndex={catergoryIndex} onTap={() => {
+                                                    setIsLoadingCategory(false);
+                                                    const id: number = Number(item.category_id);
+                                                    dispatch(getProductsCategory(id));
+                                                    setCategoryIndex(index);
+                                                }} />
+                                            </View>
+                                        )
+                                    }
 
-                                    categories && categories.map((item, index) =>
-                                        <View key={index} style={{ marginLeft: 20 }}>
-                                            <Category item={item} index={index} catergoryIndex={catergoryIndex} onTap={() => {
-                                                setIsLoadingCategory(false);
-                                                const id: number = Number(item.category_id);
-                                                dispatch(getProductsCategory(id));
-                                                setCategoryIndex(index);
-                                            }} />
-                                        </View>
-                                    )
-                                }
-
+                                </View>
                             </ScrollView>
                             <View style={styles.productList}>
                                 {
                                     !isLoadingCategory ?
                                         (<View style={styles.container}>
-                                            <ActivityIndicator size="large" color="#00ff00" />
+                                            <Image source={require('../images/loader.gif')} />
                                         </View>) :
-                                        productCategory && productCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
+                                        productCategory?.length && productCategory.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
 
                                 }
                             </View>
                             {/* San pham moi nhat */}
-                            <View style={styles.productContainer}>
-                                <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnew.png')} />
-                            </View>
-                            <View style={styles.productList}>
-                                {
-                                    productNew && productNew.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
-                                }
-                            </View>
+                            {
+                                productNew &&
+                                <>
+                                    <View style={styles.productContainer}>
+                                        <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnew.png')} />
+                                    </View>
+                                    <View style={styles.productList}>
+                                        {
+                                            productNew.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
+                                        }
+                                    </View>
+                                 </>
+                            }
 
                             {/* San pham moi nhat */}
-                            <View style={styles.productContainer}>
-                                <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnoibat.png')} />
-                            </View>
-                            <View style={styles.productList}>
-                                {
-                                    productHot && productHot.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
-                                }
-                            </View>
-
+                            {
+                                productHot &&
+                                <>
+                                    <View style={styles.productContainer}>
+                                        <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnoibat.png')} />
+                                    </View>
+                                    <View style={styles.productList}>
+                                        {
+                                            productHot.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="NEW" />)
+                                        }
+                                    </View>
+                                </>
+                            }
                         </ScrollView>)
             }
         </SafeAreaView>

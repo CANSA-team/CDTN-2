@@ -15,7 +15,7 @@ import { getCart, updateCart } from '../redux/actions/cartActions';
 
 let check = true;
 
-const Cart = (props: any) => {
+const Cart = () => {
     const { navigate } = useNavigation();
     const cartState: CartState = useSelector((state: State) => state.cartReducer);
     const { cart }: { cart: CartModel } = cartState;
@@ -49,51 +49,43 @@ const Cart = (props: any) => {
             {
                 cart ?
                     (
-                        !isLoading ?
-                            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                                <Text style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    Đang sử lý yêu cầu
-                                </Text>
-                            </View>
-                            :
-                            <View style={styles.container}>
-                                <HeaderTitle title={'Giỏ Hàng'} />
-
-                                <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-                                    <View style={{ flex: 1, marginBottom: 10 }}>
-                                        <ScrollView>
-                                            {
-                                                cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
-                                                    return (
-                                                        < View key={index} >
-                                                            <CartCard qty={cart.qty} product={cart.product} onTap={onTap} />
-                                                        </View>)
-                                                })
-                                            }
-                                        </ScrollView>
+                        <View style={styles.container}>
+                            <HeaderTitle title={'Giỏ Hàng'} />
+                            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                                <View style={{ flex: 1, marginBottom: 10 }}>
+                                    <ScrollView>
+                                        {
+                                            cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
+                                                return (
+                                                    < View key={index} >
+                                                        <CartCard isLoad={isLoading} qty={cart.qty} product={cart.product} onTap={onTap} />
+                                                    </View>)
+                                            })
+                                        }
+                                    </ScrollView>
+                                </View>
+                                <View style={styles.bill}>
+                                    <Text style={styles.txtTotal}>Totals</Text>
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.sub_price && vnd(cart.sub_price)}đ</Text>
                                     </View>
-                                    <View style={styles.bill}>
-                                        <Text style={styles.txtTotal}>Totals</Text>
-                                        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
-                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.sub_price && vnd(cart.sub_price)}đ</Text>
-                                        </View>
-                                        <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
-                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
-                                            <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.ship && vnd(cart.ship)}đ</Text>
-                                        </View>
-                                        <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
-                                            <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart.total_price && vnd(cart.total_price)}đ</Text>
-                                        </View>
-                                        <Button
-                                            onPress={onTapCheckout}
-                                            title="CHECK OUT"
-                                            buttonStyle={styles.btnCheckOut}
-                                        />
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.ship && vnd(cart.ship)}đ</Text>
                                     </View>
-                                </ScrollView>
-                            </View >
+                                    <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart.total_price && vnd(cart.total_price)}đ</Text>
+                                    </View>
+                                    <Button
+                                        onPress={onTapCheckout}
+                                        title="CHECK OUT"
+                                        buttonStyle={styles.btnCheckOut}
+                                    />
+                                </View>
+                            </ScrollView>
+                        </View >
                     )
                     :
                     (
