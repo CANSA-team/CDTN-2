@@ -33,7 +33,7 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        if (productHot && productNew && productCategory && slider && isLoadingCategory) {
+        if (productHot?.length && productNew?.length && productCategory?.length && slider?.length && isLoadingCategory) {
             let tempArr: any[] = [];
             for (const iterator of slider!) {
                 tempArr.push(iterator.slider_image)
@@ -64,27 +64,27 @@ export default function Home() {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Header */}
-            <View style={{ marginTop: 40}}>
+            <View style={{ marginTop: 40 }}>
                 <HeaderBar onSearch={searchProduct} />
             </View>
             {
                 !isLoading ?
-                    (<View style={styles.container}>
-                       <Image source={require('../images/loader.gif')} />
-                    </View>) : (
+                    (
+                        <View style={styles.container}>
+                            <Image source={require('../images/loader.gif')} />
+                        </View>
+                    )
+                    :
+                    (
                         <ScrollView showsVerticalScrollIndicator={false} >
-                            {/* Slider */}
-                            <View style={{marginBottom:5,marginTop:15,borderWidth:1,borderColor:'#ccc'}}> 
-                                {_slider && <Carousel images={_slider} auto={true} />}
+                            <View style={{ marginBottom: 5, marginTop: 15, borderWidth: 1, borderColor: '#ccc' }}>
+                                {_slider?.length && <Carousel images={_slider} auto={true} />}
                             </View>
-                            {/* Category */}
-                           
-                            <ScrollView style={{marginBottom:10}} horizontal showsHorizontalScrollIndicator={false}>
-                                <View style={{backgroundColor:'#eee',flexDirection:'row',alignItems:'center'}}>
+                            <ScrollView style={{ marginBottom: 10 }} horizontal showsHorizontalScrollIndicator={false}>
+                                <View style={{ backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center' }}>
                                     {
-                                        categories && categories.map((item, index) =>
-                                            <View key={index} style={{ marginLeft: 20,marginTop:20 }}>
+                                        categories?.length && categories.map((item, index) =>
+                                            <View key={index} style={{ marginLeft: 20, marginTop: 20 }}>
                                                 <Category type="home" item={item} index={index} catergoryIndex={catergoryIndex} onTap={() => {
                                                     setIsLoadingCategory(false);
                                                     const id: number = Number(item.category_id);
@@ -107,9 +107,8 @@ export default function Home() {
 
                                 }
                             </View>
-                            {/* San pham moi nhat */}
                             {
-                                productNew &&
+                                productNew?.length &&
                                 <>
                                     <View style={styles.productContainer}>
                                         <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnew.png')} />
@@ -119,12 +118,10 @@ export default function Home() {
                                             productNew.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} type="HOT" />)
                                         }
                                     </View>
-                                 </>
+                                </>
                             }
-
-                            {/* San pham moi nhat */}
                             {
-                                productHot &&
+                                productHot?.length &&
                                 <>
                                     <View style={styles.productContainer}>
                                         <Image style={{ height: 70, width: WIDTH }} source={require('../images/sanpnoibat.png')} />
@@ -136,7 +133,8 @@ export default function Home() {
                                     </View>
                                 </>
                             }
-                        </ScrollView>)
+                        </ScrollView>
+                    )
             }
         </SafeAreaView>
     )

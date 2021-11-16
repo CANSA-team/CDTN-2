@@ -21,90 +21,112 @@ export default function Search(props: any) {
     const [products, setProducts] = useState<ProductModel[]>([] as ProductModel[]);
     const title = getParam('title');
     const data = getParam('data');
+    const [sort, setSort] = useState<string>('');
+    const [begin, setBegin] = useState<string>('');
+    const [end, setEnd] = useState<string>('');
     const { navigate } = useNavigation();
 
     const onTapDetail = (id: number) => {
         navigate('ProductDetail', { id })
     }
 
-    const filterPrice = (data: number) => {
-        if (productSearch || productCategory) {
-            let arr = [];
-            switch (data) {
-                case 1:
-                    if (productSearch) {
-                        arr = productSearch.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 <= 999999)
-                    }
-                    else {
-                        arr = productCategory!.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 <= 999999)
-                    }
-                    setProducts(arr);
-                    break;
-                case 2:
-                    if (productSearch) {
-                        arr = productSearch.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 >= 1000000 && product.product_price! * (100 - product.product_sale!) / 100 <= 9999999)
-                    }
-                    else {
-                        arr = productCategory!.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 >= 1000000 && product.product_price! * (100 - product.product_sale!) / 100 <= 9999999)
-                    }
-                    setProducts(arr);
-                    break;
-                case 3:
-                    if (productSearch) {
-                        arr = productSearch.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 >= 10000000)
-                    }
-                    else {
-                        arr = productCategory!.filter((product: ProductModel) => product.product_price! * (100 - product.product_sale!) / 100 >= 10000000)
-                    }
-                    setProducts(arr);
-                    break;
-                default:
-                    arr = []
-                    CheckSearchOrCat(title)
-                    break;
-            }
+    const filterPrice = (key: number) => {
+        switch (key) {
+            case 1:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '0', '1000000', page))
+                    setBegin('0');
+                    setEnd('1000000')
+                }
+                else {
+                    dispatch(getProductsCategory(data, sort, '0', '1000000', page))
+                    setBegin('0');
+                    setEnd('1000000')
+                }
+                break;
+            case 2:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '1000000', '10000000', page))
+                    setBegin('1000000');
+                    setEnd('10000000')
+                }
+                else {
+                    dispatch(getProductsCategory(data, sort, '1000000', '10000000', page))
+                    setBegin('1000000');
+                    setEnd('10000000')
+                }
+                break;
+            case 3:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '10000000', '100000000', page))
+                    setBegin('10000000');
+                    setEnd('100000000')
+                }
+                else {
+                    dispatch(getProductsCategory(data, sort, '10000000', '100000000', page))
+                    setBegin('10000000');
+                    setEnd('100000000')
+                }
+                break;
+            default:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '', '', page))
+                    setBegin('');
+                    setEnd('')
+                }
+                else {
+                    dispatch(getProductsCategory(data, sort, '', '', page))
+                    setBegin('');
+                    setEnd('')
+                }
+                break;
         }
+
     }
 
-    const sortName = (data: number) => {
-        if (products) {
-            let arr;
-            switch (data) {
-                case 1:
-                    arr = [...products];
-                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() < b.product_title!.toUpperCase() ? -1 : 1 : 0);
-                    setProducts(arr);
-                    break;
-                case 2:
-                    arr = [...products];
-                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() > b.product_title!.toUpperCase() ? -1 : 1 : 0);
-                    setProducts(arr);
-                    break;
-                default:
-                    arr = [...products];
-                    setProducts(arr);
-                    break;
-            }
+    const sortName = (key: number) => {
+        switch (key) {
+            case 1:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, 'asc', begin, end, page))
+                    setSort('asc');
+                }
+                else {
+                    dispatch(getProductsCategory(data, 'asc', begin, end, page))
+                    setSort('asc');
+                }
+                break;
+            case 2:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, 'desc', begin, end, page))
+                    setSort('desc');
+                }
+                else {
+                    dispatch(getProductsCategory(data, 'desc', begin, end, page))
+                    setSort('desc');
+                }
+                break;
+            default:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, '', begin, end, page))
+                    setSort('');
+                }
+                else {
+                    dispatch(getProductsCategory(data, '', begin, end, page))
+                    setSort('');
+                }
+                break;
+
         }
     }
 
     function CheckSearchOrCat(title: string) {
         switch (title) {
             case 'Tìm kiếm':
-                if (productSearch) {
-                    setProducts(productSearch!);
-                }
-                else {
-                    setProducts([]);
-                }
+                dispatch(getProductsSearch(data, sort, begin, end, page));
                 break;
             default:
-                if (productCategory) {
-                    setProducts(productCategory!);
-                }
-                else {
-                    setProducts([]);
-                }
+                dispatch(getProductsCategory(data, sort, begin, end, page));
                 break;
         }
     }
@@ -114,6 +136,10 @@ export default function Search(props: any) {
     }, [])
 
     useEffect(() => {
+        CheckSearchOrCat(title)
+    }, [title])
+
+    useEffect(() => {
         switch (title) {
             case 'Tìm kiếm':
                 if (productSearch) {
@@ -132,7 +158,7 @@ export default function Search(props: any) {
                 }
                 break;
         }
-       
+
     }, [productState])
 
     useEffect(() => {
@@ -140,14 +166,7 @@ export default function Search(props: any) {
     }, [products])
 
     useEffect(() => {
-        switch (title) {
-            case 'Tìm kiếm':
-                dispatch(getProductsSearch(data, page));
-                break;
-            default:
-                dispatch(getProductsCategory(data, page));
-                break;
-        }
+        CheckSearchOrCat(title);
     }, [page])
 
     const searchProduct = (data: any) => {
@@ -166,8 +185,8 @@ export default function Search(props: any) {
                 <Image source={require('../images/loader.gif')} />
             </SafeAreaView>) : (
                 <SafeAreaView style={styles.container}>
-                    <View style={{backgroundColor: COLORS.primary}}>    
-                        <View style={[styles.searchContainer,{paddingBottom:30}]}>
+                    <View style={{ backgroundColor: COLORS.primary }}>
+                        <View style={[styles.searchContainer, { paddingBottom: 30 }]}>
                             <SearchBarTop onSearch={searchProduct} />
                         </View>
                     </View>
@@ -220,8 +239,8 @@ export default function Search(props: any) {
                         >
                             <View style={styles.productList}>
                                 {
-                                       
-                                        products.length > 0 ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
+
+                                    products?.length ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
                                         :
                                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ fontSize: 20, color: '#222' }}>Không có sản phẩm</Text>
