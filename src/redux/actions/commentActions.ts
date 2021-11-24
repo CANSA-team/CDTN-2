@@ -20,10 +20,10 @@ export interface AddCommentAction {
 
 export type CommentActions = GetComment | CommentErrorAction | AddCommentAction;
 
-export const getComments = (product_id: number) => {
+export const getComments = (product_id: number,page:number = 1) => {
     return async (dispatch: Dispatch<CommentActions>) => {
         try {
-            const response = await axios.get<any>(`${cansa[1]}/api/comment/all/${product_id}/e4611a028c71342a5b083d2cbf59c494`)
+            const response = await axios.get<any>(`${cansa[1]}/api/comment/all/${product_id}/${page}/e4611a028c71342a5b083d2cbf59c494`)
             if (!response) {
                 dispatch({
                     type: CommentActionType.ON_COMMENT_ERROR,
@@ -47,7 +47,7 @@ export const getComments = (product_id: number) => {
     }
 }
 
-export const addComment = (product_id: number, user_id: number, comment_content: string, comment_rating: number) => {
+export const addComment = (product_id: number, user_id: number, comment_content: string, comment_rating: number,page:number = 1) => {
     return async (dispatch: Dispatch<CommentActions>) => {
         const data = {
             user_id: user_id,
@@ -56,7 +56,7 @@ export const addComment = (product_id: number, user_id: number, comment_content:
             comment_rating: comment_rating,
         }
         try {
-            const response = await axios.post<any>(`${cansa[1]}/api/comment/insert/e4611a028c71342a5b083d2cbf59c494`, data)
+            const response = await axios.post<any>(`${cansa[1]}/api/comment/insert/${page}/e4611a028c71342a5b083d2cbf59c494`, data)
             if (!response) {
                 dispatch({
                     type: CommentActionType.ON_COMMENT_ERROR,

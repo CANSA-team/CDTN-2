@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, Alert, Image, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
@@ -32,6 +32,8 @@ export default function ProductDetail(props: any) {
     const dispatch = useDispatch();
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
+    const [page, setPage] = useState<number>(1);
+    const [isLoadMore, setisLoadMore] = useState(false)
 
     useEffect(() => {
         dispatch(getProduct(id));
@@ -40,15 +42,14 @@ export default function ProductDetail(props: any) {
     }, []);
 
     useEffect(() => {
-        if (Object.keys(product).length) {
-            setproductCheck(product)
-        }
+        setproductCheck(product)
         if (productCheck) {
             setIsLoading(true);
         }
     }, [product])
 
     useEffect(() => {
+        setisLoadMore(false)
         if (comment && !isLoadingComment) {
             setIsLoadingComment(true);
         }
@@ -71,8 +72,10 @@ export default function ProductDetail(props: any) {
 
     const onTap = (comment_content: string, comment_rating: number) => {
         if (userInfor) {
-            setIsLoadingComment(false);
-            dispatch(addComment(id, userInfor.user_id, comment_content, comment_rating));
+            if (comment_content) {
+                setIsLoadingComment(false);
+                dispatch(addComment(id, userInfor.user_id, comment_content, comment_rating));
+            }
         } else {
             Alert.alert(
                 "Thông báo!",
@@ -84,13 +87,32 @@ export default function ProductDetail(props: any) {
         }
     }
 
+    useEffect(() => {
+        setisLoadMore(true)
+        dispatch(getComments(id, page));
+    }, [page])
+
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             { !isLoading?
                 (<View style={styles.container}>
                     <Image source={require('../images/loader.gif')} />
                 </View>) :
-                (<ScrollView showsVerticalScrollIndicator={false}>
+                (<ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    onScroll={({ nativeEvent }) => {
+                        if (isCloseToBottom(nativeEvent)) {
+                            setPage(page + 1);
+                        }
+                    }}
+                    scrollEventThrottle={400}
+                    >
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
                             <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
@@ -151,7 +173,7 @@ export default function ProductDetail(props: any) {
                             isLoadingComment ?
                             <RatingComment onTap={onTap} />
                             :
-                            <RatingComment />
+                            <RatingComment onTap={()=>{}}/>
                         }
 
                         <View>
@@ -163,7 +185,12 @@ export default function ProductDetail(props: any) {
                                 )
                             }
                         </View>
-
+                        {
+                            isLoadMore &&
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <ActivityIndicator size="large" color="#00ff00" />
+                            </View>
+                        }
                     </View>
                 </ScrollView>
                 )}
