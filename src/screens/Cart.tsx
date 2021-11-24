@@ -12,7 +12,6 @@ import { withNavigationFocus } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart, updateCart } from '../redux/actions/cartActions';
 
-
 let check = true;
 
 const Cart = () => {
@@ -32,12 +31,10 @@ const Cart = () => {
         }
     }, [cartState])
 
-    if (check) {
-        dispatch(getCart());
-        check = false;
-    } else {
-        check = true;
-    }
+    useEffect(() => {
+       dispatch(getCart());
+    }, [])
+   
 
     const onTap = (id: number, qty: number) => {
         setIsLoading(false);
@@ -113,15 +110,7 @@ const styles = StyleSheet.create({
         margin: 10,
         backgroundColor: '#E5E5E5',
         padding: 15,
-        borderRadius: 15,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-        elevation: 4,
+        borderRadius: 10,
     },
     priceTitle: {
         fontWeight: '600',
@@ -135,7 +124,7 @@ const styles = StyleSheet.create({
     btnCheckOut: {
         marginTop: 20,
         backgroundColor: COLORS.primary,
-        borderRadius: 15,
+        borderRadius: 10,
         padding: 10
     }
 });

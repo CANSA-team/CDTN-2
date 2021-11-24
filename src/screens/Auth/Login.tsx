@@ -112,8 +112,8 @@ export default function Login(props: any) {
     <TouchableWithoutFeedback onPress={(e) => loginBtn(e)}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigate('homeStack')} />
+          <TouchableOpacity onPress={() => navigate('homeStack')}>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
           </TouchableOpacity>
         </View>
         <View style={styles.up}>

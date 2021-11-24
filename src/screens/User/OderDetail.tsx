@@ -70,8 +70,8 @@ export default function oderDetail(props: any) {
         <SafeAreaView style={styles.container}>
             <HeaderTitle title={`Mã đơn hàng: ${_oder.oder_id}`} />
             <View style={styles.header}>
-                <TouchableOpacity>
-                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={28} color="white" onPress={() => navigation.goBack()} />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={28} color="white"/>
                 </TouchableOpacity>
             </View>
             <View style={styles.container}>

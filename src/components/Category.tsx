@@ -8,10 +8,9 @@ export default function Category(props:any) {
     const item:CategoryModel = props.item;
     return (
         <TouchableOpacity
-            
             style={
                 type === "cat" ?
-                [{flexDirection:'column',justifyContent:'center',alignItems:'center',marginBottom:25}, catergoryIndex === index && styles.catSelected]
+                [{flexDirection:'column',justifyContent:'center',alignItems:'center',marginBottom:25}]
                 :
                 [{flexDirection:'column',justifyContent:'center',alignItems:'center',marginBottom:0}, catergoryIndex === index && styles.catSelected]
             }
@@ -19,10 +18,18 @@ export default function Category(props:any) {
             onPress={onTap}>
             <Image style={{height:50,width:50,borderRadius:15}} source={{uri:item.category_image}} />
             <Text
-            style={[
-                styles.categoryText,
-                catergoryIndex === index && styles.categoryTextSelected,
-            ]}
+            style={
+                type === "cat" ?
+                [
+                    styles.categoryText,
+                    catergoryIndex === index && {color: COLORS.primary},
+                ]
+                :
+                [
+                    styles.categoryText,
+                    catergoryIndex === index && styles.categoryTextSelected,
+                ]
+            }
             >
             {item.category_name}
             </Text>

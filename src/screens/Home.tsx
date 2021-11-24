@@ -80,11 +80,11 @@ export default function Home() {
                             <View style={{ marginBottom: 5, marginTop: 15, borderWidth: 1, borderColor: '#ccc' }}>
                                 {_slider?.length && <Carousel images={_slider} auto={true} />}
                             </View>
-                            <ScrollView style={{ marginBottom: 10 }} horizontal showsHorizontalScrollIndicator={false}>
+                            <ScrollView style={{ marginBottom: 15 }} horizontal showsHorizontalScrollIndicator={false}>
                                 <View style={{ backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center' }}>
                                     {
                                         categories?.length && categories.map((item, index) =>
-                                            <View key={index} style={{ marginLeft: 20, marginTop: 20 }}>
+                                            <View key={index} style={{ marginHorizontal: 10, marginTop: 20 }}>
                                                 <Category type="home" item={item} index={index} catergoryIndex={catergoryIndex} onTap={() => {
                                                     setIsLoadingCategory(false);
                                                     const id: number = Number(item.category_id);

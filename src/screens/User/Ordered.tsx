@@ -78,8 +78,8 @@ export default function Ordered(props: any) {
         <View style={styles.container}>
             <HeaderTitle title="Đơn hàng" />
             <View style={styles.header}>
-                <TouchableOpacity>
-                    <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <MaterialIcons name="arrow-back" size={35} color="white"/>
                 </TouchableOpacity>
             </View>
             <View style={{ padding: 10, backgroundColor: 'white' }}>

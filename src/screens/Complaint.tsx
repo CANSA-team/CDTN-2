@@ -60,8 +60,8 @@ export default function Complaint(props: any) {
         <View style={styles.container}>
             <HeaderTitle title="Báo Cáo" />
             <View style={styles.header}>
-                <TouchableOpacity>
-                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigation.goBack()} />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
                 </TouchableOpacity>
             </View>
             <View style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }}>

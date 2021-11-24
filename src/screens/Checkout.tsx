@@ -113,8 +113,8 @@ export default function Checkout(props: any) {
 
             <HeaderTitle title={'ORDER'} />
             <View style={{ position: 'absolute', left: 5, top: 35 }}>
-                <TouchableOpacity>
-                    <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <MaterialIcons name="arrow-back" size={35} color="white"/>
                 </TouchableOpacity>
             </View>
 
@@ -234,7 +234,6 @@ export default function Checkout(props: any) {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.txtPay}>Tổng tiền : </Text>
                     <Text style={styles.txtPrice}>{vnd(cart.total_price)}đ</Text>
-                    <Text style={styles.txtPrice}>{cart.total_price}đ</Text>
                 </View>
             </View>
             <View style={styles.viewTotal}>
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
     method: {
         backgroundColor: '#E5E5E5',
         paddingVertical: 20,
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
         borderRadius: 10
     },
     txtPrice: {
@@ -281,14 +280,6 @@ const styles = StyleSheet.create({
     viewTotal: {
         marginHorizontal: 20,
         margin: 10,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-        elevation: 4,
     },
     textAreaContainer: {
         borderColor: 'gray',
@@ -308,7 +299,7 @@ const styles = StyleSheet.create({
     btnContinute: {
         marginTop: 20,
         backgroundColor: COLORS.primary,
-        borderRadius: 15,
+        borderRadius: 10,
         padding: 10
     }
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
+import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import SearchBarTop from '../components/SearchBarTop'
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from '../consts/Colors';
@@ -19,11 +19,13 @@ export default function Search(props: any) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
     const [products, setProducts] = useState<ProductModel[]>([] as ProductModel[]);
-    const title = getParam('title');
+    const [productCheck, setproductCheck] = useState<any>()
+    const [title, setTitle]  = useState(getParam('title'));
     const data = getParam('data');
     const [sort, setSort] = useState<string>('');
     const [begin, setBegin] = useState<string>('');
     const [end, setEnd] = useState<string>('');
+    const [isLoadMore, setisLoadMore] = useState(false)
     const { navigate } = useNavigation();
 
     const onTapDetail = (id: number) => {
@@ -140,36 +142,43 @@ export default function Search(props: any) {
     }, [title])
 
     useEffect(() => {
+        setisLoadMore(false)
         switch (title) {
             case 'Tìm kiếm':
                 if (productSearch) {
                     setProducts(productSearch!);
+                    setproductCheck(productSearch)
                 }
                 else {
                     setProducts([]);
+                    setproductCheck([])
                 }
                 break;
             default:
                 if (productCategory) {
                     setProducts(productCategory!);
+                    setproductCheck(productSearch)
                 }
                 else {
                     setProducts([]);
+                    setproductCheck([])
                 }
                 break;
         }
-
+        if (productCheck) {
+            setIsLoading(true);
+        }
     }, [productState])
 
-    useEffect(() => {
-        setIsLoading(true);
-    }, [products])
+   
 
     useEffect(() => {
         CheckSearchOrCat(title);
     }, [page])
 
     const searchProduct = (data: any) => {
+        setTitle('Tìm kiếm');
+        setIsLoading(false);
         dispatch(getProductsSearch(data));
     }
 
@@ -194,8 +203,8 @@ export default function Search(props: any) {
                         <View style={{ paddingVertical: 10, backgroundColor: '#ffffff', marginBottom: 15 }}>
                             <Text style={{ textAlign: 'center', fontSize: 18, color: '#222' }}>{title}</Text>
                             <View style={styles.header}>
-                                <TouchableOpacity>
-                                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={25} color="white" onPress={() => navigation.goBack()} />
+                                <TouchableOpacity onPress={() => navigation.goBack()}>
+                                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={25} color="white"/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -233,10 +242,11 @@ export default function Search(props: any) {
                             onScroll={({ nativeEvent }) => {
                                 if (isCloseToBottom(nativeEvent)) {
                                     setPage(page + 1);
+                                    setisLoadMore(true);
                                 }
                             }}
                             scrollEventThrottle={400}
-                        >
+                             >
                             <View style={styles.productList}>
                                 {
 
@@ -247,8 +257,13 @@ export default function Search(props: any) {
                                         </View>
                                 }
                             </View>
+                            {
+                                isLoadMore &&
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <ActivityIndicator size="large" color="#00ff00" />
+                                </View>
+                            }
                         </ScrollView>
-
                     </View>
                 </SafeAreaView>
             )

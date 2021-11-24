@@ -11,7 +11,7 @@ import { Rating } from 'react-native-elements';
 import { CartState, CommentModel, CommentState, getProduct, ProductModel, ProductState, State, UserModel, UserStage } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, getComments } from '../redux/actions/commentActions';
-import { addCart } from '../redux/actions/cartActions';
+import { addCart, getCart } from '../redux/actions/cartActions';
 import { getUserInfo } from '../redux/actions/userActions';
 import { vnd } from '../consts/Selector';
 export default function ProductDetail(props: any) {
@@ -24,6 +24,7 @@ export default function ProductDetail(props: any) {
     const [isLoadingAddCart, setIsLoadingAddCart] = useState(false);
     const productState: ProductState = useSelector((state: State) => state.productReducer);
     const commentState: CommentState = useSelector((state: State) => state.commentReducer);
+    const [productCheck, setproductCheck] = useState<any>();
     const cartState: CartState = useSelector((state: State) => state.cartReducer);
     const { product }: { product: ProductModel } = productState;
     const { comment }: { comment: CommentModel[] } = commentState;
@@ -40,9 +41,12 @@ export default function ProductDetail(props: any) {
 
     useEffect(() => {
         if (Object.keys(product).length) {
+            setproductCheck(product)
+        }
+        if (productCheck) {
             setIsLoading(true);
         }
-    }, [productState, commentState])
+    }, [product])
 
     useEffect(() => {
         if (comment && !isLoadingComment) {
@@ -61,6 +65,7 @@ export default function ProductDetail(props: any) {
                 ]
             );
             setIsLoadingAddCart(false);
+            dispatch(getCart());
         }
     }, [cartState])
 
@@ -81,17 +86,17 @@ export default function ProductDetail(props: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {!isLoading && Object.keys(product).length === 0 ?
+            { !isLoading?
                 (<View style={styles.container}>
                     <Image source={require('../images/loader.gif')} />
                 </View>) :
                 (<ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.header}>
-                        <TouchableOpacity>
-                            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => navigation.goBack()} />
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
                         </TouchableOpacity>
-                        <TouchableOpacity>
-                            <MaterialIcons onPress={() => navigate('cart')} style={styles.headerIcon} name="shopping-cart" color="white" size={30} />
+                        <TouchableOpacity onPress={() => navigate('cart')}>
+                            <MaterialIcons style={styles.headerIcon} name="shopping-cart" color="white" size={30} />
                         </TouchableOpacity>
                     </View>
                     <View >
@@ -143,8 +148,10 @@ export default function ProductDetail(props: any) {
                         <Text style={styles.headerTitle}>Đánh giá & nhận xét :</Text>
 
                         {
-                            isLoadingComment &&
+                            isLoadingComment ?
                             <RatingComment onTap={onTap} />
+                            :
+                            <RatingComment />
                         }
 
                         <View>
