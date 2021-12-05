@@ -54,22 +54,22 @@ export default function EmailOTPscreen() {
                         color={'rgb(221, 97, 97)'}>
                     </Ionicons>
                     <Text style={styles.title}>
-                        Email OTP Code
+                    Gửi mã OTP qua E-mail
                     </Text>
                     <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10 }}>
-                        We will send 4 digits code to your email for the verifiction
+                    Chúng tôi sẽ gửi mã 6 chữ số đến email của bạn để xác minh
                     </Text>
                 </View>
                 <View style={styles.down}>
                     <View style={styles.textInputContainer}>
 
-                        <Text style={{ fontSize: 18, marginRight: 285, color: 'rgb(221, 97, 97)' }}>Email:</Text>
+                        <Text style={{ fontSize: 18, marginRight: 285, color: 'rgb(221, 97, 97)' }}>Email: </Text>
                         <TextInput
                             style={[styles.textInput, !emailValdate ? styles.error : null]}
                             onChangeText={(text) => valiDate(text, 'email')}
                             textContentType='emailAddress'
                             keyboardType={'email-address'}
-                            placeholder="Enter your email !"
+                            placeholder="Nhập E-mail"
                         >
                         </TextInput>
 
@@ -77,7 +77,7 @@ export default function EmailOTPscreen() {
                     <TouchableOpacity style={styles.loginButton}
                         onPress={continueBtn}
                     >
-                        <Text style={styles.loginButtonTitle}>Continue</Text>
+                        <Text style={styles.loginButtonTitle}>Xác nhận</Text>
                     </TouchableOpacity>
 
                 </View>
