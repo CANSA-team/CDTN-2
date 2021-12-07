@@ -98,9 +98,12 @@ export default function Chat(props: any) {
                 }));
             } else {
                 socket.emit('onlineStatus', data[0].user_to)
+                let id_shop = (myID != data[0].user_to) ? data[0].user_to : data[0].user_from
+                let a = await axios.get(`https://103.207.38.200/api/shop/info/${id_shop.split('shop_')[1]}/1/e4611a028c71342a5b083d2cbf59c494`)
                 tempData.push({
                     id: '_' + Math.random().toString(36).substr(2, 16),
-                    title: 'hoanganh22k',
+                    title: a.data.data.shop_name,
+                    img: a.data.data.shop_avatar,
                     id_user: (myID != data[0].user_to) ? data[0].user_to : data[0].user_from,
                     newStatusMess: (data[0].isWatched == 1) ? false : true,
                     statusOnline: false,

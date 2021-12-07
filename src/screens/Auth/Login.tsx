@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Alert,
+  ActivityIndicator,
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -22,12 +23,13 @@ export default function Login(props: any) {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState('')
   const [emailValdate, setEmailValdate] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
   const userState: UserStage = useSelector((state: State) => state.userReducer);
   const { check, status }: { check: boolean, status: string } = userState;
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(checkLogin());
   }, [status])
@@ -47,7 +49,7 @@ export default function Login(props: any) {
       const {
         type,
         token,
-      }:any = await Facebook.logInWithReadPermissionsAsync({
+      }: any = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile', 'email'],
       });
       if (type === 'success') {
@@ -109,11 +111,11 @@ export default function Login(props: any) {
   return (
 
     //Donot dismis Keyboard when click outside of TextInput
-    <TouchableWithoutFeedback onPress={(e) => loginBtn(e)}>
+    <TouchableWithoutFeedback>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigate('homeStack')}>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
@@ -126,7 +128,6 @@ export default function Login(props: any) {
             Nhập thông tin tài khoản Đăng nhập
           </Text>
         </View>
-
         <View style={styles.down}>
           <View style={styles.textInputContainer}>
             <TextInput
@@ -169,7 +170,7 @@ export default function Login(props: any) {
           <Divider style={styles.divider}></Divider>
           <View style={{ marginBottom: 10 }}>
             <FontAwesome.Button
-              onPress={()=>{logInFB()}}
+              onPress={() => { logInFB() }}
               style={styles.facebookButton}
               name="facebook"
               backgroundColor="#3b5998"
@@ -186,7 +187,7 @@ export default function Login(props: any) {
               Bạn chưa có tài khoản? Đăng ký
             </Text>
           </TouchableOpacity>
-        </View>
+        </View>    
       </View>
     </TouchableWithoutFeedback>
 
