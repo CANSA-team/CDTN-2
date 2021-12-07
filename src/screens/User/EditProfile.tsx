@@ -14,7 +14,7 @@ import { saveImage, updateImage } from '../../consts/Selector';
 import COLORS from '../../consts/Colors';
 import { ImageId, State, UserModel, UserStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile, getUserInfo } from '../../redux/actions/userActions';
+import { updateUserProfile, getUserInfo, updateUserProfileDefault } from '../../redux/actions/userActions';
 
 
 export default function EditProfile(props: any) {
@@ -32,20 +32,28 @@ export default function EditProfile(props: any) {
     const dispatch = useDispatch();
 
     const onChange = (event: any, selectedDate: any) => {
-        const currentDate = selectedDate || date;
+        let currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
-        setDate(currentDate);
+        setDate(new Date(Number(currentDate) + 86400000));
     };
 
     useEffect(() => {
         if (userInfor) {
             setName(userInfor.user_real_name);
             setPhone(userInfor.user_phone);
-            setDate(userInfor.user_birthday);
+            setDate(new Date(userInfor.user_birthday + 86400000));
             setavatar(Number(userInfor.user_avatar));
             setImage(userInfor.user_avatar_image);
         }
     }, [userInfor])
+
+    useEffect(() => {
+        if (updateUser && checkSave) {
+            dispatch(getUserInfo());
+            setcheckSave(false);
+            navigate('Profile')
+        }
+    }, [updateUser])
 
     useEffect(() => {
         if (avatar && checkSave) {
@@ -99,20 +107,15 @@ export default function EditProfile(props: any) {
                     saveAvt = new Promise((resolve, reject) => resolve());
                 }
                 Promise.all([saveAvt]).then(() => {
-                    dispatch(updateUserProfile(name, phone, date, _avatar.id));
+                    dispatch(updateUserProfileDefault(false));
                     setcheckSave(true);
+                    dispatch(updateUserProfile(name, phone, date, _avatar.id));
                 })
             }
         }
     }
 
-    useEffect(() => {
-        if (updateUser && checkSave) {
-            dispatch(getUserInfo());
-            setcheckSave(false);
-            navigate('Profile')
-        }
-    }, [updateUser])
+    let datePick = Number(date) - 86400000;
 
     return (
         <View style={styles.container}>
@@ -171,7 +174,7 @@ export default function EditProfile(props: any) {
                         {show && (
                             <DateTimePicker
                                 testID="dateTimePicker"
-                                value={new Date(date)}
+                                value={new Date(datePick)}
                                 mode={'date'}
                                 is24Hour={true}
                                 display="default"
@@ -190,7 +193,6 @@ export default function EditProfile(props: any) {
             </View>
         </View>
     )
-
 }
 const styles = StyleSheet.create({
     container: {

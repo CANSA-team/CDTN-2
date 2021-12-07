@@ -60,6 +60,7 @@ const userReducer = (state: UserStage = initialState, action: UserActions) => {
                 checkFogotPassword: action.payload
             }
         case UserActionType.UPDATE_USER_PROFILE:
+        case UserActionType.SET_DEFAULT_UPDATE:
             return {
                 ...state,
                 updateUser: action.payload

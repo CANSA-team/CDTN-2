@@ -51,7 +51,7 @@ export interface UserModel {
     user_status: number;
     user_last_update: number;
     user_real_name: string;
-    user_birthday: Date;
+    user_birthday: number;
     user_avatar_image: string;
 }
 

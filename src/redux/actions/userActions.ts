@@ -51,10 +51,14 @@ export interface UpdateUserProfile {
     readonly type: UserActionType.UPDATE_USER_PROFILE,
     payload?: boolean
 }
+export interface UpdateUserProfileDefault {
+    readonly type: UserActionType.SET_DEFAULT_UPDATE,
+    payload?: boolean
+}
 
 
 
-export type UserActions = CheckLogin | UserErrorAction | GetUserInfor | Login | Logout | LoginFacebook | Register | ForgottPassword | ForgottPasswordOTP | ForgottPasswordCenter | UpdateUserProfile;
+export type UserActions = CheckLogin | UserErrorAction | GetUserInfor | Login | Logout | LoginFacebook | Register | ForgottPassword | ForgottPasswordOTP | ForgottPasswordCenter | UpdateUserProfile | UpdateUserProfileDefault;
 
 export const checkLogin = () => {
     return async (dispatch: Dispatch<UserActions>) => {
@@ -339,6 +343,18 @@ export const updateUserProfile = (profile_name: string, profile_phone: string, p
                 payload: error
             })
         }
+
+    }
+}
+
+export const updateUserProfileDefault = (check: boolean = true) => {
+    return async (dispatch: Dispatch<UserActions>) => {
+        dispatch({
+            type: UserActionType.SET_DEFAULT_UPDATE,
+            payload: check
+        })
+
+
 
     }
 }

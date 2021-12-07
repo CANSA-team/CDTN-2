@@ -26,7 +26,7 @@ export default function Profile(props: any) {
                     <HeaderTitle title={'Thông tin'} />
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()} >
-                            <MaterialIcons name="arrow-back" size={35} color="white"/>
+                            <MaterialIcons name="arrow-back" size={35} color="white" />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => navigate('EditProfile')}>
                             <Feather name="edit" color="white" size={35} />
@@ -59,7 +59,7 @@ export default function Profile(props: any) {
                     </View>
 
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User birthday: {moment.utc(userInfor.user_birthday).format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.txtTitle}>User birthday: {moment.utc(userInfor.user_birthday + 86400000).format('DD/MM/YYYY')}</Text>
                     </View>
 
                     <View style={styles.resetPassContainer}>
