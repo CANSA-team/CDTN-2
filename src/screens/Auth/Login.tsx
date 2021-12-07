@@ -179,15 +179,6 @@ export default function Login(props: any) {
               >Đăng nhập bằng Facebook</Text>
             </FontAwesome.Button>
           </View>
-          <View>
-            <FontAwesome.Button
-              style={styles.googleButton}
-              name="google"
-              backgroundColor="#E54646"
-            >
-              <Text style={styles.loginButtonTitle}>Đăng nhập bằng Google</Text>
-            </FontAwesome.Button>
-          </View>
           <TouchableOpacity style={styles.forgotButton}
             onPress={() => { navigate('Register') }}
           >
