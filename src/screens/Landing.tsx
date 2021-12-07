@@ -6,6 +6,7 @@ import COLORS from '../consts/Colors';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAccess } from '../redux/actions/accessActions';
+import { checkLogin} from '../redux/actions/userActions';
 
 export default function Lauding() {
     const accessState = useSelector((state: State) => state.accessReducer);
@@ -16,11 +17,11 @@ export default function Lauding() {
 
     useEffect(() => {
         dispatch(updateAccess());
+        dispatch(checkLogin())
     }, [])
 
 
     useEffect(() => {
-
         if (message != '') {
             navigate('homeStack')
         }
