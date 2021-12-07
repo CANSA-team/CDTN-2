@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
 import HeaderTitle from '../../components/HeaderTitle';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { State, UserModel, UserStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { chatSever } from '../../consts/Selector'
 import { chat } from '../../redux/actions/chatActions';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Chat(props: any) {
     const [mess, setMess] = useState([])
@@ -118,6 +119,11 @@ export default function Chat(props: any) {
     return (
         <SafeAreaView style={styles.container}>
             <HeaderTitle title={getParam('user_name')} />
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()} >
+                    <MaterialIcons name="arrow-back" size={35} color="white" />
+                </TouchableOpacity>
+            </View>
             <GiftedChat
                 inverted={true}
                 messages={mess}
@@ -138,5 +144,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#E5E5E5'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 5,
+        position: 'absolute',
+        top: 33,
+        left: 5,
+        right: 0,
+        zIndex: 2
     },
 });

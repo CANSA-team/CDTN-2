@@ -82,12 +82,12 @@ export default function ProductDetail(props: any) {
             switch (data) {
                 case 1:
                     arr = [..._productShop];
-                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() < b.product_title!.toUpperCase() ? -1 : 1 : 0);
+                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() > b.product_title!.toUpperCase() ? -1 : 1 : 0);
                     setProductShop(arr);
                     break;
                 case 2:
                     arr = [..._productShop];
-                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() > b.product_title!.toUpperCase() ? -1 : 1 : 0);
+                    arr.sort((a: ProductModel, b: ProductModel) => a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() < b.product_title!.toUpperCase() ? -1 : 1 : 0);
                     setProductShop(arr);
                     break;
                 default:
@@ -114,7 +114,7 @@ export default function ProductDetail(props: any) {
                         </View>
                         <View style={styles.actionAccount}>
                             {info && <Text style={styles.nameUser}>{info.shop_name}</Text>}
-                            {info && <Text style={{ fontSize: 18, color: '#333' }}>{SlugStr(info.shop_description,24)}</Text>}
+                            {info?.shop_description && <Text style={{ fontSize: 18, color: '#333' }}>{SlugStr(info.shop_description,24)}</Text>}
                             <TouchableOpacity style={{ marginTop: 10, marginBottom: 10 }} onPress={() => { navigate('Chat', { id_user: 'shop_' + shop_id }) }}>
                                 <Text style={{ fontSize: 18, color: '#FFF' }}>Nhắn Tin</Text>
                             </TouchableOpacity>
