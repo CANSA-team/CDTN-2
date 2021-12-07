@@ -1,26 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import COLORS from './../consts/Colors';
 import { SlugStr, vnd } from './../consts/Selector';
-import { ProductModel, State } from '../redux';
-import { useSelector } from 'react-redux';
+import { ProductModel } from '../redux';
 
 export default function CartCard(props: any) {
-    const {isLoad} = props
-    let [qty, setNumber] = useState<number>(1);
+    const { isLoad , qty } = props
     const product:ProductModel = props.product;
-    const cartState = useSelector((state: State) => state.cartReducer);
-
-    useEffect(() => {
-        setNumber(Number(props.qty));
-    },[]);
-
-    useEffect(() => {
-    },[cartState])
-
+   
     const onTap_btn = (value: number) => {
-        setNumber(value);
         props.onTap(product.product_id, value);
     }
 
@@ -32,7 +21,7 @@ export default function CartCard(props: any) {
             </View>
             <View style={styles.productContainer}>
                 <View style={styles.productDetal}>
-                    <Text style={styles.productName}>{ product && SlugStr( product.product_title, 20)}</Text>
+                    <Text style={styles.productName}>{ product && SlugStr( product.product_title, 19)}</Text>
                     <TouchableOpacity style={styles.iconDelete} onPress={() => {
                         onTap_btn(0);
                     }}>
@@ -80,7 +69,7 @@ export default function CartCard(props: any) {
                     </View>
                     :
                     <View style={styles.productPrice}>
-                    <TouchableOpacity
+                    <View
                             style={{
                                 borderColor: 'black',
                                 borderWidth: 1,
@@ -91,11 +80,11 @@ export default function CartCard(props: any) {
                             }}
                         >
                         <Text>-</Text>
-                    </TouchableOpacity>
+                    </View>
 
                     <Text style={{marginHorizontal:10,fontSize:14}}>{qty}</Text>
 
-                    <TouchableOpacity
+                    <View
                         style={{
                             borderColor: 'black',
                             borderWidth: 1,
@@ -107,7 +96,7 @@ export default function CartCard(props: any) {
                         }}
                        >
                         <Text>+</Text>
-                    </TouchableOpacity>
+                    </View>
                         <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
                     </View>
                 }

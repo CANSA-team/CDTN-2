@@ -12,12 +12,10 @@ import { withNavigationFocus } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCart, updateCart } from '../redux/actions/cartActions';
 
-let check = true;
-
 const Cart = () => {
     const { navigate } = useNavigation();
     const cartState: CartState = useSelector((state: State) => state.cartReducer);
-    const { cart }: { cart: CartModel } = cartState;
+    const { cart , status }: { cart: CartModel , status:any } = cartState;
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
 
@@ -28,8 +26,12 @@ const Cart = () => {
     useEffect(() => {
         if (cart && !isLoading) {
             setIsLoading(true);
-        }
+        }   
     }, [cartState])
+
+    useEffect(() => {
+        dispatch(getCart());
+    }, [status])
 
     useEffect(() => {
        dispatch(getCart());
@@ -54,7 +56,7 @@ const Cart = () => {
                                         {
                                             cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
                                                 return (
-                                                    < View key={index} >
+                                                    <View key={index} >
                                                         <CartCard isLoad={isLoading} qty={cart.qty} product={cart.product} onTap={onTap} />
                                                     </View>)
                                             })
@@ -87,7 +89,7 @@ const Cart = () => {
                     :
                     (
                         <SafeAreaView style={[styles.container]}>
-                            <HeaderTitle title={'giỏ hàng'} />
+                            <HeaderTitle title={'Giỏ hàng'} />
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 <Image style={{ width: 400, height: 400 }} source={require('../images/cart_empty.png')} />
                                 <Text style={{ fontSize: 18, color: 'gray' }}>Hiện tại chưa có sản phẩm trong giỏ hàng</Text>

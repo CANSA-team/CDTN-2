@@ -57,7 +57,7 @@ export default function ProductDetail(props: any) {
 
     useEffect(() => {
         if (status && isLoadingAddCart) {
-            const message = (status === 'success') ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
+            const message = status  ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
             Alert.alert(
                 "Thông báo",
                 message,
@@ -143,12 +143,16 @@ export default function ProductDetail(props: any) {
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                 {
-                                    !isLoadingAddCart &&
+                                    !isLoadingAddCart ?
                                     <TouchableOpacity onPress={() => {
                                         dispatch(addCart(id));
                                         setIsLoadingAddCart(true);
                                     }}>
-                                        <Text style={styles.btnBuy}>Add Cart</Text>
+                                        <Text style={styles.btnBuy}>Thêm</Text>
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity>
+                                        <Text style={styles.btnBuy}>Thêm</Text>
                                     </TouchableOpacity>
                                 }
                                 <TouchableOpacity onPress={() => {
@@ -251,6 +255,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         fontWeight: '700',
-        color: '#222'
+        color: '#111'
     }
 });

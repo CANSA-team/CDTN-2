@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-navigation'
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import COLORS from '../consts/Colors';
 import { useNavigation } from './../utils/useNavigation';
 import { getProductsShop, ProductModel, ProductState, ShopModel, ShopState, State } from '../redux';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getShopInfo } from '../redux/actions/shopActions';
 import RNPickerSelect from 'react-native-picker-select';
 import Product from '../components/Product';
+import { SlugStr } from '../consts/Selector';
 
 export default function ProductDetail(props: any) {
     const [page, setPage] = useState<number>(1);
@@ -32,11 +33,13 @@ export default function ProductDetail(props: any) {
     }, [])
 
     useEffect(() => {
-        if (info && productShop) {
+        if (productShop) {
             setProductShop(productShop);
+        }
+        if (_productShop) {
             setIsLoading(true);
         }
-    }, [shopState, productState])
+    }, [productState])
 
     const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
         const paddingToBottom = 20;
@@ -99,7 +102,7 @@ export default function ProductDetail(props: any) {
 
         !isLoading ?
             (<View style={styles.container}>
-                <ActivityIndicator size="large" color="#00ff00" />
+                <Image source={require('../images/loader.gif')} />
             </View>) : (
                 <SafeAreaView style={styles.container}>
                     <View style={styles.accountContainer}>
@@ -111,7 +114,7 @@ export default function ProductDetail(props: any) {
                         </View>
                         <View style={styles.actionAccount}>
                             {info && <Text style={styles.nameUser}>{info.shop_name}</Text>}
-                            {info && <Text style={{ fontSize: 18, color: '#333' }}>{info.shop_description}</Text>}
+                            {info && <Text style={{ fontSize: 18, color: '#333' }}>{SlugStr(info.shop_description,24)}</Text>}
                             <TouchableOpacity style={{ marginTop: 10, marginBottom: 10 }} onPress={() => { navigate('Chat', { id_user: 'shop_' + shop_id }) }}>
                                 <Text style={{ fontSize: 18, color: '#FFF' }}>Nhắn Tin</Text>
                             </TouchableOpacity>
