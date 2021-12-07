@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Platform, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { Accessory, Avatar, Button } from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import moment from 'moment';
-import COLORS from '../../consts/Colors';
 import HeaderTitle from '../../components/HeaderTitle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -11,100 +9,26 @@ import { useNavigation } from '../../utils/useNavigation';
 import axios from 'axios';
 import { cansa } from '../../consts/Selector';
 import { State, UserModel, UserStage } from '../../redux';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkLogin, getUserInfo } from '../../redux/actions/userActions';
-
-let user_temp = {
-    "id": 1,
-    "phone": "0968241064",
-    "name": "anh",
-    "birthday": "1999-09-28T17:00:00.000Z"
-}
-
-class UserProfile {
-    id?: number;
-    phone?: string;
-    name?: string;
-    birthday?: Date;
-    user_id?: number;
-    user_key?: null;
-    user_name?: string;
-    user_avatar?: string;
-    user_status?: number;
-    user_last_update?: number;
-}
+import { useSelector } from 'react-redux';
 
 export default function Profile(props: any) {
     const { navigate } = useNavigation();
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
-    let [userProdfile, setUserProfile] = useState(new UserProfile());
-
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { navigation } = props;
+    const { getParam } = navigation;
     const [isLoadingChangePassword, setIsLoadingChangePassword] = useState<boolean>(true);
-
-    const [image, setImage] = useState('https://i.ibb.co/hYjK44F/anise-aroma-art-bazaar-277253.jpg');
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
 
-
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const _getUserProfile = getUserProfile();
-    //         const _getUserInfor = getUserInfor();
-
-    //         await Promise.all([_getUserProfile, _getUserInfor]).then(() => {
-    //             setUserProfile(userProdfile);
-    //             setIsLoading(true);
-    //         })
-    //     }
-    //     )();
-    // }, [])
-
-    // useEffect(() => {
-    //     dispatch(getUserInfo())
-    // }, [check])
-
-
-    // const getUserProfile = async () => {
-    //     await axios.get(`${cansa[1]}/api/user/get/profile`)
-    //         .then(res => {
-    //             userProdfile.phone = res.data.data.phone;
-    //             userProdfile.birthday = res.data.data.birthday;
-    //             userProdfile.name = res.data.data.name;;
-    //         })
-    // }
-
-    // const getUserInfor = async () => {
-    //     await axios.get(`${cansa[1]}/api/user/get/user`)
-    //         .then(res => {
-    //             userProdfile.user_key = res.data.data.user_key;
-    //             userProdfile.user_name = res.data.data.user_name;
-    //             userProdfile.user_avatar = res.data.data.user_avatar;
-    //             userProdfile.user_status = res.data.data.user_status;
-    //             userProdfile.user_last_update = res.data.data.user_last_update;
-    //             axios.get(`${cansa[0]}/api/image/get/${res.data.data.user_avatar}/e4611a028c71342a5b083d2cbf59c494`).then(res => {
-    //                 setImage(res.data.data);
-    //             })
-    //         })
-    // }
-
-
     return (
         <View style={styles.container}>
-            {/* {!isLoading ?
-                (<View style={styles.container}>
-                    <ActivityIndicator size="large" color="#00ff00" />
-                </View>) : ( */}
             <View>
                 <View>
-                    <HeaderTitle title={'PROFILE'} />
+                    <HeaderTitle title={'Thông tin'} />
                     <View style={styles.header}>
-                        <TouchableOpacity>
-                            <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
+                        <TouchableOpacity onPress={() => navigation.goBack()} >
+                            <MaterialIcons name="arrow-back" size={35} color="white" />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigate('EditProfile', { userProfile: userProdfile, avatar: image })}>
+                        <TouchableOpacity onPress={() => navigate('EditProfile')}>
                             <Feather name="edit" color="white" size={35} />
                         </TouchableOpacity>
                     </View>
@@ -135,7 +59,7 @@ export default function Profile(props: any) {
                     </View>
 
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User birthday: {moment.utc(userInfor.user_birthday).format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.txtTitle}>User birthday: {moment.utc(userInfor.user_birthday + 86400000).format('DD/MM/YYYY')}</Text>
                     </View>
 
                     <View style={styles.resetPassContainer}>
@@ -158,7 +82,6 @@ export default function Profile(props: any) {
                     </View>
                 </View>
             </View>
-            {/* )} */}
         </View>
     )
 }

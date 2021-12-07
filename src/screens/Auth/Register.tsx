@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -48,7 +48,7 @@ export default function Resgister() {
         setPasswordValdate(false)
       }
     } else if (type == 'nickname') {
-      if (text!=null) {
+      if (text != null) {
         setName(text)
         setNameValdate(true)
       }
@@ -62,8 +62,6 @@ export default function Resgister() {
     if (email != '' && password != '') {
       axios.get(`${cansa[1]}/api/user/create/1/${name}/${password}/${email}/e4611a028c71342a5b083d2cbf59c494`)
         .then(res => {
-          console.log(res.data.status)
-          //Trạng thái khi đăng nhập thành công
           if (res.data.status == 'success') {
             navigate('Login');
             Alert.alert('Thông báo', res.data.message);
@@ -77,21 +75,20 @@ export default function Resgister() {
       Alert.alert('Thông báo', 'Email hoặc password không hợp lệ!!')
     }
   }
-  
+
   const Divider = (props: any) => {
     return <View {...props}>
       <View style={styles.line}></View>
-      <Text style={styles.textOR}>OR</Text>
+      <Text style={styles.textOR}>HOẶC</Text>
       <View style={styles.line}></View>
     </View>
   }
   return (
-    //Donot dismis Keyboard when click outside of TextInput
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" onPress={() => { navigate('Login') }} />
+          <TouchableOpacity onPress={() => { navigate('Login') }}>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
@@ -101,7 +98,7 @@ export default function Resgister() {
             color={'rgb(221, 97, 97)'}>
           </Ionicons>
           <Text style={styles.title}>
-            Create an account
+            Đăng ký thông tin tài khoản
           </Text>
         </View>
         <View style={styles.down}>
@@ -112,7 +109,7 @@ export default function Resgister() {
               textContentType='nickname'
               autoCapitalize="sentences"
               returnKeyType="next"
-              placeholder="Enter your name"
+              placeholder="Nhập Họ Tên"
               maxLength={20}
               onChangeText={(text) => valiDate(text, 'nickname')}
             >
@@ -124,7 +121,7 @@ export default function Resgister() {
               style={[styles.textInput, !emailValdate ? styles.error : null]}
               textContentType='emailAddress'
               keyboardType='email-address'
-              placeholder="Enter your email"
+              placeholder="Nhập E-mail"
               onChangeText={(text) => valiDate(text, 'email')}
             >
             </TextInput>
@@ -133,7 +130,7 @@ export default function Resgister() {
           <View style={styles.textInputContainer}>
             <TextInput
               style={[styles.textInput, !passwordValdate ? styles.error : null]}
-              placeholder="Enter your password"
+              placeholder="Nhập mật khẩu"
               secureTextEntry={true}
               onChangeText={(text) => valiDate(text, 'password')}
             >
@@ -143,7 +140,7 @@ export default function Resgister() {
           <View style={styles.textInputContainer}>
             <TextInput
               style={[styles.textInput, !passwordValdate ? styles.error : null]}
-              placeholder="Confirm password"
+              placeholder="Nhập lại mật khẩu"
               secureTextEntry={true}
               onChangeText={(text) => valiDate(text, 'password')}
             >
@@ -154,7 +151,7 @@ export default function Resgister() {
           <TouchableOpacity style={styles.registerButton}
             onPress={() => { registerBtn() }}
           >
-            <Text style={styles.registerButtonTitle}>Register</Text>
+            <Text style={styles.registerButtonTitle}>Đăng Ký</Text>
           </TouchableOpacity>
 
           <Divider style={styles.divider}></Divider>
@@ -164,7 +161,7 @@ export default function Resgister() {
               name="facebook"
               backgroundColor="#3b5998"
             >
-              <Text style={styles.loginButtonTitle}>Sign up with Facebook</Text>
+              <Text style={styles.loginButtonTitle}>Đăng nhập bằng Facebook</Text>
             </FontAwesome.Button>
           </View>
           <View>
@@ -173,7 +170,7 @@ export default function Resgister() {
               name="google"
               backgroundColor="#E54646"
             >
-              <Text style={styles.loginButtonTitle}>Sign up with Google</Text>
+              <Text style={styles.loginButtonTitle}>Đăng nhập bằng Google</Text>
             </FontAwesome.Button>
 
           </View>

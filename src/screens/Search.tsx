@@ -1,114 +1,134 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, View, StyleSheet, FlatList, Text, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import SearchBarTop from '../components/SearchBarTop'
 import RNPickerSelect from 'react-native-picker-select';
 import COLORS from '../consts/Colors';
 import Product from '../components/Product';
 import { useNavigation } from '../utils/useNavigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductsCategory, getProductsSearch, ProductModel, State } from '../redux';
+import { getProductsCategory, getProductsSearch, ProductModel, ProductState, State } from '../redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import  MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Search(props: any) {
-    const productState = useSelector((state: State) => state.productReducer);
+    const productState: ProductState = useSelector((state: State) => state.productReducer);
     const dispatch = useDispatch();
-    const { productSearch, productCategory } = productState;
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
+    const { productSearch, productCategory }: { productSearch: ProductModel[], productCategory: ProductModel[] } = productState;
+    const { navigation } = props;
+    const { getParam } = navigation;
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isLoadmore, setIsLoadmore] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
-    const [products, setProducts] = useState<any>([new ProductModel()]);
-    const [title, setTitle] = useState<string>(getParam('title'));
-    const [data, setData] = useState<any>(getParam('data'));
+    const [products, setProducts] = useState<ProductModel[]>([] as ProductModel[]);
+    const [productCheck, setproductCheck] = useState<any>()
+    const [title, setTitle]  = useState(getParam('title'));
+    const data = getParam('data');
+    const [sort, setSort] = useState<string>('');
+    const [begin, setBegin] = useState<string>('');
+    const [end, setEnd] = useState<string>('');
+    const [isLoadMore, setisLoadMore] = useState(false)
     const { navigate } = useNavigation();
+
     const onTapDetail = (id: number) => {
         navigate('ProductDetail', { id })
     }
 
-    const filterPrice = (data:number) =>{
-        if (productSearch || productCategory) {
-            let arr = [];
-            switch (data) {
-                case 1:
-                    if (productSearch) {
-                        arr = productSearch.filter((product:ProductModel) => product.product_price!*(100-product.product_sale!)/100 <= 999999)
-                    }
-                    else{
-                        arr = productCategory!.filter((product:ProductModel) => product.product_price!*(100-product.product_sale!)/100 <= 999999)
-                    }
-                    setProducts(arr);
-                    break;
-                case 2:
-                    if (productSearch) {
-                       arr = productSearch.filter((product:ProductModel) => product.product_price!*(100-product.product_sale!)/100 >= 1000000 && product.product_price!*(100-product.product_sale!)/100 <= 9999999)
-                    }
-                    else{
-                       arr = productCategory!.filter((product:ProductModel) => product.product_price!*(100-product.product_sale!)/100 >= 1000000 && product.product_price!*(100-product.product_sale!)/100 <= 9999999)
-                    }
-                    setProducts(arr);
-                    break;
-                case 3:
-                    if (productSearch) {
-                        arr = productSearch.filter((product:ProductModel) => product.product_price!*(100-product.product_sale!)/100 >= 10000000)
-                    }
-                    else{
-                        arr = productCategory!.filter((product:ProductModel) => product.product_price!*(100-product.product_sale!)/100 >= 10000000)
-                    }
-                    setProducts(arr);
-                    break;
-                default:
-                    arr=[]
-                    CheckSearchOrCat(title)
-                break;
-            }
-        }
-    }
-
-    const sortName = (data:number)=>{
-        if (products) {
-            let arr;
-            switch (data) {
-                case 1:
-                    arr = [...products];
-                    arr.sort((a:ProductModel, b:ProductModel)=> a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() < b.product_title!.toUpperCase() ? -1 : 1 : 0 );  
-                    setProducts(arr);
-                    break;
-                case 2:
-                    arr = [...products];
-                    arr.sort((a:ProductModel, b:ProductModel)=> a.product_title!.toUpperCase() !== b.product_title!.toUpperCase() ? a.product_title!.toUpperCase() > b.product_title!.toUpperCase() ? -1 : 1 : 0 );  
-                    setProducts(arr);
-                    break;
-                default:
-                    arr=[...products];
-                    setProducts(arr);
-                break;
-            }
-        }
-    }
-
-    function CheckSearchOrCat(title:string) {
-        switch (title) {
-            case 'Tìm kiếm':
-                if (productSearch) {
-                    setProducts(productSearch!);
-                    setIsLoading(true);
+    const filterPrice = (key: number) => {
+        switch (key) {
+            case 1:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '0', '1000000', page))
+                    setBegin('0');
+                    setEnd('1000000')
                 }
-                else{
-                    setProducts([]);
-                    setIsLoading(true);
+                else {
+                    dispatch(getProductsCategory(data, sort, '0', '1000000', page))
+                    setBegin('0');
+                    setEnd('1000000')
+                }
+                break;
+            case 2:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '1000000', '10000000', page))
+                    setBegin('1000000');
+                    setEnd('10000000')
+                }
+                else {
+                    dispatch(getProductsCategory(data, sort, '1000000', '10000000', page))
+                    setBegin('1000000');
+                    setEnd('10000000')
+                }
+                break;
+            case 3:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '10000000', '100000000', page))
+                    setBegin('10000000');
+                    setEnd('100000000')
+                }
+                else {
+                    dispatch(getProductsCategory(data, sort, '10000000', '100000000', page))
+                    setBegin('10000000');
+                    setEnd('100000000')
                 }
                 break;
             default:
-                if (productCategory) {
-                    setProducts(productCategory!);
-                    setIsLoading(true);
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, sort, '', '', page))
+                    setBegin('');
+                    setEnd('')
                 }
-                else{
-                    setProducts([]);
-                    setIsLoading(true);
+                else {
+                    dispatch(getProductsCategory(data, sort, '', '', page))
+                    setBegin('');
+                    setEnd('')
                 }
+                break;
+        }
+
+    }
+
+    const sortName = (key: number) => {
+        switch (key) {
+            case 1:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, 'asc', begin, end, page))
+                    setSort('asc');
+                }
+                else {
+                    dispatch(getProductsCategory(data, 'asc', begin, end, page))
+                    setSort('asc');
+                }
+                break;
+            case 2:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, 'desc', begin, end, page))
+                    setSort('desc');
+                }
+                else {
+                    dispatch(getProductsCategory(data, 'desc', begin, end, page))
+                    setSort('desc');
+                }
+                break;
+            default:
+                if (title === 'search') {
+                    dispatch(getProductsSearch(data, '', begin, end, page))
+                    setSort('');
+                }
+                else {
+                    dispatch(getProductsCategory(data, '', begin, end, page))
+                    setSort('');
+                }
+                break;
+
+        }
+    }
+
+    function CheckSearchOrCat(title: string) {
+        switch (title) {
+            case 'Tìm kiếm':
+                dispatch(getProductsSearch(data, sort, begin, end, page));
+                break;
+            default:
+                dispatch(getProductsCategory(data, sort, begin, end, page));
                 break;
         }
     }
@@ -118,43 +138,48 @@ export default function Search(props: any) {
     }, [])
 
     useEffect(() => {
+        CheckSearchOrCat(title)
+    }, [title])
+
+    useEffect(() => {
+        setisLoadMore(false)
         switch (title) {
             case 'Tìm kiếm':
                 if (productSearch) {
                     setProducts(productSearch!);
-                    setIsLoading(true);
+                    setproductCheck(productSearch)
                 }
-                else{
+                else {
                     setProducts([]);
-                    setIsLoading(true);
+                    setproductCheck([])
                 }
                 break;
             default:
                 if (productCategory) {
                     setProducts(productCategory!);
-                    setIsLoading(true);
+                    setproductCheck(productSearch)
                 }
-                else{
+                else {
                     setProducts([]);
-                    setIsLoading(true);
+                    setproductCheck([])
                 }
                 break;
+        }
+        if (productCheck) {
+            setIsLoading(true);
         }
     }, [productState])
 
+   
+
     useEffect(() => {
-        switch (title) {
-            case 'Tìm kiếm':
-                dispatch(getProductsSearch(data, page));
-                break;
-            default:
-                dispatch(getProductsCategory(data, page));
-                break;
-        }
+        CheckSearchOrCat(title);
     }, [page])
 
     const searchProduct = (data: any) => {
-        navigate('Search', { data })
+        setTitle('Tìm kiếm');
+        setIsLoading(false);
+        dispatch(getProductsSearch(data));
     }
 
     const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
@@ -166,22 +191,22 @@ export default function Search(props: any) {
     return (
         !isLoading ?
             (<SafeAreaView style={styles.container}>
-                <ActivityIndicator size="large" color="#00ff00" />
+                <Image source={require('../images/loader.gif')} />
             </SafeAreaView>) : (
                 <SafeAreaView style={styles.container}>
-
-                    <View style={styles.searchContainer}>
-                        <SearchBarTop onSearch={searchProduct} />        
+                    <View style={{ backgroundColor: COLORS.primary }}>
+                        <View style={[styles.searchContainer, { paddingBottom: 30 }]}>
+                            <SearchBarTop onSearch={searchProduct} />
+                        </View>
                     </View>
-                   
-                    <View style={{ flex: 1, marginTop: 30, backgroundColor: '#E5E5E5' }}>
-                        <View style={{paddingVertical:10,backgroundColor:'#ffffff',marginBottom:15}}>
-                            <Text style={{textAlign:'center',fontSize:18,color:'#222'}}>{title}</Text>
+                    <View style={{ flex: 1, backgroundColor: '#E5E5E5' }}>
+                        <View style={{ paddingVertical: 10, backgroundColor: '#ffffff', marginBottom: 15 }}>
+                            <Text style={{ textAlign: 'center', fontSize: 18, color: '#222' }}>{title}</Text>
                             <View style={styles.header}>
-                                <TouchableOpacity>
-                                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={25} color="white" onPress={() => navigation.goBack()} />
+                                <TouchableOpacity onPress={() => navigation.goBack()}>
+                                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={25} color="white"/>
                                 </TouchableOpacity>
-                            </View>    
+                            </View>
                         </View>
                         <View style={{ flexDirection: 'row', padding: 10, marginBottom: 10 }}>
                             <View style={{ flex: 1, borderRadius: 50, paddingRight: 10 }}>
@@ -213,25 +238,32 @@ export default function Search(props: any) {
                                 </View>
                             </View>
                         </View>
-                        <ScrollView                         
+                        <ScrollView
                             onScroll={({ nativeEvent }) => {
                                 if (isCloseToBottom(nativeEvent)) {
                                     setPage(page + 1);
+                                    setisLoadMore(true);
                                 }
                             }}
                             scrollEventThrottle={400}
-                            >
+                             >
                             <View style={styles.productList}>
                                 {
-                                    products.length > 0 ? products.map((product, index) => <Product onTap={onTapDetail} key={index} product={product} />) 
-                                    :
-                                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                                        <Text style={{fontSize:20,color:'#222'}}>Không có sản phẩm</Text>
-                                    </View>
+
+                                    products?.length ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
+                                        :
+                                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: 20, color: '#222' }}>Không có sản phẩm</Text>
+                                        </View>
                                 }
                             </View>
+                            {
+                                isLoadMore &&
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <ActivityIndicator size="large" color="#00ff00" />
+                                </View>
+                            }
                         </ScrollView>
-
                     </View>
                 </SafeAreaView>
             )
@@ -240,14 +272,14 @@ export default function Search(props: any) {
 
 const styles = StyleSheet.create({
     header: {
-        flexDirection:'row',
-        justifyContent:'space-between',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         padding: 5,
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        zIndex:2
+        zIndex: 2
     },
     headerIcon: {
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
@@ -256,7 +288,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: COLORS.primary,
     },
     searchContainer: {
         marginTop: 30,
@@ -265,8 +296,8 @@ const styles = StyleSheet.create({
     productList: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent:'space-around',
-        flexWrap:'wrap'
+        justifyContent: 'space-around',
+        flexWrap: 'wrap'
     }
 });
 const pickerSelectStyles = StyleSheet.create({

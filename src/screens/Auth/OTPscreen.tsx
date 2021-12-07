@@ -7,8 +7,8 @@ import { cansa } from '../../consts/Selector'
 
 export default function OTPscreen(props:any) {
     const { navigate } = useNavigation();
-    const {navigation,route} = props;
-    const { getParam, goBack } = navigation;
+    const {navigation} = props;
+    const { getParam } = navigation;
     const [pinText1, setpinText1] = useState<string>('');
     const [pinText2, setpinText2] = useState<string>('');
     const [pinText3, setpinText3] = useState<string>('');
@@ -71,6 +71,7 @@ export default function OTPscreen(props:any) {
             pinInputRef5.current?.focus()
         }
     };
+
     //Hàm continue
     const continueBtn = ()=>{
         if(pinText1 && pinText2 && pinText3 && pinText4 && pinText5 && pinText6){
@@ -90,6 +91,7 @@ export default function OTPscreen(props:any) {
             Alert.alert('Thông báo',"Vui lòng không để trống ô nào!!")
         }
     }
+
     // Time out
     const [time, setTime] = useState(60);
     useEffect(() => {
@@ -98,9 +100,9 @@ export default function OTPscreen(props:any) {
                 setTime(time - 1)
             }, 1000);
         }else{
-            // Alert.alert('Thông báo',"Vui lòng resend mã code!!")
         }
     }, [time]);
+    
     useEffect(() => {
         setTime(time)
     }, []);
@@ -116,10 +118,10 @@ export default function OTPscreen(props:any) {
                         color={'rgb(221, 97, 97)'}>
                     </Ionicons>
                     <Text style={styles.title}>
-                        Verfication Code
+                        Mã Xác Minh
                     </Text>
                     <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10 }}>
-                        Input your OTP code sent via Email
+                    Nhập mã OTP của bạn được gửi qua Email
                     </Text>
                 </View>
                 <View style={styles.down}>
@@ -194,19 +196,19 @@ export default function OTPscreen(props:any) {
 
                     <TouchableOpacity style={styles.forgotButton1}>
                         <Text style={styles.navButtonText1}>
-                            Resend OTP in: {time}
+                        Gửi lại mã OTP trong: {time}
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.loginButton}
                     onPress={continueBtn}
                     >
-                        <Text style={styles.loginButtonTitle}>Continue</Text>
+                        <Text style={styles.loginButtonTitle}>Xác nhận</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.forgotButton}>
                         <Text style={styles.navButtonText}>
-                            Resend OTP
+                        Gửi lại OTP
                         </Text>
                     </TouchableOpacity>
                 </View>

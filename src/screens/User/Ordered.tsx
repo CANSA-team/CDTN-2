@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Text, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Image } from 'react-native';
 import HeaderTitle from '../../components/HeaderTitle';
 import ProductOrdered from '../../components/ProductOrdered';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { OderItemModel, OderModel, State } from '../../redux';
+import { OderModel, OderState, State, UserModel, UserStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllOder, updateOder } from '../../redux/actions/oderActions';
 import { getUserInfo } from '../../redux/actions/userActions';
@@ -12,13 +12,12 @@ import RNPickerSelect from 'react-native-picker-select';
 let check = true;
 
 export default function Ordered(props: any) {
-    const { navigation, route } = props;
-    const orderState = useSelector((state: State) => state.oderReducer);
-    const { oderList, oder } = orderState;
-    const userState = useSelector((state: State) => state.userReducer);
-    const { userInfor } = userState;
+    const { navigation } = props;
+    const orderState: OderState = useSelector((state: State) => state.oderReducer);
+    const { oderList, oder }: { oderList: OderModel[], oder: OderModel } = orderState;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { userInfor }: { userInfor: UserModel } = userState;
     const dispatch = useDispatch();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     let [_oderList, setOderList] = useState<Array<any>>();
 
     useEffect(() => {
@@ -79,8 +78,8 @@ export default function Ordered(props: any) {
         <View style={styles.container}>
             <HeaderTitle title="Đơn hàng" />
             <View style={styles.header}>
-                <TouchableOpacity>
-                    <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <MaterialIcons name="arrow-back" size={35} color="white"/>
                 </TouchableOpacity>
             </View>
             <View style={{ padding: 10, backgroundColor: 'white' }}>
@@ -90,15 +89,17 @@ export default function Ordered(props: any) {
                     onValueChange={(data) => filterStatus(data)}
                     items={[
                         { label: 'Đang sử lý', value: 1 },
-                        { label: 'Đã nhận', value: 2 },
+                        { label: 'Đang sử lý', value: 2 },
+                        { label: 'Đang sử lý', value: 3 },
+                        { label: 'Đã nhận', value: 4 },
                         { label: 'Đã hủy', value: 0 },
                     ]}
                 />
             </View>
             {
                 !_oderList ?
-                    (<View style={styles.container}>
-                        <ActivityIndicator size="large" color="#00ff00" />
+                    (<View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                        <Image style={{ width: '100%', height: '100%' }} source={require("../../images/noorders.png")} />
                     </View>) :
                     (
                         <ScrollView style={{ flex: 1, marginTop: 5 }} showsVerticalScrollIndicator={false}>

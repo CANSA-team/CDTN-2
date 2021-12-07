@@ -10,6 +10,7 @@ import userReducer from './userReducer';
 import oderReducer from './oderReducer';
 import complaintReducer from './complaintReducer';
 import imageReducer from './imageReducer';
+import chatReducer from './chatReducer';
 
 const rootReducer = combineReducers({
    productReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
    oderReducer,
    complaintReducer,
    imageReducer,
+   chatReducer
 });
 
 export default rootReducer;

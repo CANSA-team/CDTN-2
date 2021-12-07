@@ -31,6 +31,7 @@ const DIMENS = {
     iconSize: 30,
     fontNameCategory: 15
 }
+
 const switchNavigator = createSwitchNavigator({
     landingStack: {
         screen: createStackNavigator({
@@ -68,16 +69,6 @@ const switchNavigator = createSwitchNavigator({
         })
     },
 
-    shopStack:{
-        screen: createStackNavigator({
-            Shop,
-        }, {
-            defaultNavigationOptions: {
-                headerShown: false
-            }
-        })
-    },
-
     homeStack: createBottomTabNavigator({
         // Home tab Icon
         home: {
@@ -86,7 +77,6 @@ const switchNavigator = createSwitchNavigator({
                 ProductDetail: ProductDetail,
                 Search: Search,
                 Shop: Shop,
-                Complaint:Complaint,
                 Complaint: Complaint,
             }, {
                 defaultNavigationOptions: {

@@ -52,7 +52,8 @@ export enum UserActionType {
     CHECK_LOGIN = 'CHECK_LOGIN',
     GET_USER_INFO = 'GET_USER_INFO',
     ON_LOGIN_ERROR = 'ON_LOGIN_ERROR',
-    UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
+    UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE',
+    SET_DEFAULT_UPDATE = 'SET_DEFAULT_UPDATE'
 }
 
 export enum OderActionType {
@@ -70,6 +71,11 @@ export enum CommplaintActionType {
 
 export enum ImageActionType {
     GET_IMAGE = 'GET_IMAGE',
+    UPDATE_IMAGE = 'UPDATE_IMAGE',
+    ON_IMAGE_ERROR = 'ON_IMAGE_ERROR'
+}
+export enum Chat {
+    CHAT_IS_UPDATE = 'CHAT_IS_UPDATE',
     UPDATE_IMAGE = 'UPDATE_IMAGE',
     ON_IMAGE_ERROR = 'ON_IMAGE_ERROR'
 }

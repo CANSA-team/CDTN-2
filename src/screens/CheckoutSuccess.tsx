@@ -21,8 +21,8 @@ export default function CheckoutSuccess() {
         <View style={styles.container}>
 
             <View style={{position:'absolute',left:10,top:40}}>
-                <TouchableOpacity>
-                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={35} color="white" onPress={onTabCart}/>
+                <TouchableOpacity onPress={onTabCart}>
+                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={35} color="white" />
                 </TouchableOpacity>
             </View>
 

@@ -1,36 +1,36 @@
 import { Dispatch } from "redux";
 import { CommentModel } from "../models";
-import  axios  from 'axios';
-import {  CommentActionType } from "../action-types";
-import {cansa} from "../../consts/Selector";
+import axios from 'axios';
+import { CommentActionType } from "../action-types";
+import { cansa } from "../../consts/Selector";
 
-export interface GetComment{
+export interface GetComment {
     readonly type: CommentActionType.GET_ALL_COMMENT,
     payload?: [CommentModel]
 }
 
-export interface CommentErrorAction{
+export interface CommentErrorAction {
     readonly type: CommentActionType.ON_COMMENT_ERROR,
     payload: any
 }
-export interface AddCommentAction{
+export interface AddCommentAction {
     readonly type: CommentActionType.ADD_COMMENT,
     payload: any
 }
 
 export type CommentActions = GetComment | CommentErrorAction | AddCommentAction;
 
-export const getComments = (product_id: number) => {
-    return async ( dispatch: Dispatch<CommentActions>) => {
+export const getComments = (product_id: number,page:number = 1) => {
+    return async (dispatch: Dispatch<CommentActions>) => {
         try {
-            const response = await axios.get<any>(`${cansa[1]}/api/comment/all/${product_id}/e4611a028c71342a5b083d2cbf59c494`)
-            if(!response){
+            const response = await axios.get<any>(`${cansa[1]}/api/comment/all/${product_id}/${page}/e4611a028c71342a5b083d2cbf59c494`)
+            if (!response) {
                 dispatch({
                     type: CommentActionType.ON_COMMENT_ERROR,
                     payload: 'Product list error'
                 })
-            }else{
-                // save our location in local storage
+            } else {
+
                 dispatch({
                     type: CommentActionType.GET_ALL_COMMENT,
                     payload: response.data.data
@@ -47,8 +47,8 @@ export const getComments = (product_id: number) => {
     }
 }
 
-export const addComment = (product_id: number,user_id:number,comment_content:string,comment_rating:number) => {
-    return async ( dispatch: Dispatch<CommentActions>) => {
+export const addComment = (product_id: number, user_id: number, comment_content: string, comment_rating: number,page:number = 1) => {
+    return async (dispatch: Dispatch<CommentActions>) => {
         const data = {
             user_id: user_id,
             comment_content: comment_content,
@@ -56,14 +56,14 @@ export const addComment = (product_id: number,user_id:number,comment_content:str
             comment_rating: comment_rating,
         }
         try {
-            const response = await axios.post<any>(`${cansa[1]}/api/comment/insert/e4611a028c71342a5b083d2cbf59c494`,data)
-            if(!response){
+            const response = await axios.post<any>(`${cansa[1]}/api/comment/insert/${page}/e4611a028c71342a5b083d2cbf59c494`, data)
+            if (!response) {
                 dispatch({
                     type: CommentActionType.ON_COMMENT_ERROR,
                     payload: 'Product list error'
                 })
-            }else{
-                // save our location in local storage
+            } else {
+
                 dispatch({
                     type: CommentActionType.ADD_COMMENT,
                     payload: response.data.data

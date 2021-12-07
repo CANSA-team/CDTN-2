@@ -1,11 +1,10 @@
-import { CartActionType, ProductActionType } from "../action-types";
+import { CartActionType } from "../action-types";
 import { CartActions } from "../actions/cartActions";
-import { ProductActions } from "../actions/productActions";
-import { ProductModel, ProductState, CartModel, CartState } from "../models";
+import { CartModel, CartState } from "../models";
 
 
 const initialState: CartState = {
-    cart: undefined,
+    cart: {} as CartModel,
     status: undefined,
     error: undefined
 }

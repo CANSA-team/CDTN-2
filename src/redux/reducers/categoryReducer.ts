@@ -1,10 +1,10 @@
-import {  CategoryActionType } from "../action-types";
+import { CategoryActionType } from "../action-types";
 import { CategoryActions } from "../actions/categoryActions";
-import {  CategoryModel,CategoryState } from "../models";
+import { CategoryModel, CategoryState } from "../models";
 
 
 const initialState: CategoryState = {
-    categories: undefined,
+    categories: [] as CategoryModel[],
     error: undefined
 }
 

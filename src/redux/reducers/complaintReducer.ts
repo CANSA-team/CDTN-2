@@ -1,7 +1,6 @@
-import { CommentActionType, CommplaintActionType, SliderActionType } from "../action-types";
-import { CommentActions } from "../actions/commentActions";
+import { CommplaintActionType } from "../action-types";
 import { ComplaintActions } from "../actions/complaintActions";
-import { CommentState, CommentModel,ComplaintStage } from "../models";
+import { ComplaintStage } from "../models";
 
 
 const initialState: ComplaintStage = {

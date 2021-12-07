@@ -10,7 +10,6 @@ export default function OderCard(props: any) {
     const status = props.status;
     const oderStatus = props.oderStatus;
     const { navigate } = useNavigation();
-
     return (
         <View style={styles.container}>
             {
@@ -37,10 +36,9 @@ export default function OderCard(props: any) {
                     <View style={styles.productDetal}>
                         <Text style={styles.productName}>{product && SlugStr(product.product_title, 22)}</Text>
                     </View>
-                    <Text style={{ fontSize: 16, color: '#222' }}>{SlugStr(product && product.product_description, 62)}</Text>
                     <View style={styles.productPrice}>
-                        <Text>{qty}</Text>
-                        <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
+                        <Text style={{fontSize: 16}}>Số lượng : {qty}</Text>
+                        <Text style={{ color: '#222', fontSize: 20 }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
                     </View>
                     {
                         status === 2 &&
@@ -81,7 +79,9 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: 15,
         borderColor: COLORS.primary,
-        borderWidth: 1
+        borderWidth: 1,
+        width: 100,
+        height: 100
     },
     productContainer: {
         flex: 2,
@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
         marginBottom: 8
     },
     productName: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
-        color: '#111'
+        color: '#222'
     },
     iconDelete: {
         backgroundColor: COLORS.primary,

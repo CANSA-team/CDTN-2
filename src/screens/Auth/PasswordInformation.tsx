@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import {
     StyleSheet,
     Text,
@@ -9,40 +9,36 @@ import {
     Keyboard,
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import axios from 'axios'
+import { useNavigation } from '../../utils/useNavigation'
+import { cansa } from '../../consts/Selector'
 
-export default class PasswordInformation extends Component {
+export default function PasswordInformation(props:any){
 
-    constructor(props: any) {
-        super(props)
-        this.state = {
-            password: '',
-            passwordValdate: true
-        }
-    }
-    valiDate(text: any, type: any) {
+    const { navigate } = useNavigation();
+    const [password, setPassword] = useState('')
+    const [passwordValdate, setPasswordValdate] = useState(true)
+    const {navigation,route} = props;
+    const { getParam, goBack } = navigation;
+    const valiDate = (text: any, type: any) => {
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
         if (type == 'password') {
             if (passwordRegex.test(text)) {
-                this.setState({
-                    passwordValdate: true,
-                })
-                console.warn('Password hợp lệ')
+                setPassword(text)
+                setPasswordValdate(true)
+                console.warn('Password hợp lệ, bạn cần nhập lại')
             }
             else {
-                this.setState({
-                    passwordValdate: false
-                })
+                setPasswordValdate(false)
                 console.warn('Password chưa hợp lệ gồm 6 kí tự ,chữ cái hoa đầu')
             }
         }
     }
 
-    render() {
         const Divider = (props: any) => {
             return <View {...props}>
                 <View style={styles.line}></View>
-                <Text style={styles.textOR}>OR</Text>
+                <Text style={styles.textOR}>HOẶC</Text>
                 <View style={styles.line}></View>
             </View>
         }
@@ -57,15 +53,15 @@ export default class PasswordInformation extends Component {
                             color={'rgb(221, 97, 97)'}>
                         </Ionicons>
                         <Text style={styles.title}>
-                            Change Password Information
+                            ĐổI Mật Khẩu
                         </Text>
                     </View>
                     <View style={styles.down}>
                         <View style={styles.textInputContainer}>
                             <TextInput                            
-                               style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
-                               onChangeText = {(text) => this.valiDate(text, 'password')}
-                                placeholder="Current password"
+                               style={[styles.textInput, !passwordValdate? styles.error:null]}
+                               onChangeText = {(text) => valiDate(text, 'password')}
+                                placeholder=" Nhập mật khẩu hiện tại"
                                 secureTextEntry={true}
                             >
                             </TextInput>
@@ -73,32 +69,32 @@ export default class PasswordInformation extends Component {
 
                         <View style={styles.textInputContainer}>
                             <TextInput
-                                style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
-                                onChangeText = {(text) => this.valiDate(text, 'password')}
-                                placeholder="Import password new"
+                                style={[styles.textInput, !passwordValdate? styles.error:null]}
+                                onChangeText = {(text) => valiDate(text, 'password')}
+                                placeholder="Nhập mật khẩu mới"
                                 secureTextEntry={true}
                             >
                             </TextInput>
                         </View>
                         <View style={styles.textInputContainer}>
                             <TextInput
-                                style={[styles.textInput, !this.state.passwordValdate? styles.error:null]}
-                                onChangeText = {(text) => this.valiDate(text, 'password')}
-                                placeholder="Confirm password new"
+                                style={[styles.textInput, !passwordValdate? styles.error:null]}
+                                onChangeText = {(text) => valiDate(text, 'password')}
+                                placeholder="Nhập lại mật khẩu mới"
                                 secureTextEntry={true}
                             >
                             </TextInput>
                         </View>
 
                         <TouchableOpacity style={styles.retrievalButton}>
-                            <Text style={styles.retrievalButtonTitle}>Recuperate</Text>
+                            <Text style={styles.retrievalButtonTitle}>Xác nhận</Text>
                         </TouchableOpacity>
 
                         <Divider style={styles.divider}></Divider>
 
                         <TouchableOpacity style={styles.forgotButton}>
                             <Text style={styles.navButtonText}>
-                                Have an account? Sign In
+                                Bạn đã có tài khoản? Đăng nhập
                             </Text>
                         </TouchableOpacity>
 
@@ -108,7 +104,6 @@ export default class PasswordInformation extends Component {
 
         )
     }
-}
 
 const styles = StyleSheet.create({
     container: {

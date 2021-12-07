@@ -3,38 +3,38 @@
 /**
  * Silder
  */
-export class SliderModel {
-    slider_id?: number;
-    slider_image?: string;
+export interface SliderModel {
+    slider_id: number;
+    slider_image: string;
 }
 
 /**
  * Product
  */
-export class ProductModel {
-    product_id?: number;
-    product_date?: Date;
-    shop_id?: number;
-    product_avatar?: string;
-    product_quantity?: number;
-    product_view?: number;
-    product_price?: number;
-    product_sale?: number;
-    product_title?: string;
-    product_image?: [string];
-    product_description?: string;
-    product_rating?: number;
-    last_update?: number;
-    status?: number;
+export interface ProductModel {
+    product_id: number;
+    product_date: Date;
+    shop_id: number;
+    product_avatar: string;
+    product_quantity: number;
+    product_view: number;
+    product_price: number;
+    product_sale: number;
+    product_title: string;
+    product_image: [string];
+    product_description: string;
+    product_rating: number;
+    last_update: number;
+    status: number;
 }
 //Product State
 export interface ProductState {
-    productNew?: [ProductModel];
-    productHot?: [ProductModel];
-    productCategory?: [ProductModel];
-    productSearch?: [ProductModel];
-    productShop?: [ProductModel];
-    product?: ProductModel;
+    productNew: ProductModel[];
+    productHot: ProductModel[];
+    productCategory: ProductModel[];
+    productSearch: ProductModel[];
+    productShop: ProductModel[];
+    product: ProductModel;
     error: string | undefined;
 }
 
@@ -51,68 +51,68 @@ export interface UserModel {
     user_status: number;
     user_last_update: number;
     user_real_name: string;
-    user_birthday: Date;
+    user_birthday: number;
     user_avatar_image: string;
 }
 
 /**
  * Comment
  */
-export class CommentModel {
-    comment_id?: number;
-    comment_rating?: number;
-    comment_date?: Date;
-    comment_content?: string;
-    product_id?: number;
-    user?: UserModel;
+export interface CommentModel {
+    comment_id: number;
+    comment_rating: number;
+    comment_date: Date;
+    comment_content: string;
+    product_id: number;
+    user: UserModel;
 }
 
 /**
  * Category
  */
-export class CategoryModel {
-    category_id?: number;
-    category_image?: string;
-    category_view?: number;
-    category_name?: string;
-    last_update?: number;
-    status?: number;
-    categories?: [CategoryModel];
+export interface CategoryModel {
+    category_id: number;
+    category_image: string;
+    category_view: number;
+    category_name: string;
+    last_update: number;
+    status: number;
+    categories: [CategoryModel];
 }
 
 /**
  * Shop
  */
-export class ShopModel {
-    shop_id?: number;
-    shop_name?: string;
-    shop_description?: string;
-    shop_owner?: number;
-    shop_avatar?: string;
-    last_update?: number;
-    status?: number;
+export interface ShopModel {
+    shop_id: number;
+    shop_name: string;
+    shop_description: string;
+    shop_owner: number;
+    shop_avatar: string;
+    last_update: number;
+    status: number;
 }
 
 /**
  * Cart Item
  */
-export class CartItemModel {
-    qty?: number;
-    product?: ProductModel;
+export interface CartItemModel {
+    qty: number;
+    product: ProductModel;
 }
 
 /**
  * Cart
  */
-export class CartModel {
-    cart?: [CartItemModel];
-    sub_price?: number;
-    ship?: number;
-    total_price?: number;
+export interface CartModel {
+    cart: CartItemModel[];
+    sub_price: number;
+    ship: number;
+    total_price: number;
 }
 export interface CartState {
-    cart?: CartModel;
-    status?: string;
+    cart: CartModel;
+    status: string | undefined;
     error: string | undefined;
 }
 /**
@@ -129,47 +129,47 @@ export interface OderItemModel {
  * Oder
 */
 
-export class OderModel {
-    oder_id?: string;
-    oder_address?: string;
-    oder_phone?: string;
-    oder_date?: Date;
-    oder_customer?: number;
-    product_oder?: OderItemModel[];
-    status?: number;
+export interface OderModel {
+    oder_id: number;
+    oder_address: string;
+    oder_phone: string;
+    oder_date: Date;
+    oder_customer: number;
+    product_oder: OderItemModel[];
+    status: number;
 }
 
 
 
 export interface OderState {
-    status?: string;
-    oderList?: OderModel[];
-    oder?: OderModel;
+    status: string | undefined;
+    oderList: OderModel[];
+    oder: OderModel;
     error: string | undefined;
 }
 
 export interface CategoryState {
-    categories?: [CategoryModel];
+    categories: CategoryModel[];
     error: string | undefined;
 }
 
 export interface SliderState {
-    slider?: [SliderModel];
+    slider: SliderModel[];
     error: string | undefined;
 }
 
 export interface CommentState {
-    comment?: [CommentModel];
+    comment: CommentModel[];
     error: string | undefined;
 }
 
 export interface ShopState {
-    info?: ShopModel;
+    info: ShopModel;
     error: string | undefined;
 }
 
 export interface AccessState {
-    message?: any;
+    message: any;
     error: string | undefined;
 }
 
@@ -193,15 +193,17 @@ export interface UserStage {
 }
 
 export interface ComplaintStage {
-    status?: string;
+    status: string | undefined;
     error: string | undefined;
 }
 
 
 export interface ImageStage {
-    status?: string;
-    image?: string;
+    image: string | undefined;
     error: string | undefined;
+}
+export interface ChatStage {
+    isChat: boolean | undefined;
 }
 
 export interface ImageId {

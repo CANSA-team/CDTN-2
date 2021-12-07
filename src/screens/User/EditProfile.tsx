@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Platform, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Button, Text, Input, Avatar, Accessory } from 'react-native-elements';
 import moment from 'moment';
 
@@ -8,70 +8,52 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '../../utils/useNavigation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Feather from 'react-native-vector-icons/Feather';
 import HeaderTitle from '../../components/HeaderTitle';
-import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-import { cansa, saveImage, updateImage } from '../../consts/Selector';
-import { margin, marginBottom } from 'styled-system';
+import { saveImage, updateImage } from '../../consts/Selector';
 import COLORS from '../../consts/Colors';
 import { ImageId, State, UserModel, UserStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile, getUserInfo } from '../../redux/actions/userActions';
+import { updateUserProfile, getUserInfo, updateUserProfileDefault } from '../../redux/actions/userActions';
 
-let user_temp = {
-    "id": 1,
-    "phone": "0968241064",
-    "name": "anh",
-    "birthday": "1999-09-28T17:00:00.000Z"
-}
 
 export default function EditProfile(props: any) {
     const { navigate } = useNavigation();
-    const { navigation, route } = props;
-    const { getParam, goBack } = navigation;
+    const { navigation } = props;
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor, updateUser }: { userInfor: UserModel, updateUser: number } = userState;
-    const userProdfile = getParam('userProfile');
     const [date, setDate] = useState(new Date(userInfor.user_birthday));
     const [show, setShow] = useState(false);
     const [name, setName] = useState(userInfor.user_real_name);
     const [phone, setPhone] = useState(userInfor.user_phone);
     const [image, setImage] = useState(userInfor.user_avatar_image);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [avatar, setavatar] = useState<number | undefined>(undefined);
     const [checkSave, setcheckSave] = useState<boolean>(false);
     const dispatch = useDispatch();
 
-
-
-    useEffect(() => {
-    }, [])
-
-    const onChange = (event: any, selectedDate: Date) => {
-        selectedDate = selectedDate || date;
+    const onChange = (event: any, selectedDate: any) => {
+        let currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
-        setDate(selectedDate);
-    };
-
-    const showMode = (currentMode: any) => {
-        setShow(true);
-    };
-
-    const showDatepicker = () => {
-        showMode('date');
-        setDate(date);
+        setDate(new Date(Number(currentDate) + 86400000));
     };
 
     useEffect(() => {
         if (userInfor) {
             setName(userInfor.user_real_name);
             setPhone(userInfor.user_phone);
-            setDate(userInfor.user_birthday);
+            setDate(new Date(userInfor.user_birthday + 86400000));
             setavatar(Number(userInfor.user_avatar));
             setImage(userInfor.user_avatar_image);
         }
     }, [userInfor])
+
+    useEffect(() => {
+        if (updateUser && checkSave) {
+            dispatch(getUserInfo());
+            setcheckSave(false);
+            navigate('Profile')
+        }
+    }, [updateUser])
 
     useEffect(() => {
         if (avatar && checkSave) {
@@ -90,13 +72,12 @@ export default function EditProfile(props: any) {
 
         if (!result.cancelled) {
             setImage(result.uri);
-            console.log(result.uri)
         }
     };
 
     const save = () => {
         if (/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone) && name && date && image) {
-            if (userInfor.user_avatar) {
+            if (!userInfor.user_avatar) {
                 //them hinh
                 let _avatar: ImageId = { id: 0 };
                 const avatar_img = {
@@ -108,6 +89,7 @@ export default function EditProfile(props: any) {
 
                 Promise.all([saveAvt]).then(() => {
                     dispatch(updateUserProfile(name, phone, date, _avatar.id));
+                    setcheckSave(true);
                 })
             }
             else {
@@ -125,28 +107,24 @@ export default function EditProfile(props: any) {
                     saveAvt = new Promise((resolve, reject) => resolve());
                 }
                 Promise.all([saveAvt]).then(() => {
+                    dispatch(updateUserProfileDefault(false));
+                    setcheckSave(true);
                     dispatch(updateUserProfile(name, phone, date, _avatar.id));
                 })
             }
         }
     }
 
-    useEffect(() => {
-        if (updateUser) {
-            dispatch(getUserInfo());
-            navigate('Profile')
-        }
-
-    }, [updateUser])
+    let datePick = Number(date) - 86400000;
 
     return (
         <View style={styles.container}>
             <View>
                 <View>
-                    <HeaderTitle title={'EDIT PROFILE'} />
+                    <HeaderTitle title={'Cập nhật'} />
                     <View style={styles.header}>
-                        <TouchableOpacity>
-                            <MaterialIcons name="arrow-back" size={35} color="white" onPress={() => navigation.goBack()} />
+                        <TouchableOpacity onPress={() => navigation.goBack()} >
+                            <MaterialIcons name="arrow-back" size={35} color="white" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -185,7 +163,7 @@ export default function EditProfile(props: any) {
                     />
                     <View style={styles.txtContainer}>
                         <Text style={styles.txtTitle}>Ngày sinh: {moment.utc(date).format('DD/MM/YYYY')}</Text>
-                        <Button onPress={showDatepicker}
+                        <Button onPress={() => setShow(true)}
                             buttonStyle={{
                                 backgroundColor: COLORS.primary,
                             }}
@@ -196,8 +174,10 @@ export default function EditProfile(props: any) {
                         {show && (
                             <DateTimePicker
                                 testID="dateTimePicker"
-                                value={date}
+                                value={new Date(datePick)}
                                 mode={'date'}
+                                is24Hour={true}
+                                display="default"
                                 onChange={onChange}
                             />
                         )}
@@ -213,7 +193,6 @@ export default function EditProfile(props: any) {
             </View>
         </View>
     )
-
 }
 const styles = StyleSheet.create({
     container: {

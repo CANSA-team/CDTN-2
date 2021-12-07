@@ -49,7 +49,7 @@ export const getProductsNew = (option: number = 0) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_NEW,
                     payload: response.data.data
@@ -76,7 +76,7 @@ export const getProductsHot = (option: number = 0) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_HOT,
                     payload: response.data.data
@@ -93,17 +93,33 @@ export const getProductsHot = (option: number = 0) => {
     }
 }
 
-export const getProductsCategory = (category_id: number, page: number = 1, option: number = 0) => {
+export const getProductsCategory = (category_id: number, sort: string = "", begin: string = "", end: string = "", page: number = 1, option: number = 0) => {
     return async (dispatch: Dispatch<ProductActions>) => {
         try {
-            const response = await axios.get<any>(`${cansa[1]}/api/category/page/${page}/${category_id}/${option}/e4611a028c71342a5b083d2cbf59c494`)
+            let _sort = '';
+            let filter = '';
+            if (sort !== '') {
+                _sort = `sort=${sort}`
+            }
+            if (begin !== '' && end !== '') {
+                filter = `begin=${begin}&end=${end}`
+            }
+            let query = '';
+            if (sort !== '') {
+                query = `?${_sort}`
+                if (filter !== '') {
+                    query += `&${filter}`
+                }
+            } else if (filter !== '') {
+                query = `?${filter}`
+            }
+            const response = await axios.get<any>(`${cansa[1]}/api/category/page/${page}/${category_id}/${option}/e4611a028c71342a5b083d2cbf59c494${query}`)
             if (!response) {
                 dispatch({
                     type: ProductActionType.ON_PRODUCT_ERROR,
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_CATEGORY,
                     payload: response.data.data
@@ -130,7 +146,7 @@ export const getProduct = (product_id: number, option: number = 0) => {
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT,
                     payload: response.data.data
@@ -147,23 +163,38 @@ export const getProduct = (product_id: number, option: number = 0) => {
     }
 }
 
-export const getProductsSearch = (search: string, page: number = 1, option: number = 0) => {
+export const getProductsSearch = (search: string, sort: string = "", begin: string = "", end: string = "", page: number = 1, option: number = 0) => {
     return async (dispatch: Dispatch<ProductActions>) => {
         try {
-            const response = await axios.get<any>(`${cansa[1]}/api/product/search/${page}/${search}/${option}/e4611a028c71342a5b083d2cbf59c494`)
+            let _sort = '';
+            let filter = '';
+            if (sort !== '') {
+                _sort = `sort=${sort}`
+            }
+            if (begin !== '' && end !== '') {
+                filter = `begin=${begin}&end=${end}`
+            }
+            let query = '';
+            if (sort !== '') {
+                query = `?${_sort}`
+                if (filter !== '') {
+                    query += `&${filter}`
+                }
+            } else if (filter !== '') {
+                query = `?${filter}`
+            }
+            const response = await axios.get<any>(`${cansa[1]}/api/product/search/${page}/${search}/${option}/e4611a028c71342a5b083d2cbf59c494${query}`)
             if (!response) {
                 dispatch({
                     type: ProductActionType.ON_PRODUCT_ERROR,
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_SEARCH,
                     payload: response.data.data
                 })
             }
-
         } catch (error) {
             dispatch({
                 type: ProductActionType.ON_PRODUCT_ERROR,
@@ -184,7 +215,7 @@ export const getProductsShop = (shop_id: number, page: number = 1, option: numbe
                     payload: 'Product list error'
                 })
             } else {
-                // save our location in local storage
+
                 dispatch({
                     type: ProductActionType.GET_PRODUCT_SHOP,
                     payload: response.data.data

@@ -1,10 +1,10 @@
-import { CommentActionType, SliderActionType } from "../action-types";
+import { CommentActionType } from "../action-types";
 import { CommentActions } from "../actions/commentActions";
 import { CommentState, CommentModel } from "../models";
 
 
 const initialState: CommentState = {
-    comment: undefined,
+    comment: [] as CommentModel[],
     error: undefined
 }
 

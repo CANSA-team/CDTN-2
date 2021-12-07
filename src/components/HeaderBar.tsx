@@ -12,9 +12,6 @@ export default function HeaderBar(props:any) {
             <View>
                 <Text style={styles.textLogo}>CANSA</Text>
             </View>
-            <View>
-                <Ionicons name="notifications-sharp" size={28} color={COLORS.colorFontInit}/> 
-            </View>
         </View>
          <SearchBarTop onSearch={onSearch}/>
         </>

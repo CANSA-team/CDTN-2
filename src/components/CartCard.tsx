@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import NumericInput from 'react-native-numeric-input';
 import COLORS from './../consts/Colors';
 import { SlugStr, vnd } from './../consts/Selector';
 import { ProductModel, State } from '../redux';
-import { borderWidth } from 'styled-system';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function CartCard(props: any) {
-    let [qty, setNumber] = useState<number>();
-    const [product, setProduct] = useState<ProductModel>();
+    const {isLoad} = props
+    let [qty, setNumber] = useState<number>(1);
+    const product:ProductModel = props.product;
     const cartState = useSelector((state: State) => state.cartReducer);
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        setNumber(props.qty);
-        setProduct(props.product);
+        setNumber(Number(props.qty));
     },[]);
 
     useEffect(() => {
-        setNumber(props.qty);
-        setProduct(props.product);
     },[cartState])
 
     const onTap_btn = (value: number) => {
+        setNumber(value);
         props.onTap(product.product_id, value);
     }
 
@@ -36,7 +32,7 @@ export default function CartCard(props: any) {
             </View>
             <View style={styles.productContainer}>
                 <View style={styles.productDetal}>
-                    <Text style={styles.productName}>{ product && SlugStr( product.product_title, 22)}</Text>
+                    <Text style={styles.productName}>{ product && SlugStr( product.product_title, 20)}</Text>
                     <TouchableOpacity style={styles.iconDelete} onPress={() => {
                         onTap_btn(0);
                     }}>
@@ -44,44 +40,78 @@ export default function CartCard(props: any) {
                     </TouchableOpacity>
                 </View>
                 <Text style={{ fontSize: 16, color: '#222' }}>{SlugStr(product && product.product_description, 62)}</Text>
-                <View style={styles.productPrice}>
+                {
+                    isLoad ?  
+                    <View style={styles.productPrice}>
                     <TouchableOpacity
-                        style={{
-                            width: 16,
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            minWidth: 33,
-                        }}
-                        onPress={() => {
-                            qty--;
-                            onTap_btn(qty);
-                        }}
-                    >
-                        <Text
-                        >-</Text>
+                            style={{
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: 30,
+                                height: 30,
+                            }}
+                            onPress={() => {
+                                onTap_btn(Number(qty) - 1);
+                            }}
+                        >
+                        <Text>-</Text>
                     </TouchableOpacity>
 
-                    <Text>{qty}</Text>
+                    <Text style={{marginHorizontal:10,fontSize:14}}>{qty}</Text>
 
                     <TouchableOpacity
                         style={{
-                            width: 16,
                             borderColor: 'black',
                             borderWidth: 1,
                             justifyContent: 'center',
                             alignItems: 'center',
-                            minWidth: 33,
+                            width: 30,
+                            height: 30,
+                            marginRight:20
                         }}
                         onPress={() => {
-                            qty++;
-                            onTap_btn(qty);
+                            onTap_btn(Number(qty) + 1);
                         }}>
                         <Text>+</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
-                </View>
+                        <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
+                    </View>
+                    :
+                    <View style={styles.productPrice}>
+                    <TouchableOpacity
+                            style={{
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: 30,
+                                height: 30,
+                            }}
+                        >
+                        <Text>-</Text>
+                    </TouchableOpacity>
+
+                    <Text style={{marginHorizontal:10,fontSize:14}}>{qty}</Text>
+
+                    <TouchableOpacity
+                        style={{
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: 30,
+                            height: 30,
+                            marginRight:20
+                        }}
+                       >
+                        <Text>+</Text>
+                    </TouchableOpacity>
+                        <Text style={{ color: '#222', fontSize: 20, fontWeight: 'bold' }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
+                    </View>
+                }
+               
             </View>
         </View>
         :
@@ -128,7 +158,7 @@ const styles = StyleSheet.create({
     },
     productPrice: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        
         alignItems: 'center',
         marginTop: 8
     }

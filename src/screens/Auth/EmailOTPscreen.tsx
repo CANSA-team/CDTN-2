@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import {
     StyleSheet,
     Text,
@@ -19,6 +19,7 @@ export default function EmailOTPscreen() {
     const { navigate } = useNavigation();
     const [emailValdate, setEmailValdate] = useState(true)
     const [email, setEmail] = useState('')
+
     const valiDate = (text: any, type: any) => {
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
         if (type == 'email') {
@@ -31,6 +32,7 @@ export default function EmailOTPscreen() {
             }
         }
     }
+    
     const continueBtn = () => {
         if (email != '') {
             axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res)=>{
@@ -52,22 +54,22 @@ export default function EmailOTPscreen() {
                         color={'rgb(221, 97, 97)'}>
                     </Ionicons>
                     <Text style={styles.title}>
-                        Email OTP Code
+                    Gửi mã OTP qua E-mail
                     </Text>
                     <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10 }}>
-                        We will send 4 digits code to your email for the verifiction
+                    Chúng tôi sẽ gửi mã 6 chữ số đến email của bạn để xác minh
                     </Text>
                 </View>
                 <View style={styles.down}>
                     <View style={styles.textInputContainer}>
 
-                        <Text style={{ fontSize: 18, marginRight: 285, color: 'rgb(221, 97, 97)' }}>Email:</Text>
+                        <Text style={{ fontSize: 18, marginRight: 285, color: 'rgb(221, 97, 97)' }}>Email: </Text>
                         <TextInput
                             style={[styles.textInput, !emailValdate ? styles.error : null]}
                             onChangeText={(text) => valiDate(text, 'email')}
                             textContentType='emailAddress'
                             keyboardType={'email-address'}
-                            placeholder="Enter your email !"
+                            placeholder="Nhập E-mail"
                         >
                         </TextInput>
 
@@ -75,7 +77,7 @@ export default function EmailOTPscreen() {
                     <TouchableOpacity style={styles.loginButton}
                         onPress={continueBtn}
                     >
-                        <Text style={styles.loginButtonTitle}>Continue</Text>
+                        <Text style={styles.loginButtonTitle}>Xác nhận</Text>
                     </TouchableOpacity>
 
                 </View>

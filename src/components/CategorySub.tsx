@@ -1,7 +1,6 @@
 import React from 'react'
 import { Image, Text, TouchableOpacity,StyleSheet } from 'react-native'
 import { CategoryModel } from '../redux';
-import COLORS from './../consts/Colors';
 
 export default function CategorySub(props:any) {
     const item:CategoryModel = props.item;
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
     categoryText:{
         fontSize: 16,
         color: '#574a4a',
-        fontWeight: 'bold',
-        textAlign:'center'
+        textAlign:'center',
     }
 });
