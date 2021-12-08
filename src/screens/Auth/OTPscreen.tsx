@@ -126,7 +126,7 @@ export default function OTPscreen(props: any) {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
+                        <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.up}>
@@ -134,7 +134,7 @@ export default function OTPscreen(props: any) {
                     <Text style={styles.title}>
                         Mã Xác Minh
                     </Text>
-                    <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10 }}>
+                    <Text style={{ color: '#111', fontSize: 15, marginTop: 10 }}>
                         Nhập mã OTP của bạn được gửi qua Email
                     </Text>
                 </View>
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'stretch',
-        backgroundColor: '#E5E5E5'
+        backgroundColor: '#fff'
     },
     header: {
         flexDirection: 'row',
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
         zIndex: 2
     },
     headerIcon: {
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      
         borderRadius: 50,
         padding: 5
     },

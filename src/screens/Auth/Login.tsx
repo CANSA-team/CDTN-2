@@ -114,14 +114,11 @@ export default function Login(props: any) {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigate('homeStack')}>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
-         <Image style={{width:100,height:100}} source={require('../../../assets/icon.png')} />
-          <Text style={styles.title}>
-            Đăng nhập
-          </Text>
+         <Image style={{width:150,height:150}} source={require('../../../assets/icon.png')} />
         </View>
         <View style={styles.down}>
           <View style={styles.textInputContainer}>
@@ -179,7 +176,7 @@ export default function Login(props: any) {
             onPress={() => { navigate('Register') }}
           >
             <Text style={styles.navButtonText1}>
-              Bạn chưa có tài khoản? Đăng ký
+               Đăng ký tại đây !
             </Text>
           </TouchableOpacity>
         </View>    
@@ -196,7 +193,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#E5E5E5'
+    backgroundColor: '#fff'
   },
   header: {
     flexDirection: 'row',
@@ -209,7 +206,6 @@ const styles = StyleSheet.create({
     zIndex: 2
   },
   headerIcon: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 50,
     padding: 5
   },
@@ -218,7 +214,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:30
+    marginTop:30,
+    marginBottom:20
   },
   down: {
     flex: 7,
@@ -301,7 +298,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     color: '#3b5998'
-
   },
   error: {
     borderColor: 'red',

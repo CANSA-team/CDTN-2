@@ -88,14 +88,11 @@ export default function Resgister() {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => { navigate('Login') }}>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black"/>
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
-          <Image style={{width:100,height:100}} source={require('../../../assets/icon.png')} />
-          <Text style={styles.title}>
-            Đăng ký
-          </Text>
+          <Image style={{width:150,height:150}} source={require('../../../assets/icon.png')} />
         </View>
         <View style={styles.down}>
 
@@ -174,7 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#E5E5E5'
+    backgroundColor: '#fff'
   },
   header: {
     flexDirection: 'row',
@@ -187,7 +184,6 @@ const styles = StyleSheet.create({
     zIndex: 2
   },
   headerIcon: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     borderRadius: 50,
     padding: 5
   },
@@ -195,7 +191,8 @@ const styles = StyleSheet.create({
     flex: 3,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom:20
   },
   down: {
     flex: 7,
