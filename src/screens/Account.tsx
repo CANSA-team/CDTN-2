@@ -16,7 +16,7 @@ export default function Account() {
     const dispatch = useDispatch();
 
     const onTapProfile = () => {
-        navigate('Profile')
+        navigate('Profile',{email:userInfor.user_email})
     }
     const onTapOrdered = () => {
         navigate('Ordered')
