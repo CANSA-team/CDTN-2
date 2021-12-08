@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Text, FlatList, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { Text, FlatList, TouchableOpacity, View, StyleSheet, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-navigation'
 import { useNavigation } from '../../utils/useNavigation';
 import HeaderTitle from '../../components/HeaderTitle';
@@ -16,6 +16,7 @@ export default function Chat(props: any) {
     const [dataAll, setDataAll]: any = useState([])
     const { navigate } = useNavigation();
     const socket = io(chatSever);
+    const [isLoadingChat, setIsLoadingChat]: any = useState(true)
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { check: boolean, userInfor: UserModel, status: string } = userState;
     const chatState: ChatStage = useSelector((state: State) => state.chatReducer);
@@ -62,6 +63,7 @@ export default function Chat(props: any) {
                 setDataAll(temp)
             });
             dispatch(chat(false))
+
 
         }
     }, [isChat])
@@ -114,9 +116,55 @@ export default function Chat(props: any) {
 
             let temp = tempData.sort((a: any, b: any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
             setDataAll(temp)
+            setIsLoadingChat(false)
         });
     }, [])
 
+
+
+    const onRefeshing = () => {
+        setIsLoadingChat(true)
+        socket.emit('roomList', myID)
+        socket.on("roomList", async function (data) {
+            let tempData: any = [];
+            if (data.length !== 1) {
+                await Promise.all(data.map(async (element: any) => {
+                    socket.emit('onlineStatus', element[0].user_to)
+                    let id = '_' + Math.random().toString(36).substr(2, 16)
+                    let id_shop = (myID != element[0].user_to) ? element[0].user_to : element[0].user_from
+                    let a = await axios.get(`https://103.207.38.200/api/shop/info/${id_shop.split('shop_')[1]}/1/e4611a028c71342a5b083d2cbf59c494`)
+                    tempData.push({
+                        id: id,
+                        title: a.data.data.shop_name,
+                        img: a.data.data.shop_avatar,
+                        id_user: (myID != element[0].user_to) ? element[0].user_to : element[0].user_from,
+                        newStatusMess: (element[0].isWatched == 1) ? false : true,
+                        statusOnline: false,
+                        CreateDate: element[0].CreateDate,
+                        text: element[0].message,
+                    })
+                }));
+            } else {
+                socket.emit('onlineStatus', data[0].user_to)
+                let id_shop = (myID != data[0].user_to) ? data[0].user_to : data[0].user_from
+                let a = await axios.get(`https://103.207.38.200/api/shop/info/${id_shop.split('shop_')[1]}/1/e4611a028c71342a5b083d2cbf59c494`)
+                tempData.push({
+                    id: '_' + Math.random().toString(36).substr(2, 16),
+                    title: a.data.data.shop_name,
+                    img: a.data.data.shop_avatar,
+                    id_user: (myID != data[0].user_to) ? data[0].user_to : data[0].user_from,
+                    newStatusMess: (data[0].isWatched == 1) ? false : true,
+                    statusOnline: false,
+                    CreateDate: data[0].CreateDate,
+                    text: data[0].message,
+                })
+            }
+
+            let temp = tempData.sort((a: any, b: any) => new Date(b.CreateDate).getTime() - new Date(a.CreateDate).getTime())
+            setDataAll(temp)
+            setIsLoadingChat(false)
+        });
+    }
     const BadgedIcon = withBadge(1)(Icon)
 
     const renderItem = ({ item }: any) => {
@@ -153,6 +201,13 @@ export default function Chat(props: any) {
                 data={dataAll}
                 renderItem={renderItem}
                 keyExtractor={(item: any) => item.id}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isLoadingChat}
+                        onRefresh={() => { onRefeshing() }}
+
+                    />
+                }
             />
         </SafeAreaView>
     );
