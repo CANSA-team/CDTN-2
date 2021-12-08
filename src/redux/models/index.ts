@@ -190,6 +190,7 @@ export interface UserStage {
     status: string;
     updateUser: number;
     error: string | undefined;
+    timeSampCheckLogin: number;
 }
 
 export interface ComplaintStage {

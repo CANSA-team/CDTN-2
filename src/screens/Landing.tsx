@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { View, Text, StyleSheet } from 'react-native';
-import { State } from '../redux';
+import { State, UserModel, UserStage } from '../redux';
 import { useNavigation } from '../utils/useNavigation';
 import COLORS from '../consts/Colors';
 
@@ -13,6 +13,8 @@ export default function Lauding() {
 
     const { navigate } = useNavigation();
     const { message } = accessState;
+    const userState: UserStage = useSelector((state: State) => state.userReducer);
+    const { timeSampCheckLogin }: { timeSampCheckLogin:number } = userState;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -22,11 +24,11 @@ export default function Lauding() {
 
 
     useEffect(() => {
-        if (message != '') {
+        if (message != '' && timeSampCheckLogin !== -1) {
             navigate('homeStack')
         }
 
-    }, [accessState]);
+    }, [accessState,timeSampCheckLogin]);
 
     return (
         <View style={styles.container}>

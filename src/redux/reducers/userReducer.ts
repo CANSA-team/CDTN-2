@@ -9,7 +9,8 @@ const initialState: UserStage = {
     userInfor: {} as UserModel,
     status: '',
     updateUser: 0,
-    error: undefined
+    error: undefined,
+    timeSampCheckLogin: -1,
 }
 
 const userReducer = (state: UserStage = initialState, action: UserActions) => {
@@ -38,6 +39,11 @@ const userReducer = (state: UserStage = initialState, action: UserActions) => {
             return {
                 ...state,
                 status: action.payload
+            }
+        case UserActionType.TIME_CHECK_LOGIN:
+            return {
+                ...state,
+                timeSampCheckLogin: action.payload
             }
         case UserActionType.LOGOUT:
             return {

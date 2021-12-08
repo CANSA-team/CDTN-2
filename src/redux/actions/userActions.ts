@@ -56,9 +56,12 @@ export interface UpdateUserProfileDefault {
     payload?: boolean
 }
 
+export interface TimeCheckLogin {
+    readonly type: UserActionType.TIME_CHECK_LOGIN,
+    payload?: number
+}
 
-
-export type UserActions = CheckLogin | UserErrorAction | GetUserInfor | Login | Logout | LoginFacebook | Register | ForgottPassword | ForgottPasswordOTP | ForgottPasswordCenter | UpdateUserProfile | UpdateUserProfileDefault;
+export type UserActions = CheckLogin | UserErrorAction | GetUserInfor | Login | Logout | LoginFacebook | Register | ForgottPassword | ForgottPasswordOTP | ForgottPasswordCenter | UpdateUserProfile | UpdateUserProfileDefault | TimeCheckLogin;
 
 export const checkLogin = () => {
     return async (dispatch: Dispatch<UserActions>) => {
@@ -70,10 +73,15 @@ export const checkLogin = () => {
                     payload: 'Product list error'
                 })
             } else {
+                var time = Math.floor(Date.now()/1000)
 
                 dispatch({
                     type: UserActionType.CHECK_LOGIN,
                     payload: response.data.data
+                })
+                dispatch({
+                    type: UserActionType.TIME_CHECK_LOGIN,
+                    payload: time
                 })
             }
 
@@ -102,6 +110,7 @@ export const getUserInfo = () => {
                     type: UserActionType.GET_USER_INFO,
                     payload: response.data.data
                 })
+
             }
         } catch (error) {
             dispatch({

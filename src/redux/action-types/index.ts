@@ -43,6 +43,7 @@ export enum AccessActionType {
 
 export enum UserActionType {
     LOGIN = 'LOGIN',
+    TIME_CHECK_LOGIN = 'TIME_CHECK_LOGIN',
     LOGOUT = 'LOGOUT',
     FORGOTT_PASSWORD = 'FORGOTT_PASSWORD',
     FORGOTT_PASSWORD_OTP = 'FORGOTT_PASSWORD_OTP',
