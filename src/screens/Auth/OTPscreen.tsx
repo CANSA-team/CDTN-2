@@ -6,9 +6,9 @@ import { cansa } from '../../consts/Selector'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../../consts/Colors';
 
-export default function OTPscreen(props:any) {
+export default function OTPscreen(props: any) {
     const { navigate } = useNavigation();
-    const {navigation} = props;
+    const { navigation } = props;
     const { getParam } = navigation;
     const [pinText1, setpinText1] = useState<string>('');
     const [pinText2, setpinText2] = useState<string>('');
@@ -34,7 +34,7 @@ export default function OTPscreen(props:any) {
         setpinText2(pinText2);
         if (pinText2 != "") {
             pinInputRef3.current?.focus()
-        }else if(pinText2 == ""){
+        } else if (pinText2 == "") {
             pinInputRef1.current?.focus()
         }
     };
@@ -43,7 +43,7 @@ export default function OTPscreen(props:any) {
         setpinText3(pinText3);
         if (pinText3 != "") {
             pinInputRef4.current?.focus()
-        }else if(pinText3 == ""){
+        } else if (pinText3 == "") {
             pinInputRef2.current?.focus()
         }
     };
@@ -52,7 +52,7 @@ export default function OTPscreen(props:any) {
         setpinText4(pinText4);
         if (pinText4 != "") {
             pinInputRef5.current?.focus()
-        }else if(pinText4 == ""){
+        } else if (pinText4 == "") {
             pinInputRef3.current?.focus()
         }
     };
@@ -61,7 +61,7 @@ export default function OTPscreen(props:any) {
         setpinText5(pinText5);
         if (pinText5 != "") {
             pinInputRef6.current?.focus()
-        }else if(pinText5 == ""){
+        } else if (pinText5 == "") {
             pinInputRef4.current?.focus()
         }
     };
@@ -74,22 +74,22 @@ export default function OTPscreen(props:any) {
     };
 
     //Hàm continue
-    const continueBtn = ()=>{
-        if(pinText1 && pinText2 && pinText3 && pinText4 && pinText5 && pinText6){
+    const continueBtn = () => {
+        if (pinText1 && pinText2 && pinText3 && pinText4 && pinText5 && pinText6) {
             let codePin = `${pinText1}${pinText2}${pinText3}${pinText4}${pinText5}${pinText6}`;
             let email = getParam('email')
-            axios.get(`${cansa[1]}/api/user/forgot/password/checkPin/${email}/${codePin}`).then((res)=>{
-                if(res.data.data){
-                    Alert.alert('Thông Báo',res.data.message);
-                    navigate('ChangePassword',{email:email})
+            axios.get(`${cansa[1]}/api/user/forgot/password/checkPin/${email}/${codePin}`).then((res) => {
+                if (res.data.data) {
+                    Alert.alert('Thông Báo', res.data.message);
+                    navigate('ChangePassword', { email: email })
 
-                }else{
-                    Alert.alert('Thông Báo',res.data.message);
+                } else {
+                    Alert.alert('Thông Báo', res.data.message);
                 }
-            }) 
-            
-        }else{
-            Alert.alert('Thông báo',"Vui lòng không để trống ô nào!!")
+            })
+
+        } else {
+            Alert.alert('Thông báo', "Vui lòng không để trống ô nào!!")
         }
     }
 
@@ -100,30 +100,42 @@ export default function OTPscreen(props:any) {
             setTimeout(() => {
                 setTime(time - 1)
             }, 1000);
-        }else{
+        } else {
         }
     }, [time]);
-    
+
     useEffect(() => {
         setTime(time)
     }, []);
 
+    const reSend = () => {
+        let email = getParam('email')
+        if (email != '') {
+            axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
+                setTime(60)
+                Alert.alert('Thông Báo', res.data.message);
+                navigate('OTPscreen', { email: email })
+            })
+        } else {
+            Alert.alert('Thông báo', 'Email không được để trống!!')
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
-                    <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.up}>
-                    <Image style={{width:100,height:100}} source={require('../../../assets/icon.png')} />
+                    <Image style={{ width: 100, height: 100 }} source={require('../../../assets/icon.png')} />
                     <Text style={styles.title}>
                         Mã Xác Minh
                     </Text>
                     <Text style={{ color: 'rgb(221, 97, 97)', fontSize: 15, marginTop: 10 }}>
-                    Nhập mã OTP của bạn được gửi qua Email
+                        Nhập mã OTP của bạn được gửi qua Email
                     </Text>
                 </View>
                 <View style={styles.down}>
@@ -198,19 +210,21 @@ export default function OTPscreen(props:any) {
 
                     <TouchableOpacity style={styles.forgotButton1}>
                         <Text style={styles.navButtonText1}>
-                        Gửi lại mã OTP trong: {time}
+                            Gửi lại mã OTP trong: {time}
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.loginButton}
-                    onPress={continueBtn}
+                        onPress={continueBtn}
                     >
                         <Text style={styles.loginButtonTitle}>Xác nhận</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.forgotButton}>
+                    <TouchableOpacity style={styles.forgotButton}
+                        onPress={reSend}
+                    >
                         <Text style={styles.navButtonText}>
-                        Gửi lại OTP
+                            Gửi lại OTP
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -242,7 +256,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     up: {
-        marginTop:80,
+        marginTop: 80,
         flex: 3,
         flexDirection: 'column',
         justifyContent: 'center',
