@@ -89,17 +89,17 @@ export default function oderDetail(props: any) {
                         </ScrollView>
                     </View>
                     <View style={styles.bill}>
-                        <Text style={styles.txtTotal}>Totals</Text>
+                        <Text style={styles.txtTotal}>Đơn hàng</Text>
                         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                            <Text style={[styles.priceTitle, { fontSize: 22 }]}>Sub total :</Text>
+                            <Text style={[styles.priceTitle, { fontSize: 22 }]}>Tổng tiền :</Text>
                             <Text style={[styles.priceTitle, { fontSize: 22 }]}>{vnd(sub_price)}đ</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
-                            <Text style={[styles.priceTitle, { fontSize: 22 }]}>Ship total :</Text>
+                            <Text style={[styles.priceTitle, { fontSize: 22 }]}>Phí giao hàng :</Text>
                             <Text style={[styles.priceTitle, { fontSize: 22 }]}>{vnd(ship)}đ</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                            <Text style={[styles.priceTitle, { fontSize: 24 }]}>Total Price :</Text>
+                            <Text style={[styles.priceTitle, { fontSize: 24 }]}>Thành tiền :</Text>
                             <Text style={[styles.priceTitle, { fontSize: 24 }]}>{vnd(total_price)}đ</Text>
                         </View>
                     </View>

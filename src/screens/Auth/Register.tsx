@@ -8,21 +8,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Image,
 } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '../../utils/useNavigation'
 import axios from 'axios';
 import { cansa } from '../../consts/Selector'
+import COLORS from '../../consts/Colors';
 
 export default function Resgister() {
   const { navigate } = useNavigation();
-
   const [name, setName] = useState('')
   const [nameValdate, setNameValdate] = useState(true)
   const [email, setEmail] = useState('')
-  const [emailValdate, setEmailValdate] = useState(false)
+  const [emailValdate, setEmailValdate] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
 
@@ -92,13 +92,9 @@ export default function Resgister() {
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
-          <Ionicons
-            name="ios-speedometer"
-            size={100}
-            color={'rgb(221, 97, 97)'}>
-          </Ionicons>
+          <Image style={{width:100,height:100}} source={require('../../../assets/icon.png')} />
           <Text style={styles.title}>
-            Đăng ký thông tin tài khoản
+            Đăng ký
           </Text>
         </View>
         <View style={styles.down}>
@@ -164,16 +160,6 @@ export default function Resgister() {
               <Text style={styles.loginButtonTitle}>Đăng nhập bằng Facebook</Text>
             </FontAwesome.Button>
           </View>
-          <View>
-            <FontAwesome.Button
-              style={styles.googleButton}
-              name="google"
-              backgroundColor="#E54646"
-            >
-              <Text style={styles.loginButtonTitle}>Đăng nhập bằng Google</Text>
-            </FontAwesome.Button>
-
-          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -188,7 +174,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#33FF99'
+    backgroundColor: '#E5E5E5'
   },
   header: {
     flexDirection: 'row',
@@ -231,7 +217,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: 280,
-    height: 45
+    height: 50,
+    borderColor:COLORS.primary,
+    borderWidth:1,
+    borderRadius:5,
+    padding: 10
   },
 
   loginButtonTitle: {
@@ -245,7 +235,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-    backgroundColor: 'rgb(221, 97, 97)'
+    backgroundColor: COLORS.primary
   },
   registerButtonTitle: {
     fontSize: 18,

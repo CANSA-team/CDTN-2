@@ -111,7 +111,7 @@ export default function Checkout(props: any) {
     return (
         <SafeAreaView style={styles.container}>
 
-            <HeaderTitle title={'ORDER'} />
+            <HeaderTitle title={'Thông tin'} />
             <View style={{ position: 'absolute', left: 5, top: 35 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back" size={35} color="white"/>
@@ -239,7 +239,7 @@ export default function Checkout(props: any) {
             <View style={styles.viewTotal}>
                 <Button
                     onPress={onTapCheckoutSuccess}
-                    title="CONTINUTE"
+                    title="TIẾP TỤC"
                     buttonStyle={styles.btnContinute}
                 />
             </View>

@@ -10,9 +10,11 @@ import { chatSever } from '../../consts/Selector'
 import { State, UserModel, UserStage, ChatStage } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { chat } from '../../redux/actions/chatActions';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 export default function Chat(props: any) {
+    const { navigation } = props;
     const [dataAll, setDataAll]: any = useState([])
     const { navigate } = useNavigation();
     const socket = io(chatSever);
@@ -148,7 +150,12 @@ export default function Chat(props: any) {
     };
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderTitle title={'List Chat'} />
+            <HeaderTitle title={'Liên hệ'} />
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()} >
+                    <MaterialIcons name="arrow-back" size={35} color="white" />
+                </TouchableOpacity>
+            </View>
             <FlatList
                 data={dataAll}
                 renderItem={renderItem}
@@ -162,6 +169,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#E5E5E5'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 5,
+        position: 'absolute',
+        top: 33,
+        left: 5,
+        right: 0,
+        zIndex: 2
     },
     tinyLogo: {
         width: 50,

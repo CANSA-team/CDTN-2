@@ -89,7 +89,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="home" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="home-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
-                tabBarLabel: "Home"
+                tabBarLabel: "Trang chủ"
             },
 
         },
@@ -107,7 +107,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="ios-grid-sharp" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="ios-grid-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
-                tabBarLabel: "Categories"
+                tabBarLabel: "Danh mục"
             },
 
         },
@@ -128,7 +128,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="cart" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="cart-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
-                tabBarLabel: "Cart"
+                tabBarLabel: "Giỏ hàng"
             },
 
         },
@@ -156,7 +156,7 @@ const switchNavigator = createSwitchNavigator({
                     let icon = focused ? <Ionicons name="person" size={DIMENS.iconSize} color={COLORS.primary} /> : <Ionicons name="person-outline" size={DIMENS.iconSize} color={COLORS.colorFontInit} />
                     return icon;
                 },
-                tabBarLabel: "Account"
+                tabBarLabel: "Tài khoản"
             },
 
         },

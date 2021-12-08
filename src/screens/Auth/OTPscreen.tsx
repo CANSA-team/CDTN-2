@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { TextInput, View, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import { TextInput, View, TouchableOpacity, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, Alert, Image } from 'react-native';
 import axios from 'axios'
 import { useNavigation } from '../../utils/useNavigation'
 import { cansa } from '../../consts/Selector'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import COLORS from '../../consts/Colors';
 
 export default function OTPscreen(props:any) {
     const { navigate } = useNavigation();
@@ -111,12 +112,13 @@ export default function OTPscreen(props:any) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
+                        </TouchableOpacity>
+                    </View>
                 <View style={styles.up}>
-                    <Ionicons
-                        name="ios-speedometer"
-                        size={100}
-                        color={'rgb(221, 97, 97)'}>
-                    </Ionicons>
+                    <Image style={{width:100,height:100}} source={require('../../../assets/icon.png')} />
                     <Text style={styles.title}>
                         Mã Xác Minh
                     </Text>
@@ -222,9 +224,25 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'stretch',
-        backgroundColor: '#33FF99'
+        backgroundColor: '#E5E5E5'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 5,
+        position: 'absolute',
+        top: 33,
+        left: 5,
+        right: 0,
+        zIndex: 2
+    },
+    headerIcon: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 50,
+        padding: 5
     },
     up: {
+        marginTop:80,
         flex: 3,
         flexDirection: 'column',
         justifyContent: 'center',
@@ -260,7 +278,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(221, 97, 97)',
+        backgroundColor: COLORS.primary,
         marginBottom: 10,
         marginTop: 10
     },

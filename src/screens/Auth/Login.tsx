@@ -7,9 +7,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Alert,
-  ActivityIndicator,
+  Image,
 } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { useNavigation } from '../../utils/useNavigation'
 import * as Facebook from 'expo-facebook';
@@ -17,13 +16,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { State, UserStage } from '../../redux'
 import { checkLogin, login, LoginFacebook } from '../../redux/actions/userActions'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import COLORS from './../../consts/Colors';
 
 
 export default function Login(props: any) {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState('')
   const [emailValdate, setEmailValdate] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
   const userState: UserStage = useSelector((state: State) => state.userReducer);
@@ -119,13 +118,9 @@ export default function Login(props: any) {
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
-          <Ionicons
-            name="ios-speedometer"
-            size={100}
-            color={'rgb(221, 97, 97)'}>
-          </Ionicons>
+         <Image style={{width:100,height:100}} source={require('../../../assets/icon.png')} />
           <Text style={styles.title}>
-            Nhập thông tin tài khoản Đăng nhập
+            Đăng nhập
           </Text>
         </View>
         <View style={styles.down}>
@@ -201,7 +196,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#33FF99'
+    backgroundColor: '#E5E5E5'
   },
   header: {
     flexDirection: 'row',
@@ -222,7 +217,8 @@ const styles = StyleSheet.create({
     flex: 3,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop:30
   },
   down: {
     flex: 7,
@@ -231,20 +227,23 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   title: {
-    color: 'rgb(255,119,34)',
+    color: '#111',
     textAlign: 'center',
     width: 400,
     fontSize: 23
   },
   textInputContainer: {
-    paddingHorizontal: 10,
     borderRadius: 6,
     marginBottom: 20,
     backgroundColor: 'rgba(255,255,255,0.2)'
   },
   textInput: {
     width: 280,
-    height: 45
+    height: 50,
+    borderColor:COLORS.primary,
+    borderWidth:1,
+    borderRadius:5,
+    padding: 10
   },
   loginButton: {
     width: 300,
@@ -252,7 +251,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(221, 97, 97)'
+    backgroundColor: COLORS.primary
   },
   loginButtonTitle: {
     fontSize: 18,

@@ -64,22 +64,22 @@ const Cart = () => {
                                     </ScrollView>
                                 </View>
                                 <View style={styles.bill}>
-                                    <Text style={styles.txtTotal}>Totals</Text>
+                                    <Text style={styles.txtTotal}>Đơn hàng</Text>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Sub total :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Tổng tiền :</Text>
                                         <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.sub_price && vnd(cart.sub_price)}đ</Text>
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Ship total :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>Phí giao hàng :</Text>
                                         <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.ship && vnd(cart.ship)}đ</Text>
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>Total Price :</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>Thành tiền :</Text>
                                         <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart.total_price && vnd(cart.total_price)}đ</Text>
                                     </View>
                                     <Button
                                         onPress={onTapCheckout}
-                                        title="CHECK OUT"
+                                        title="MUA NGAY"
                                         buttonStyle={styles.btnCheckOut}
                                     />
                                 </View>

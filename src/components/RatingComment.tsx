@@ -31,7 +31,7 @@ export default function RatingComment(props:any) {
                     setDefautRating(5);
                     setComment("");
                 }}>
-                    <Text style={styles.btnSend}>Send</Text>
+                    <Text style={styles.btnSend}>Gửi</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.textAreaContainer} >

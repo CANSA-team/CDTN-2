@@ -15,7 +15,6 @@ export default function Profile(props: any) {
     const { navigate } = useNavigation();
     const { navigation } = props;
     const { getParam } = navigation;
-    const [isLoadingChangePassword, setIsLoadingChangePassword] = useState<boolean>(true);
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
 
@@ -47,38 +46,35 @@ export default function Profile(props: any) {
 
                 <View style={styles.viewTxt}>
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User full name: {userInfor.user_real_name}</Text>
+                        <Text style={styles.txtTitle}>Họ và tên : {userInfor.user_real_name}</Text>
                     </View>
 
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User nick name: {userInfor.user_name}</Text>
+                        <Text style={styles.txtTitle}>Tên khác : {userInfor.user_name}</Text>
                     </View>
 
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User phone: {userInfor.user_phone}</Text>
+                        <Text style={styles.txtTitle}>Số điện thoại : {userInfor.user_phone}</Text>
                     </View>
 
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>User birthday: {moment.utc(userInfor.user_birthday + 86400000).format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.txtTitle}>Ngày sinh : {moment.utc(userInfor.user_birthday + 86400000).format('DD/MM/YYYY')}</Text>
                     </View>
 
                     <View style={styles.resetPassContainer}>
-                        {
-                            isLoadingChangePassword &&
-                            <TouchableOpacity style={styles.touchReset}
-                                onPress={() => {
-                                    setIsLoadingChangePassword(false);
-                                    let email = getParam('email');
-                                    axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
-                                        Alert.alert('Thông Báo', res.data.message);
-                                        navigate('OTPscreen', { email: email })
-                                    })
-                                }}>
-                                <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
-                                <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
-                            </TouchableOpacity>
-                        }
-
+                      
+                        <TouchableOpacity style={styles.touchReset}
+                            onPress={() => {
+                                let email = getParam('email');
+                                axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
+                                    Alert.alert('Thông Báo', res.data.message);
+                                    navigate('OTPscreen', { email: email })
+                                })
+                            }}>
+                            <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
+                            <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
+                        </TouchableOpacity>
+                        
                     </View>
                 </View>
             </View>

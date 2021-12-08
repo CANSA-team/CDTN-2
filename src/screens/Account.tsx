@@ -41,7 +41,7 @@ export default function Account() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderTitle title={'ACCOUNT'} />
+            <HeaderTitle title={'Tài khoản'} />
 
             <View style={styles.accountContainer}>
                 <View>
@@ -71,14 +71,14 @@ export default function Account() {
                 </View>
                 <View style={styles.viewAction}>
                     <TouchableOpacity onPress={() => { navigate('ListChat') }} style={styles.actionTouch}>
-                        <Text style={styles.actionTitle}>Chat</Text>
+                        <Text style={styles.actionTitle}>Liên hệ</Text>
                         <SimpleLineIcons name="arrow-right" size={20} color="#333" />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.viewAction}>
                     <TouchableOpacity style={styles.actionTouch}
                         onPress={() => btnLogout()}>
-                        <Text style={{ fontSize: 20, color: 'red' }}>Logout</Text>
+                        <Text style={{ fontSize: 20, color: 'red' }}>Đăng xuất</Text>
                         <MaterialIcons name="exit-to-app" size={35} color='#ec2525' />
                     </TouchableOpacity>
                 </View>
