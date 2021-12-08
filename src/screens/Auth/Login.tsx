@@ -94,9 +94,6 @@ export default function Login(props: any) {
     if (email !== '' && password !== '') {
       dispatch(login(email, password));
     }
-    else if (status === "Faild" || status === "") {
-      Alert.alert("Tài khoản hoặc mật khẩu không đúng!")
-    }
   }
 
   const Divider = (props: any) => {
