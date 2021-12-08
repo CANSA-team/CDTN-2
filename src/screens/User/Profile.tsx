@@ -62,19 +62,16 @@ export default function Profile(props: any) {
                     </View>
 
                     <View style={styles.resetPassContainer}>
-                      
+
                         <TouchableOpacity style={styles.touchReset}
                             onPress={() => {
                                 let email = getParam('email');
-                                axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
-                                    Alert.alert('Thông Báo', res.data.message);
-                                    navigate('OTPscreen', { email: email })
-                                })
+                                navigate('ChangePassword', { email: email })
                             }}>
                             <Text style={{ fontSize: 20, color: '#555' }}>Đổi mật khẩu</Text>
                             <MaterialIcons name="arrow-right-alt" size={35} color="#555" />
                         </TouchableOpacity>
-                        
+
                     </View>
                 </View>
             </View>

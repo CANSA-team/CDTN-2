@@ -20,7 +20,7 @@ export interface AddCommentAction {
 
 export type CommentActions = GetComment | CommentErrorAction | AddCommentAction;
 
-export const getComments = (product_id: number,page:number = 1) => {
+export const getComments = (product_id: number, page: number = 1) => {
     return async (dispatch: Dispatch<CommentActions>) => {
         try {
             const response = await axios.get<any>(`${cansa[1]}/api/comment/all/${product_id}/${page}/e4611a028c71342a5b083d2cbf59c494`)
@@ -47,7 +47,7 @@ export const getComments = (product_id: number,page:number = 1) => {
     }
 }
 
-export const addComment = (product_id: number, user_id: number, comment_content: string, comment_rating: number,page:number = 1) => {
+export const addComment = (product_id: number, user_id: number, comment_content: string, comment_rating: number, page: number = 1) => {
     return async (dispatch: Dispatch<CommentActions>) => {
         const data = {
             user_id: user_id,

@@ -9,12 +9,13 @@ export default function OderCard(props: any) {
     const qty = props.qty;
     const status = props.status;
     const oderStatus = props.oderStatus;
+    const id = props.id;
     const { navigate } = useNavigation();
     return (
         <View style={styles.container}>
             {
                 (oderStatus == 1) &&
-                <TouchableOpacity onPress={() => props.onTap(product.product_id)}>
+                <TouchableOpacity onPress={() => props.onTap(id)}>
                     <View style={{
                         justifyContent: 'flex-end',
                         alignItems: 'flex-end',
@@ -37,11 +38,11 @@ export default function OderCard(props: any) {
                         <Text style={styles.productName}>{product && SlugStr(product.product_title, 22)}</Text>
                     </View>
                     <View style={styles.productPrice}>
-                        <Text style={{fontSize: 16}}>Số lượng : {qty}</Text>
+                        <Text style={{ fontSize: 16 }}>Số lượng : {qty}</Text>
                         <Text style={{ color: '#222', fontSize: 20 }}>{vnd((product.product_price * (100 - product.product_sale) / 100) * qty)}đ</Text>
                     </View>
                     {
-                        status === 2 &&
+                        status === 4 &&
                         <TouchableOpacity onPress={() => {
                             navigate('Complaint', { id: product.product_id });
                         }}>

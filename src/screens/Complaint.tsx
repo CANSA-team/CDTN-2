@@ -81,13 +81,13 @@ export default function Complaint(props: any) {
                     }}
                 />
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, marginTop: 10, marginHorizontal: 10 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 5, marginTop: 10, marginHorizontal: 10 }}>
 
                 <TouchableOpacity style={{ justifyContent: 'flex-end', marginRight: 5 }} onPress={() => {
                     check = true;
                     opTap();
                 }}>
-                    <Text style={styles.btnSend}>Send</Text>
+                    <Text style={styles.btnSend}>Gửi</Text>
                 </TouchableOpacity>
             </View>
         </View>

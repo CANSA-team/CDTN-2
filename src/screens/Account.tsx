@@ -16,7 +16,7 @@ export default function Account() {
     const dispatch = useDispatch();
 
     const onTapProfile = () => {
-        navigate('Profile',{email:userInfor.user_email})
+        navigate('Profile', { email: userInfor.user_email })
     }
     const onTapOrdered = () => {
         navigate('Ordered')
@@ -86,10 +86,6 @@ export default function Account() {
 
             </View>
         </SafeAreaView>
-        // ) :
-        //     (<View style={[styles.container_login, styles.horizontal]}>
-        //         <ActivityIndicator size="large" color="#FF6F61" />
-        //     </View>)
     )
 }
 const styles = StyleSheet.create({

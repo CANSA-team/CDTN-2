@@ -54,7 +54,6 @@ export const addCart = (product_id: number) => {
     return async (dispatch: Dispatch<CartActions>) => {
         try {
             const response = await axios.get<any>(`${cansa[1]}/api/cart/add/${product_id}/e4611a028c71342a5b083d2cbf59c494`)
-           
             if (!response) {
                 dispatch({
                     type: CartActionType.ON_CART_ERROR,

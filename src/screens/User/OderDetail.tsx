@@ -33,7 +33,9 @@ export default function oderDetail(props: any) {
     }, [orderState])
 
     if (_oder) for (const item of _oder.product_oder) {
-        sub_price += (item.product.product_price * (100 - item.product.product_sale) / 100) * item.product_quantity;
+        if (item.status) {
+            sub_price += (item.product.product_price * (100 - item.product.product_sale) / 100) * item.product_quantity;
+        }
     }
 
     total_price = sub_price + ship;
@@ -45,7 +47,7 @@ export default function oderDetail(props: any) {
         <View style={styles.statusPending}>
             <Text style={styles.txtStatus}>Đang xử lí</Text>
         </View>,
-         <View style={styles.statusPending}>
+        <View style={styles.statusPending}>
             <Text style={styles.txtStatus}>Đang xử lí</Text>
         </View>,
         <View style={styles.statusPending}>
@@ -61,8 +63,8 @@ export default function oderDetail(props: any) {
             "Thông báo",
             "Hủy đơn hàng ?",
             [
-                { text: "Cancel" },
-                { text: "Yes", onPress: () => { setCheck(true); dispatch(updateOderItem(product_id, _oder.oder_id)) } },
+                { text: "Hủy" },
+                { text: "Xác nhận", onPress: () => { setCheck(true); dispatch(updateOderItem(product_id, _oder.oder_id)) } },
             ]
         );
     }
@@ -71,7 +73,7 @@ export default function oderDetail(props: any) {
             <HeaderTitle title={`Mã đơn hàng: ${_oder.oder_id}`} />
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={28} color="white"/>
+                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={28} color="white" />
                 </TouchableOpacity>
             </View>
             <View style={styles.container}>
@@ -82,7 +84,7 @@ export default function oderDetail(props: any) {
                                 _oder && _oder.product_oder.map((cart: any, index: number) => {
                                     return (
                                         < View key={index} >
-                                            <OderCard qty={cart.product_quantity} product={cart.product} oderStatus={cart.status} status={_oder.status} onTap={changeStatus} />
+                                            <OderCard qty={cart.product_quantity} id={cart.product_id} product={cart.product} oderStatus={cart.status} status={_oder.status} onTap={changeStatus} />
                                         </View>)
                                 })
                             }
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
     },
     statusAccept: {
         marginTop: 8,
-        backgroundColor:'#28a745',
+        backgroundColor: '#28a745',
         padding: 8,
         borderRadius: 10,
         margin: 10

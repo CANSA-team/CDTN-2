@@ -16,6 +16,8 @@ export default function OTPscreen(props: any) {
     const [pinText4, setpinText4] = useState<string>('');
     const [pinText5, setpinText5] = useState<string>('');
     const [pinText6, setpinText6] = useState<string>('');
+    const [isSend, setIsSend] = useState<boolean>(false)
+    const [isResend, setIsResend] = useState<boolean>(false);
     const pinInputRef1 = useRef<TextInput>();
     const pinInputRef2 = useRef<TextInput>();
     const pinInputRef3 = useRef<TextInput>();
@@ -96,139 +98,169 @@ export default function OTPscreen(props: any) {
     // Time out
     const [time, setTime] = useState(60);
     useEffect(() => {
-        if (time > 0) {
+        if (time) {
             setTimeout(() => {
-                setTime(time - 1)
+                !isResend ? setTime(time - 1) : setTime(0);
             }, 1000);
-        } else {
         }
     }, [time]);
 
     useEffect(() => {
-        setTime(time)
+        setTime(time);
     }, []);
 
     const reSend = () => {
+        setIsResend(true);
         let email = getParam('email')
         if (email != '') {
             axios.get(`${cansa[1]}/api/user/forgot/password/${email}`).then((res) => {
+                setIsResend(false);
                 setTime(60)
                 Alert.alert('Thông Báo', res.data.message);
-                navigate('OTPscreen', { email: email })
             })
         } else {
             Alert.alert('Thông báo', 'Email không được để trống!!')
+            setIsResend(false);
         }
     }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.up}>
-                    <Image style={{ width: 100, height: 100 }} source={require('../../../assets/icon.png')} />
-                    <Text style={styles.title}>
-                        Mã Xác Minh
-                    </Text>
-                    <Text style={{ color: '#111', fontSize: 15, marginTop: 10 }}>
-                        Nhập mã OTP của bạn được gửi qua Email
-                    </Text>
-                </View>
-                <View style={styles.down}>
-                    <View style={styles.containerInput}>
-                        <TextInput
-                            onChangeText={updatePinText1}
-                            value={pinText1}
-                            ref={pinInputRef1}
-                            maxLength={1}
-                            keyboardType='numeric'
-                            style={{
-                                marginRight: 5, marginLeft: 5,
-                                fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
-                                width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
-                            }} />
-                        <TextInput
-                            onChangeText={updatePinText2}
-                            value={pinText2}
-                            ref={pinInputRef2}
-                            maxLength={1}
-                            keyboardType='numeric'
-                            style={{
-                                marginRight: 5, marginLeft: 5,
-                                fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
-                                width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
-                            }} />
-                        <TextInput
-                            onChangeText={updatePinText3}
-                            value={pinText3}
-                            ref={pinInputRef3}
-                            maxLength={1}
-                            keyboardType='numeric'
-                            style={{
-                                marginRight: 5, marginLeft: 5,
-                                fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
-                                width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
-                            }} />
-                        <TextInput
-                            onChangeText={updatePinText4}
-                            value={pinText4}
-                            ref={pinInputRef4}
-                            maxLength={1}
-                            keyboardType='numeric'
-                            style={{
-                                marginRight: 5, marginLeft: 5,
-                                fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
-                                width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
-                            }} />
-                        <TextInput
-                            onChangeText={updatePinText5}
-                            value={pinText5}
-                            ref={pinInputRef5}
-                            maxLength={1}
-                            keyboardType='numeric'
-                            style={{
-                                marginRight: 5, marginLeft: 5,
-                                fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
-                                width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
-                            }} />
-                        <TextInput
-                            onChangeText={updatePinText6}
-                            value={pinText6}
-                            ref={pinInputRef6}
-                            maxLength={1}
-                            keyboardType='numeric'
-                            style={{
-                                marginRight: 5, marginLeft: 5,
-                                fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
-                                width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
-                            }} />
+            {
+                (isResend || isSend) ?
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <TouchableOpacity onPress={() => navigation.goBack()}>
+                                <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.up}>
+                            <Image style={{ width: 100, height: 100 }} source={require('../../../assets/icon.png')} />
+                            <Text style={styles.title}>
+                                Mã Xác Minh
+                            </Text>
+                            <Text style={{ color: '#111', fontSize: 15, marginTop: 10 }}>
+                                {isResend ? 'Chúng tôi đang gửi lại mã OTP qua Email của bạn ...' : 'Chúng tôi đang kiểm tra mã OTP bạn nhập ...'}
+                            </Text>
+                        </View>
                     </View>
+                    :
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <TouchableOpacity onPress={() => navigation.goBack()}>
+                                <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.up}>
+                            <Image style={{ width: 100, height: 100 }} source={require('../../../assets/icon.png')} />
+                            <Text style={styles.title}>
+                                Mã Xác Minh
+                            </Text>
+                            <Text style={{ color: '#111', fontSize: 15, marginTop: 10 }}>
+                                Nhập mã OTP của bạn được gửi qua Email
+                            </Text>
+                        </View>
+                        <View style={styles.down}>
+                            <View style={styles.containerInput}>
+                                <TextInput
+                                    onChangeText={updatePinText1}
+                                    value={pinText1}
+                                    ref={pinInputRef1}
+                                    maxLength={1}
+                                    keyboardType='numeric'
+                                    style={{
+                                        marginRight: 5, marginLeft: 5,
+                                        fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
+                                        width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
+                                    }} />
+                                <TextInput
+                                    onChangeText={updatePinText2}
+                                    value={pinText2}
+                                    ref={pinInputRef2}
+                                    maxLength={1}
+                                    keyboardType='numeric'
+                                    style={{
+                                        marginRight: 5, marginLeft: 5,
+                                        fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
+                                        width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
+                                    }} />
+                                <TextInput
+                                    onChangeText={updatePinText3}
+                                    value={pinText3}
+                                    ref={pinInputRef3}
+                                    maxLength={1}
+                                    keyboardType='numeric'
+                                    style={{
+                                        marginRight: 5, marginLeft: 5,
+                                        fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
+                                        width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
+                                    }} />
+                                <TextInput
+                                    onChangeText={updatePinText4}
+                                    value={pinText4}
+                                    ref={pinInputRef4}
+                                    maxLength={1}
+                                    keyboardType='numeric'
+                                    style={{
+                                        marginRight: 5, marginLeft: 5,
+                                        fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
+                                        width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
+                                    }} />
+                                <TextInput
+                                    onChangeText={updatePinText5}
+                                    value={pinText5}
+                                    ref={pinInputRef5}
+                                    maxLength={1}
+                                    keyboardType='numeric'
+                                    style={{
+                                        marginRight: 5, marginLeft: 5,
+                                        fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
+                                        width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
+                                    }} />
+                                <TextInput
+                                    onChangeText={updatePinText6}
+                                    value={pinText6}
+                                    ref={pinInputRef6}
+                                    maxLength={1}
+                                    keyboardType='numeric'
+                                    style={{
+                                        marginRight: 5, marginLeft: 5,
+                                        fontWeight: '600', alignSelf: 'center', padding: 15, fontSize: 20, height: 55,
+                                        width: '13%', borderColor: 'grey', borderBottomWidth: 1.5, justifyContent: 'center', alignItems: 'center'
+                                    }} />
+                            </View>
 
-                    <TouchableOpacity style={styles.forgotButton1}>
-                        <Text style={styles.navButtonText1}>
-                            Gửi lại mã OTP trong: {time}
-                        </Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.forgotButton1}>
+                                <Text style={styles.navButtonText1}>
+                                    Gửi lại mã OTP trong: {time}
+                                </Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.loginButton}
-                        onPress={continueBtn}
-                    >
-                        <Text style={styles.loginButtonTitle}>Xác nhận</Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.loginButton}
+                                onPress={continueBtn}
+                            >
+                                <Text style={styles.loginButtonTitle}>Xác nhận</Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.forgotButton}
-                        onPress={reSend}
-                    >
-                        <Text style={styles.navButtonText}>
-                            Gửi lại OTP
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                            {
+                                !isResend ?
+                                    <TouchableOpacity style={styles.forgotButton}
+                                        onPress={reSend}
+                                    >
+                                        <Text style={styles.navButtonText}>
+                                            Gửi lại OTP
+                                        </Text>
+                                    </TouchableOpacity> :
+                                    <TouchableOpacity style={styles.forgotButton}
+                                    >
+                                        <Text style={styles.navButtonText}>
+                                            Gửi lại OTP
+                                        </Text>
+                                    </TouchableOpacity>
+                            }
+                        </View>
+                    </View>
+            }
         </TouchableWithoutFeedback>
     )
 }
@@ -251,7 +283,7 @@ const styles = StyleSheet.create({
         zIndex: 2
     },
     headerIcon: {
-      
+
         borderRadius: 50,
         padding: 5
     },

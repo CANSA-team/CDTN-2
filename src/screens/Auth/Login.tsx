@@ -22,6 +22,7 @@ import COLORS from './../../consts/Colors';
 export default function Login(props: any) {
   const { navigate } = useNavigation();
   const [email, setEmail] = useState('')
+  const [isSend, setIsSend] = useState<boolean>(false)
   const [emailValdate, setEmailValdate] = useState(true)
   const [password, setPassword] = useState('')
   const [passwordValdate, setPasswordValdate] = useState(true)
@@ -42,6 +43,7 @@ export default function Login(props: any) {
 
   const logInFB = async () => {
     try {
+      setIsSend(true);
       await Facebook.initializeAsync({
         appId: '994248931143640',
       });
@@ -57,11 +59,16 @@ export default function Login(props: any) {
         //Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
         var infomation = await response.json();
         dispatch(LoginFacebook(infomation.email, token, infomation.id, infomation.name))
+        setIsSend(false);
+
       } else {
         // type === 'cancel'
+        setIsSend(false);
+
       }
     } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
+      Alert.alert(`Facebook Login Error: ${message}`);
+      setIsSend(false);
     }
   }
   const valiDate = (text: any, type: any) => {
@@ -91,7 +98,9 @@ export default function Login(props: any) {
 
   const loginBtn = (e: any) => {
     e.preventDefault()
+    setIsSend(true);
     if (email !== '' && password !== '') {
+      setIsSend(false);
       dispatch(login(email, password));
     }
   }
@@ -109,74 +118,87 @@ export default function Login(props: any) {
     //Donot dismis Keyboard when click outside of TextInput
     <TouchableWithoutFeedback>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigate('homeStack')}>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.up}>
-         <Image style={{width:150,height:150}} source={require('../../../assets/icon.png')} />
-        </View>
-        <View style={styles.down}>
-          <View style={styles.textInputContainer}>
-            <TextInput
-              style={[styles.textInput, !emailValdate ? styles.error : null]}
-              textContentType='emailAddress'
-              keyboardType='email-address'
-              placeholder="Nhập E-mail"
-              onChangeText={(text) => valiDate(text, 'email')}
-            >
-            </TextInput>
-          </View>
+        {
+          isSend ?
+            <View style={styles.up}>
+              <Image style={{ width: 100, height: 100 }} source={require('../../../assets/icon.png')} />
+              <Text style={styles.title}>
+                Đang Xác Minh
+              </Text>
+            </View>
+            :
+            <>
+              <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigate('homeStack')}>
+                  <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.up}>
+                <Image style={{ width: 150, height: 150 }} source={require('../../../assets/icon.png')} />
+              </View>
+              <View style={styles.down}>
+                <View style={styles.textInputContainer}>
+                  <TextInput
+                    style={[styles.textInput, !emailValdate ? styles.error : null]}
+                    textContentType='emailAddress'
+                    keyboardType='email-address'
+                    placeholder="Nhập E-mail"
+                    onChangeText={(text) => valiDate(text, 'email')}
+                  >
+                  </TextInput>
+                </View>
 
 
-          <View style={styles.textInputContainer}>
-            <TextInput
-              style={[styles.textInput, !passwordValdate ? styles.error : null]}
-              placeholder="Nhập mật khẩu"
-              secureTextEntry={true}
-              onChangeText={(text) => valiDate(text, 'password')}
-            >
-            </TextInput>
-          </View>
+                <View style={styles.textInputContainer}>
+                  <TextInput
+                    style={[styles.textInput, !passwordValdate ? styles.error : null]}
+                    placeholder="Nhập mật khẩu"
+                    secureTextEntry={true}
+                    onChangeText={(text) => valiDate(text, 'password')}
+                  >
+                  </TextInput>
+                </View>
 
 
 
-          <TouchableOpacity style={styles.loginButton}
-            onPress={(e) => loginBtn(e)}
-          >
-            <Text style={styles.loginButtonTitle}>Đăng Nhập</Text>
-          </TouchableOpacity>
+                <TouchableOpacity style={styles.loginButton}
+                  onPress={(e) => loginBtn(e)}
+                >
+                  <Text style={styles.loginButtonTitle}>Đăng Nhập</Text>
+                </TouchableOpacity>
 
-          <TouchableOpacity style={styles.forgotButton}
-            onPress={() => { navigate('EmailOTPscreen') }}
-          >
-            <Text style={styles.navButtonText}>
-              Quên mật khẩu?
-            </Text>
-          </TouchableOpacity>
+                <TouchableOpacity style={styles.forgotButton}
+                  onPress={() => { navigate('EmailOTPscreen') }}
+                >
+                  <Text style={styles.navButtonText}>
+                    Quên mật khẩu?
+                  </Text>
+                </TouchableOpacity>
 
-          <Divider style={styles.divider}></Divider>
-          <View style={{ marginBottom: 10 }}>
-            <FontAwesome.Button
-              onPress={() => { logInFB() }}
-              style={styles.facebookButton}
-              name="facebook"
-              backgroundColor="#3b5998"
-            >
-              <Text style={styles.loginButtonTitle}
+                <Divider style={styles.divider}></Divider>
+                <View style={{ marginBottom: 10 }}>
+                  <FontAwesome.Button
+                    onPress={() => { logInFB() }}
+                    style={styles.facebookButton}
+                    name="facebook"
+                    backgroundColor="#3b5998"
+                  >
+                    <Text style={styles.loginButtonTitle}
 
-              >Đăng nhập bằng Facebook</Text>
-            </FontAwesome.Button>
-          </View>
-          <TouchableOpacity style={styles.forgotButton}
-            onPress={() => { navigate('Register') }}
-          >
-            <Text style={styles.navButtonText1}>
-               Đăng ký tại đây !
-            </Text>
-          </TouchableOpacity>
-        </View>    
+                    >Đăng nhập bằng Facebook</Text>
+                  </FontAwesome.Button>
+                </View>
+                <TouchableOpacity style={styles.forgotButton}
+                  onPress={() => { navigate('Register') }}
+                >
+                  <Text style={styles.navButtonText1}>
+                    Đăng ký tại đây !
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+        }
+
       </View>
     </TouchableWithoutFeedback>
 
@@ -211,8 +233,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:30,
-    marginBottom:20
+    marginTop: 30,
+    marginBottom: 20
   },
   down: {
     flex: 7,
@@ -234,9 +256,9 @@ const styles = StyleSheet.create({
   textInput: {
     width: 280,
     height: 50,
-    borderColor:COLORS.primary,
-    borderWidth:1,
-    borderRadius:5,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    borderRadius: 5,
     padding: 10
   },
   loginButton: {

@@ -8,7 +8,7 @@ import RatingComment from '../components/RatingComment';
 import Comment from '../components/Comment';
 import { useNavigation } from './../utils/useNavigation';
 import { Rating } from 'react-native-elements';
-import { CartState, CommentModel, CommentState, getProduct, ProductModel, ProductState, State, UserModel, UserStage } from '../redux';
+import { CartState, CategoryModel, CategoryState, CommentModel, CommentState, getProduct, getProductsCategory, getProductsHot, getProductsNew, ProductModel, ProductState, State, UserModel, UserStage } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, getComments } from '../redux/actions/commentActions';
 import { addCart, getCart } from '../redux/actions/cartActions';
@@ -33,7 +33,9 @@ export default function ProductDetail(props: any) {
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
     const [page, setPage] = useState<number>(1);
-    const [isLoadMore, setisLoadMore] = useState(false)
+    const [isLoadMore, setisLoadMore] = useState(false);
+    const categoryState: CategoryState = useSelector((state: State) => state.categoryReducer);
+    const { categories }: { categories: CategoryModel[] } = categoryState;
 
     useEffect(() => {
         dispatch(getProduct(id));
@@ -52,12 +54,16 @@ export default function ProductDetail(props: any) {
         setisLoadMore(false)
         if (comment && !isLoadingComment) {
             setIsLoadingComment(true);
+            dispatch(getProductsNew());
+            dispatch(getProductsHot());
+            dispatch(getProductsCategory(categories[0].category_id));
+            dispatch(getProduct(id));
         }
     }, [commentState])
 
     useEffect(() => {
         if (status && isLoadingAddCart) {
-            const message = status  ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
+            const message = status ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ hàng thất bại';
             Alert.alert(
                 "Thông báo",
                 message,
@@ -100,11 +106,11 @@ export default function ProductDetail(props: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            { !isLoading?
+            {!isLoading ?
                 (<View style={styles.container}>
                     <Image source={require('../images/loader.gif')} />
                 </View>) :
-                (<ScrollView 
+                (<ScrollView
                     showsVerticalScrollIndicator={false}
                     onScroll={({ nativeEvent }) => {
                         if (isCloseToBottom(nativeEvent)) {
@@ -112,10 +118,10 @@ export default function ProductDetail(props: any) {
                         }
                     }}
                     scrollEventThrottle={400}
-                    >
+                >
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white"/>
+                            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => navigate('cart')}>
                             <MaterialIcons style={styles.headerIcon} name="shopping-cart" color="white" size={30} />
@@ -144,16 +150,16 @@ export default function ProductDetail(props: any) {
                             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                 {
                                     !isLoadingAddCart ?
-                                    <TouchableOpacity onPress={() => {
-                                        dispatch(addCart(id));
-                                        setIsLoadingAddCart(true);
-                                    }}>
-                                        <Text style={styles.btnBuy}>Thêm</Text>
-                                    </TouchableOpacity>
-                                    :
-                                    <TouchableOpacity>
-                                        <Text style={styles.btnBuy}>Thêm</Text>
-                                    </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {
+                                            dispatch(addCart(id));
+                                            setIsLoadingAddCart(true);
+                                        }}>
+                                            <Text style={styles.btnBuy}>Thêm</Text>
+                                        </TouchableOpacity>
+                                        :
+                                        <TouchableOpacity>
+                                            <Text style={styles.btnBuy}>Thêm</Text>
+                                        </TouchableOpacity>
                                 }
                                 <TouchableOpacity onPress={() => {
                                     navigate('Shop', { shop_id: product.shop_id });
@@ -175,9 +181,9 @@ export default function ProductDetail(props: any) {
 
                         {
                             isLoadingComment ?
-                            <RatingComment onTap={onTap} />
-                            :
-                            <RatingComment onTap={()=>{}}/>
+                                <RatingComment onTap={onTap} />
+                                :
+                                <RatingComment onTap={() => { console.log("asdakjsd") }} />
                         }
 
                         <View>
