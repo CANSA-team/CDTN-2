@@ -205,7 +205,6 @@ export default function Chat(props: any) {
                     <RefreshControl
                         refreshing={isLoadingChat}
                         onRefresh={() => { onRefeshing() }}
-
                     />
                 }
             />
