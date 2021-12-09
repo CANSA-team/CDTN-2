@@ -1,20 +1,23 @@
 import moment from 'moment';
-import React, { useState, useEffect } from 'react'
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useRef } from 'react'
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import COLORS from '../consts/Colors';
 import { useNavigation } from '../utils/useNavigation';
 import { SlugStr } from './../consts/Selector';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function ProductOrdered(props: any) {
     const oder = props.oder;
     const { navigate } = useNavigation();
+    const swipeableRef = useRef<any>(null);
 
     const OderStatus = [
         <View style={styles.statusDes}>
             <Text style={styles.txtStatus}>Đã hủy</Text>
         </View>,
         <View style={styles.statusPending}>
-            <Text style={styles.txtStatus}>Đang xử lí</Text>
+            <Text style={styles.txtStatus}>Đã đặt hàng</Text>
         </View>,
         <View style={styles.statusPending}>
             <Text style={styles.txtStatus}>Đang xử lí</Text>
@@ -31,37 +34,58 @@ export default function ProductOrdered(props: any) {
         navigate('OderDetail', { oder: oder })
     }
 
-    return (
-        <View style={styles.container}>
-            {
-                (oder.status == 1) &&
-                <TouchableOpacity onPress={() => props.onTap(oder.oder_id)}>
-                    <View style={{
-                        justifyContent: 'flex-end',
-                        alignItems: 'flex-end',
-                        marginHorizontal: 10,
-                        marginBottom: 5
-                    }}>
-                        <Text style={{ color: 'red', fontSize: 16 }}> Hủy đơn hàng </Text>
-                    </View>
+    const boxRenderRight = () => {
+        return (
+            <>
+                <TouchableOpacity onPress={() => props.onTap(oder.oder_id)} style={{ marginVertical: 2, marginTop: 3, width: 75, backgroundColor: '#f53a4c', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Hủy đơn hàng</Text>
                 </TouchableOpacity>
-            }
-            <TouchableOpacity onPress={() => onTap()}>
-                <View style={styles.productContainer}>
-                    <View style={styles.productDetal}>
-                        <Text style={styles.productName}>Mã đơn hàng: {SlugStr(oder.oder_id, 60)}</Text>
-                    </View>
-                    <View style={styles.productDetal}>
-                        <Text style={styles.productName}>Ngày đặt hàng: {moment.utc(oder.oder_date).format('DD/MM/YYYY')}</Text>
-                    </View>
-                    <Text style={{ color: 'gray', fontSize: 18 }}>Trạng thái :</Text>
-                    {
-                        OderStatus[oder.status]
-                    }
+            </>
+        )
+    }
+
+
+    const boxRenderLeft = () => {
+        return (
+            <>
+                <TouchableOpacity onPress={onTap} style={{ marginVertical: 2, marginTop: 3, width: 80, backgroundColor: '#ffc106', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
+                    <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Thông tin đơn hàng</Text>
+                </TouchableOpacity>
+            </>
+        )
+    }
+
+    return (oder.status == 1) ?
+        <Swipeable ref={swipeableRef} friction={2} overshootLeft={false} overshootRight={false} renderLeftActions={boxRenderLeft} renderRightActions={boxRenderRight}>
+            <View style={styles.container}>
+                <View style={styles.productDetal}>
+                    <Text style={styles.productName}>Mã đơn hàng: {SlugStr(oder.oder_id, 60)}</Text>
                 </View>
-            </TouchableOpacity>
-        </View>
-    )
+                <View style={styles.productDetal}>
+                    <Text style={styles.productName}>Ngày đặt hàng: {moment.utc(oder.oder_date).format('DD/MM/YYYY')}</Text>
+                </View>
+                <Text style={{ color: 'gray', fontSize: 18 }}>Trạng thái :</Text>
+                {
+                    OderStatus[oder.status]
+                }
+            </View>
+        </Swipeable>
+        :
+        <Swipeable ref={swipeableRef} friction={2} overshootLeft={false} overshootRight={false} renderLeftActions={boxRenderLeft}>
+            <View style={styles.container}>
+                <View style={styles.productDetal}>
+                    <Text style={styles.productName}>Mã đơn hàng: {SlugStr(oder.oder_id, 60)}</Text>
+                </View>
+                <View style={styles.productDetal}>
+                    <Text style={styles.productName}>Ngày đặt hàng: {moment.utc(oder.oder_date).format('DD/MM/YYYY')}</Text>
+                </View>
+                <Text style={{ color: 'gray', fontSize: 18 }}>Trạng thái :</Text>
+                {
+                    OderStatus[oder.status]
+                }
+            </View>
+        </Swipeable>
+
 }
 const styles = StyleSheet.create({
     container: {
@@ -70,8 +94,6 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: '#fff',
         marginTop: 3,
-        borderRadius: 10,
-        marginHorizontal: 10,
         marginVertical: 2
     },
     img: {
@@ -93,7 +115,7 @@ const styles = StyleSheet.create({
     },
     productName: {
         fontSize: 20,
-        fontWeight:'700',
+        fontWeight: '700',
         color: '#333'
     },
     statusPending: {
