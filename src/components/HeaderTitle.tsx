@@ -13,9 +13,8 @@ export default function HeaderTitle(props:any) {
 const styles = StyleSheet.create({
     container:{
         paddingTop:35,
-        paddingBottom:15,
+        paddingBottom:10,
         backgroundColor:COLORS.primary
-
     },
     txtTitleTop:{
         textAlign:'center',

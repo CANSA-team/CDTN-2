@@ -26,6 +26,7 @@ import Complaint from '../screens/Complaint';
 import EditProfile from '../screens/User/EditProfile';
 import Chat from '../screens/Chat/Chat';
 import ListChat from '../screens/Chat/ListChat';
+import RatingScreen from '../screens/RatingScreen';
 
 const DIMENS = {
     iconSize: 30,
@@ -73,11 +74,10 @@ const switchNavigator = createSwitchNavigator({
         // Home tab Icon
         home: {
             screen: createStackNavigator({
-                Home: Home,
-                ProductDetail: ProductDetail,
-                Search: Search,
-                Shop: Shop,
-                Complaint: Complaint,
+                Home,
+                ProductDetail,
+                Search,
+                Shop,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -95,8 +95,8 @@ const switchNavigator = createSwitchNavigator({
         },
         category: {
             screen: createStackNavigator({
-                Categories: Categories,
-                Search: Search,
+                Categories,
+                Search,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -113,10 +113,10 @@ const switchNavigator = createSwitchNavigator({
         },
         cart: {
             screen: createStackNavigator({
-                Cart: Cart,
-                Checkout: Checkout,
-                CheckoutSuccess: CheckoutSuccess,
-                Ordered: Ordered
+                Cart,
+                Checkout,
+                CheckoutSuccess,
+                Ordered
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,
@@ -134,17 +134,19 @@ const switchNavigator = createSwitchNavigator({
         },
         account: {
             screen: createStackNavigator({
-                Account: Account,
-                Profile: Profile,
-                Checkout: Checkout,
-                Ordered: Ordered,
-                OderDetail: OderDetail,
-                EditProfile: EditProfile,
+                Account,
+                Profile,
+                Checkout,
+                Ordered,
+                OderDetail,
+                EditProfile,
                 EmailOTPscreen,
                 ChangePassword,
                 OTPscreen,
                 Chat,
                 ListChat,
+                RatingScreen,
+                Complaint,
             }, {
                 defaultNavigationOptions: {
                     headerShown: false,

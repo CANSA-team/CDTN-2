@@ -5,7 +5,6 @@ import COLORS from '../consts/Colors';
 import { useNavigation } from '../utils/useNavigation';
 import { SlugStr } from './../consts/Selector';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function ProductOrdered(props: any) {
     const oder = props.oder;
@@ -31,13 +30,14 @@ export default function ProductOrdered(props: any) {
     ]
 
     const onTap = () => {
+        swipeableRef.current.close();
         navigate('OderDetail', { oder: oder })
     }
 
     const boxRenderRight = () => {
         return (
             <>
-                <TouchableOpacity onPress={() => props.onTap(oder.oder_id)} style={{ marginVertical: 2, marginTop: 3, width: 75, backgroundColor: '#f53a4c', justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => props.onTap(oder.oder_id)} style={{ marginVertical: 2, marginTop: 3, width: 100, backgroundColor: '#f53a4c', justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Hủy đơn hàng</Text>
                 </TouchableOpacity>
             </>
@@ -48,7 +48,7 @@ export default function ProductOrdered(props: any) {
     const boxRenderLeft = () => {
         return (
             <>
-                <TouchableOpacity onPress={onTap} style={{ marginVertical: 2, marginTop: 3, width: 80, backgroundColor: '#ffc106', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
+                <TouchableOpacity onPress={onTap} style={{ marginVertical: 2, marginTop: 3, width: 105, backgroundColor: '#ffc106', justifyContent: 'center', alignItems: 'center', padding: 5 }}>
                     <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Thông tin đơn hàng</Text>
                 </TouchableOpacity>
             </>

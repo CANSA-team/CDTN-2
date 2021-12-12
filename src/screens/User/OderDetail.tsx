@@ -83,7 +83,7 @@ export default function oderDetail(props: any) {
                             {
                                 _oder && _oder.product_oder.map((cart: any, index: number) => {
                                     return (
-                                        < View key={index} >
+                                        <View key={index} >
                                             <OderCard qty={cart.product_quantity} id={cart.product_id} product={cart.product} oderStatus={cart.status} status={_oder.status} onTap={changeStatus} />
                                         </View>)
                                 })

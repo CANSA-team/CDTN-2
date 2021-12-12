@@ -56,21 +56,21 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         padding: 5,
-        borderRadius: 20
+        borderRadius: 5,
     },
     textArea: {
-        height: 90,
+        height: 110,
         justifyContent: "flex-start",
         alignItems: 'flex-start',
         lineHeight: 30,
         textAlignVertical: "top",
         padding: 10,
-        fontSize: 16
+        fontSize: 20
     },
     btnSend: {
         textAlign: 'center',
         padding: 9,
-        borderRadius: 15,
+        borderRadius: 5,
         backgroundColor: '#eeeb3e',
         width: 100,
         fontSize: 14

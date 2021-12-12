@@ -70,7 +70,7 @@ export default function Home() {
             {
                 !isLoading ?
                     (
-                        <View style={styles.container}>
+                        <View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
                             <Image source={require('../images/loader.gif')} />
                         </View>
                     )

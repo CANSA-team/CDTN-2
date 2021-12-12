@@ -4,13 +4,12 @@ import { View, StyleSheet, Text, TouchableOpacity, ScrollView, Alert, Image, Act
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Carousel from './../components/Carousel';
 import COLORS from '../consts/Colors';
-import RatingComment from '../components/RatingComment';
 import Comment from '../components/Comment';
 import { useNavigation } from './../utils/useNavigation';
 import { Rating } from 'react-native-elements';
-import { CartState, CategoryModel, CategoryState, CommentModel, CommentState, getProduct, getProductsCategory, getProductsHot, getProductsNew, ProductModel, ProductState, State, UserModel, UserStage } from '../redux';
+import { CartState,  CommentModel, CommentState, getProduct, ProductModel, ProductState, State } from '../redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, getComments } from '../redux/actions/commentActions';
+import {  getComments } from '../redux/actions/commentActions';
 import { addCart, getCart } from '../redux/actions/cartActions';
 import { getUserInfo } from '../redux/actions/userActions';
 import { vnd } from '../consts/Selector';
@@ -20,7 +19,6 @@ export default function ProductDetail(props: any) {
     const { getParam } = navigation;
     const id = getParam('id');
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingComment, setIsLoadingComment] = useState(true);
     const [isLoadingAddCart, setIsLoadingAddCart] = useState(false);
     const productState: ProductState = useSelector((state: State) => state.productReducer);
     const commentState: CommentState = useSelector((state: State) => state.commentReducer);
@@ -30,12 +28,8 @@ export default function ProductDetail(props: any) {
     const { comment }: { comment: CommentModel[] } = commentState;
     const { status }: { status: string | undefined } = cartState;
     const dispatch = useDispatch();
-    const userState: UserStage = useSelector((state: State) => state.userReducer);
-    const { userInfor }: { userInfor: UserModel } = userState;
     const [page, setPage] = useState<number>(1);
     const [isLoadMore, setisLoadMore] = useState(false);
-    const categoryState: CategoryState = useSelector((state: State) => state.categoryReducer);
-    const { categories }: { categories: CategoryModel[] } = categoryState;
 
     useEffect(() => {
         dispatch(getProduct(id));
@@ -44,22 +38,15 @@ export default function ProductDetail(props: any) {
     }, []);
 
     useEffect(() => {
+        setisLoadMore(false)
+    }, [commentState])
+
+    useEffect(() => {
         setproductCheck(product)
         if (productCheck) {
             setIsLoading(true);
         }
     }, [product])
-
-    useEffect(() => {
-        setisLoadMore(false)
-        if (comment && !isLoadingComment) {
-            setIsLoadingComment(true);
-            dispatch(getProductsNew());
-            dispatch(getProductsHot());
-            dispatch(getProductsCategory(categories[0].category_id));
-            dispatch(getProduct(id));
-        }
-    }, [commentState])
 
     useEffect(() => {
         if (status && isLoadingAddCart) {
@@ -76,23 +63,7 @@ export default function ProductDetail(props: any) {
         }
     }, [cartState])
 
-    const onTap = (comment_content: string, comment_rating: number) => {
-        if (userInfor) {
-            if (comment_content) {
-                setIsLoadingComment(false);
-                dispatch(addComment(id, userInfor.user_id, comment_content, comment_rating));
-            }
-        } else {
-            Alert.alert(
-                "Thông báo!",
-                "Chưa đăng nhập!",
-                [
-                    { text: "OK" }
-                ]
-            );
-        }
-    }
-
+   
     useEffect(() => {
         setisLoadMore(true)
         dispatch(getComments(id, page));
@@ -107,7 +78,7 @@ export default function ProductDetail(props: any) {
     return (
         <SafeAreaView style={styles.container}>
             {!isLoading ?
-                (<View style={styles.container}>
+                (<View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
                     <Image source={require('../images/loader.gif')} />
                 </View>) :
                 (<ScrollView
@@ -177,14 +148,7 @@ export default function ProductDetail(props: any) {
                             }
                         </Text>
 
-                        <Text style={styles.headerTitle}>Đánh giá & nhận xét :</Text>
-
-                        {
-                            isLoadingComment ?
-                                <RatingComment onTap={onTap} />
-                                :
-                                <RatingComment onTap={() => { console.log("asdakjsd") }} />
-                        }
+                        <Text style={styles.headerTitle}>Các nhận xét :</Text>
 
                         <View>
                             {

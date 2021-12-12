@@ -17,11 +17,12 @@ export default function Search(props: any) {
     const { navigation } = props;
     const { getParam } = navigation;
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoadFill, setisLoadFill] = useState(false)
     const [page, setPage] = useState<number>(1);
     const [products, setProducts] = useState<ProductModel[]>([] as ProductModel[]);
     const [productCheck, setproductCheck] = useState<any>()
     const [title, setTitle]  = useState(getParam('title'));
-    const data = getParam('data');
+    const [data, setData]  = useState(getParam('data'));
     const [sort, setSort] = useState<string>('');
     const [begin, setBegin] = useState<string>('');
     const [end, setEnd] = useState<string>('');
@@ -33,6 +34,7 @@ export default function Search(props: any) {
     }
 
     const filterPrice = (key: number) => {
+        setisLoadFill(true);
         switch (key) {
             case 1:
                 if (title === 'search') {
@@ -87,6 +89,7 @@ export default function Search(props: any) {
     }
 
     const sortName = (key: number) => {
+        setisLoadFill(true);
         switch (key) {
             case 1:
                 if (title === 'search') {
@@ -123,6 +126,7 @@ export default function Search(props: any) {
     }
 
     function CheckSearchOrCat(title: string) {
+        console.log(data)
         switch (title) {
             case 'Tìm kiếm':
                 dispatch(getProductsSearch(data, sort, begin, end, page));
@@ -131,7 +135,12 @@ export default function Search(props: any) {
                 dispatch(getProductsCategory(data, sort, begin, end, page));
                 break;
         }
+
     }
+
+    useEffect(() => {
+        setisLoadFill(false);
+    }, [products])
 
     useEffect(() => {
         CheckSearchOrCat(title)
@@ -176,12 +185,14 @@ export default function Search(props: any) {
         CheckSearchOrCat(title);
     }, [page])
 
-    const searchProduct = (data: any) => {
+    const searchProduct = (str: any) => {
+        setData(str);
         setTitle('Tìm kiếm');
         setIsLoading(false);
-        dispatch(getProductsSearch(data));
+        dispatch(getProductsSearch(str));
     }
 
+    
     const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
         const paddingToBottom = 20;
         return layoutMeasurement.height + contentOffset.y >=
@@ -190,7 +201,7 @@ export default function Search(props: any) {
 
     return (
         !isLoading ?
-            (<SafeAreaView style={styles.container}>
+            (<SafeAreaView style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
                 <Image source={require('../images/loader.gif')} />
             </SafeAreaView>) : (
                 <SafeAreaView style={styles.container}>
@@ -248,8 +259,12 @@ export default function Search(props: any) {
                             scrollEventThrottle={400}
                              >
                             <View style={styles.productList}>
-                                {
 
+
+                                {
+                                    isLoadFill ? 
+                                    <Image source={require('../images/loader.gif')} />
+                                    :
                                     products?.length ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
                                         :
                                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

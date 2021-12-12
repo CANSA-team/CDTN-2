@@ -7,11 +7,6 @@ import COLORS from './../consts/Colors';
 export default function SearchBarTop(props: any) {
     const { onSearch } = props;
     const [data, setData] = useState("");
-    const updateSearch = (search: string): void => {
-        setData(search);
-    };
-
-    
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
@@ -23,7 +18,7 @@ export default function SearchBarTop(props: any) {
                 </TouchableOpacity>
                 <SearchBar
                     placeholder="Bạn đang tìm kiếm gì ?"
-                    onChangeText={(search: string) => updateSearch(search)}
+                    onChangeText={(search: string) =>setData(search)}
                     value={data}
                     color="gray"
                     lightTheme={true}

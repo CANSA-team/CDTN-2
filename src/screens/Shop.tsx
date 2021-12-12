@@ -101,7 +101,7 @@ export default function ProductDetail(props: any) {
     return (
 
         !isLoading ?
-            (<View style={styles.container}>
+            (<View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
                 <Image source={require('../images/loader.gif')} />
             </View>) : (
                 <SafeAreaView style={styles.container}>

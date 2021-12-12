@@ -25,7 +25,7 @@ export default function Complaint(props: any) {
                 "Thông báo!",
                 "Cảm ơn bạn đã phản hồi!",
                 [
-                    { text: "OK", onPress: () => check = false }
+                    { text: "OK", onPress: () => {check = false; navigation.goBack()} }
                 ]
             );
 
@@ -61,7 +61,7 @@ export default function Complaint(props: any) {
             <HeaderTitle title="Báo Cáo" />
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="white" />
+                    <MaterialIcons name="arrow-back" size={30} color="white" />
                 </TouchableOpacity>
             </View>
             <View style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }}>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         padding: 5,
-        borderRadius: 20,
+        borderRadius: 5,
         marginTop: 20,
         marginHorizontal: 10
     },
@@ -116,19 +116,14 @@ const styles = StyleSheet.create({
         right: 0,
         zIndex: 2
     },
-    headerIcon: {
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: 50,
-        padding: 5
-    },
     textArea: {
-        height: 90,
+        height: 110,
         justifyContent: "flex-start",
         alignItems: 'flex-start',
         lineHeight: 30,
         textAlignVertical: "top",
         padding: 10,
-        fontSize: 16
+        fontSize: 20
     },
     btnSend: {
         textAlign: 'center',

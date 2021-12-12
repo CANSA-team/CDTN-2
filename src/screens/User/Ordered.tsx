@@ -22,6 +22,7 @@ export default function Ordered(props: any) {
 
     useEffect(() => {
         dispatch(getUserInfo());
+        
     }, []);
 
     useEffect(() => {

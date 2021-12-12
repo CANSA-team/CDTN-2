@@ -15,7 +15,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Chat(props: any) {
     const { navigation } = props;
-    const [dataAll, setDataAll]: any = useState([])
+    const [dataAll, setDataAll] = useState<any[]>([])
     const { navigate } = useNavigation();
     const socket = io(chatSever);
     const [isLoadingChat, setIsLoadingChat]: any = useState(true)
@@ -123,7 +123,6 @@ export default function Chat(props: any) {
     }, [])
 
 
-
     const onRefeshing = () => {
         setIsLoadingChat(true)
         socket.emit('roomList', myID)
@@ -204,17 +203,22 @@ export default function Chat(props: any) {
                     <MaterialIcons name="arrow-back" size={35} color="white" />
                 </TouchableOpacity>
             </View>
-            <FlatList
-                data={dataAll}
-                renderItem={renderItem}
-                keyExtractor={(item: any) => item.id}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={isLoadingChat}
-                        onRefresh={() => { onRefeshing() }}
-                    />
-                }
-            />
+            {
+                dataAll.length ?
+                <FlatList
+                    data={dataAll}
+                    renderItem={renderItem}
+                    keyExtractor={(item: any) => item.id}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isLoadingChat}
+                            onRefresh={() => { onRefeshing() }}
+                        />
+                    }
+                />
+                :
+                <View></View>
+            }
         </SafeAreaView>
     );
 

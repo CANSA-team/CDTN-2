@@ -17,13 +17,13 @@ export default function OderCard(props: any) {
     const boxRenderRight = () => {
         return (
             <>
-                <TouchableOpacity onPress={() => props.onTap(id)} style={{ marginVertical: 2, marginTop: 3, width: 75, backgroundColor: '#f53a4c', justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => props.onTap(id)} style={{ marginVertical: 2, marginTop: 3, width: 100, backgroundColor: '#f53a4c', justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Hủy đơn hàng</Text>
                 </TouchableOpacity>
             </>
         )
     }
-    return (oderStatus == 1) ? (
+    return (oderStatus === 1) ? (
         <Swipeable ref={swipeableRef} friction={2} overshootLeft={false} overshootRight={false} renderRightActions={boxRenderRight}>
             <View style={styles.container}>
                 {
@@ -55,14 +55,19 @@ export default function OderCard(props: any) {
                         {
                             status === 4 &&
                             <TouchableOpacity onPress={() => {
-                                navigate('Complaint', { id: product.product_id });
+                                navigate('Complaint', { id });
                             }}>
                                 <Text style={styles.btnReport}>Báo cáo</Text>
                             </TouchableOpacity>
                         }
+
+                        
                     </View>
+                    
                 </View>
+                          
             </View>
+                    
         </Swipeable>
     )
         : (
@@ -95,11 +100,18 @@ export default function OderCard(props: any) {
                         </View>
                         {
                             status === 4 &&
+                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
                             <TouchableOpacity onPress={() => {
-                                navigate('Complaint', { id: product.product_id });
+                                navigate('Complaint', { id });
                             }}>
                                 <Text style={styles.btnReport}>Báo cáo</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                navigate('RatingScreen', { id });
+                            }}>
+                                <Text style={styles.btnRating}>Đánh giá</Text>
+                            </TouchableOpacity>
+                            </View>
                         }
                     </View>
                 </View>
@@ -118,11 +130,21 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     btnReport: {
-        backgroundColor: 'red',
-        padding: 7,
-        width: 150,
-        borderRadius: 20,
-        marginBottom: 10,
+        backgroundColor: '#dc3545',
+        paddingVertical: 7,
+        paddingHorizontal:20,
+        borderRadius: 5,
+        marginBottom: 5,
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: '700',
+        color: '#f0f0f0'
+    },
+    btnRating: {
+        backgroundColor: '#ffc107',
+        paddingVertical: 7,
+        paddingHorizontal:20,
+        borderRadius: 5,
         fontSize: 18,
         textAlign: 'center',
         fontWeight: '700',
@@ -145,7 +167,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8
     },
     productName: {
         fontSize: 20,
@@ -161,6 +182,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 8
+        marginTop: 5
     }
 });

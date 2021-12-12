@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#574a4a',
         textAlign:'center',
-        maxWidth:150
+        maxWidth:160
     },
     categoryTextSelected: {
         color: COLORS.primary,

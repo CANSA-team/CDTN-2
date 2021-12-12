@@ -41,7 +41,7 @@ export default function Product(props: any) {
             <View style={styles.imgContainer}>
                 <Image style={styles.img} source={{ uri: product.product_avatar }} />
             </View>
-            <Text style={styles.txtTitle}>{SlugStr(product.product_title!, 21)}</Text>
+            <Text style={styles.txtTitle}>{SlugStr(product.product_title!, 28)}</Text>
             <View style={{ alignItems: 'center', flexDirection: 'row', }}>
                 {
                     !product.product_rating ?
@@ -65,7 +65,7 @@ export default function Product(props: any) {
 }
 const styles = StyleSheet.create({
     container: {
-        height: 255,
+        height: 260,
         backgroundColor: 'white',
         width: WIDTH,
         borderRadius: 10,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         paddingRight: 8,
         paddingTop: 5,
         paddingBottom: 5,
-        borderTopRightRadius: 15
+        borderTopRightRadius: 10
     },
     imgContainer: {
         display: 'flex',
