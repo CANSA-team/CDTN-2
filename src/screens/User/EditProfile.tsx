@@ -41,7 +41,8 @@ export default function EditProfile(props: any) {
         if (userInfor) {
             setName(userInfor.user_real_name);
             setPhone(userInfor.user_phone);
-            setDate(new Date(userInfor.user_birthday + 86400000));
+            setDate(new Date(Number(new Date(userInfor.user_birthday)) + 86400000));
+            console.log(userInfor.user_birthday)
             setavatar(Number(userInfor.user_avatar));
             setImage(userInfor.user_avatar_image);
         }
@@ -116,6 +117,7 @@ export default function EditProfile(props: any) {
     }
 
     let datePick = Number(date) - 86400000;
+
 
     return (
         <View style={styles.container}>

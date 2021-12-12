@@ -18,6 +18,7 @@ export default function Profile(props: any) {
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
 
+    console.log(userInfor.user_birthday)
     return (
         <View style={styles.container}>
             <View>
@@ -58,7 +59,7 @@ export default function Profile(props: any) {
                     </View>
 
                     <View style={styles.txtContainer}>
-                        <Text style={styles.txtTitle}>Ngày sinh : {moment.utc(userInfor.user_birthday + 86400000).format('DD/MM/YYYY')}</Text>
+                        <Text style={styles.txtTitle}>Ngày sinh : {moment.utc(Number(new Date((userInfor.user_birthday))) + 86400000).format('DD/MM/YYYY')}</Text>
                     </View>
 
                     <View style={styles.resetPassContainer}>
