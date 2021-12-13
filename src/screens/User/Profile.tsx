@@ -18,7 +18,6 @@ export default function Profile(props: any) {
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
 
-    console.log(userInfor.user_birthday)
     return (
         <View style={styles.container}>
             <View>

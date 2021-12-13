@@ -26,11 +26,9 @@ export default function PasswordInformation(props:any){
             if (passwordRegex.test(text)) {
                 setPassword(text)
                 setPasswordValdate(true)
-                console.warn('Password hợp lệ, bạn cần nhập lại')
             }
             else {
                 setPasswordValdate(false)
-                console.warn('Password chưa hợp lệ gồm 6 kí tự ,chữ cái hoa đầu')
             }
         }
     }

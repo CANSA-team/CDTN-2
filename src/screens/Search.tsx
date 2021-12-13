@@ -35,7 +35,6 @@ export default function Search(props: any) {
 
     const filterPrice = (key: number) => {
         setisLoadFill(true);
-        console.log(data, sort, '0', '1000000', page, title)
         switch (key) {
             case 1:
                 if (title === 'Tìm kiếm') {
