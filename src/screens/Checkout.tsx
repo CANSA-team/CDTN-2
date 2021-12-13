@@ -12,6 +12,7 @@ import { CartModel, CartState, State, UserModel, UserStage } from '../redux';
 import { getUserInfo } from '../redux/actions/userActions';
 import { addOder } from '../redux/actions/oderActions';
 import { vnd } from '../consts/Selector';
+import { getCart } from '../redux/actions/cartActions';
 
 let check = false;
 
@@ -86,7 +87,7 @@ export default function Checkout(props: any) {
                 "Thông báo!",
                 status,
                 [
-                    { text: "OK", onPress: () => { navigate('CheckoutSuccess'); check = false; } }
+                    { text: "OK", onPress: () => { navigate('CheckoutSuccess'); dispatch(getCart()); check = false; } }
                 ]
             );
         }
@@ -114,7 +115,7 @@ export default function Checkout(props: any) {
             <HeaderTitle title={'Thông tin'} />
             <View style={{ position: 'absolute', left: 5, top: 35 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons name="arrow-back" size={35} color="white"/>
+                    <MaterialIcons name="arrow-back" size={35} color="white" />
                 </TouchableOpacity>
             </View>
 

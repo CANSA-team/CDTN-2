@@ -22,7 +22,7 @@ export default function Ordered(props: any) {
 
     useEffect(() => {
         dispatch(getUserInfo());
-        
+
     }, []);
 
     useEffect(() => {
@@ -80,7 +80,7 @@ export default function Ordered(props: any) {
             <HeaderTitle title="Đơn hàng" />
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons name="arrow-back" size={35} color="white"/>
+                    <MaterialIcons name="arrow-back" size={35} color="white" />
                 </TouchableOpacity>
             </View>
             <View style={{ padding: 10, backgroundColor: 'white' }}>
@@ -89,9 +89,9 @@ export default function Ordered(props: any) {
                     style={{ ...pickerSelectStyles, placeholder: { color: '#555' } }}
                     onValueChange={(data) => filterStatus(data)}
                     items={[
-                        { label: 'Đang sử lý', value: 1 },
-                        { label: 'Đang sử lý', value: 2 },
-                        { label: 'Đang sử lý', value: 3 },
+                        { label: 'Đang xử lý', value: 1 },
+                        { label: 'Đang xử lý', value: 2 },
+                        { label: 'Đang xử lý', value: 3 },
                         { label: 'Đã nhận', value: 4 },
                         { label: 'Đã hủy', value: 0 },
                     ]}

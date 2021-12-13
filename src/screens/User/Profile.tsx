@@ -40,7 +40,7 @@ export default function Profile(props: any) {
                         rounded
                         size={200}
                         source={{
-                            uri: userInfor.user_avatar_image,
+                            uri: userInfor.user_avatar_image ? userInfor.user_avatar_image : 'https://103.207.38.200:333/api/image/photo/1764/e4611a028c71342a5b083d2cbf59c494',
                         }} >
                     </Avatar>
                 </View>
