@@ -102,7 +102,16 @@ export default function Login(props: any) {
     if (email !== '' && password !== '') {
       setIsSend(false);
       dispatch(login(email, password));
+    } else {
+      Alert.alert(
+        "Thông báo!",
+        'Email hoặc password không hợp lệ!!',
+        [
+          { text: "OK", onPress: () => setIsSend(false) }
+        ]
+      );
     }
+
   }
 
   const Divider = (props: any) => {
@@ -114,8 +123,6 @@ export default function Login(props: any) {
   }
 
   return (
-
-    //Donot dismis Keyboard when click outside of TextInput
     <TouchableWithoutFeedback>
       <View style={styles.container}>
         {
