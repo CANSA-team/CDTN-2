@@ -65,7 +65,7 @@ export default function Product(props: any) {
 }
 const styles = StyleSheet.create({
     container: {
-        height: 260,
+        height: 265,
         backgroundColor: 'white',
         width: WIDTH,
         borderRadius: 10,

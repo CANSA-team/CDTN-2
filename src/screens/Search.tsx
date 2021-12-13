@@ -21,8 +21,8 @@ export default function Search(props: any) {
     const [page, setPage] = useState<number>(1);
     const [products, setProducts] = useState<ProductModel[]>([] as ProductModel[]);
     const [productCheck, setproductCheck] = useState<any>()
-    const [title, setTitle]  = useState(getParam('title'));
-    const [data, setData]  = useState(getParam('data'));
+    const [title, setTitle] = useState(getParam('title'));
+    const [data, setData] = useState(getParam('data'));
     const [sort, setSort] = useState<string>('');
     const [begin, setBegin] = useState<string>('');
     const [end, setEnd] = useState<string>('');
@@ -35,9 +35,10 @@ export default function Search(props: any) {
 
     const filterPrice = (key: number) => {
         setisLoadFill(true);
+        console.log(data, sort, '0', '1000000', page, title)
         switch (key) {
             case 1:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, sort, '0', '1000000', page))
                     setBegin('0');
                     setEnd('1000000')
@@ -49,7 +50,7 @@ export default function Search(props: any) {
                 }
                 break;
             case 2:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, sort, '1000000', '10000000', page))
                     setBegin('1000000');
                     setEnd('10000000')
@@ -61,7 +62,7 @@ export default function Search(props: any) {
                 }
                 break;
             case 3:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, sort, '10000000', '100000000', page))
                     setBegin('10000000');
                     setEnd('100000000')
@@ -73,7 +74,7 @@ export default function Search(props: any) {
                 }
                 break;
             default:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, sort, '', '', page))
                     setBegin('');
                     setEnd('')
@@ -92,7 +93,7 @@ export default function Search(props: any) {
         setisLoadFill(true);
         switch (key) {
             case 1:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, 'asc', begin, end, page))
                     setSort('asc');
                 }
@@ -102,7 +103,7 @@ export default function Search(props: any) {
                 }
                 break;
             case 2:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, 'desc', begin, end, page))
                     setSort('desc');
                 }
@@ -112,7 +113,7 @@ export default function Search(props: any) {
                 }
                 break;
             default:
-                if (title === 'search') {
+                if (title === 'Tìm kiếm') {
                     dispatch(getProductsSearch(data, '', begin, end, page))
                     setSort('');
                 }
@@ -126,7 +127,6 @@ export default function Search(props: any) {
     }
 
     function CheckSearchOrCat(title: string) {
-        console.log(data)
         switch (title) {
             case 'Tìm kiếm':
                 dispatch(getProductsSearch(data, sort, begin, end, page));
@@ -179,7 +179,7 @@ export default function Search(props: any) {
         }
     }, [productState])
 
-   
+
 
     useEffect(() => {
         CheckSearchOrCat(title);
@@ -192,7 +192,7 @@ export default function Search(props: any) {
         dispatch(getProductsSearch(str));
     }
 
-    
+
     const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
         const paddingToBottom = 20;
         return layoutMeasurement.height + contentOffset.y >=
@@ -201,7 +201,7 @@ export default function Search(props: any) {
 
     return (
         !isLoading ?
-            (<SafeAreaView style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
+            (<SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
                 <Image source={require('../images/loader.gif')} />
             </SafeAreaView>) : (
                 <SafeAreaView style={styles.container}>
@@ -215,7 +215,7 @@ export default function Search(props: any) {
                             <Text style={{ textAlign: 'center', fontSize: 18, color: '#222' }}>{title}</Text>
                             <View style={styles.header}>
                                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={25} color="white"/>
+                                    <MaterialIcons style={styles.headerIcon} name="arrow-back" size={25} color="white" />
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -257,19 +257,19 @@ export default function Search(props: any) {
                                 }
                             }}
                             scrollEventThrottle={400}
-                             >
+                        >
                             <View style={styles.productList}>
 
 
                                 {
-                                    isLoadFill ? 
-                                    <Image source={require('../images/loader.gif')} />
-                                    :
-                                    products?.length ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
+                                    isLoadFill ?
+                                        <Image source={require('../images/loader.gif')} />
                                         :
-                                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontSize: 20, color: '#222' }}>Không có sản phẩm</Text>
-                                        </View>
+                                        products?.length ? products.map((product: ProductModel, index: number) => <Product onTap={onTapDetail} key={index} product={product} />)
+                                            :
+                                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                                <Text style={{ fontSize: 20, color: '#222' }}>Không có sản phẩm</Text>
+                                            </View>
                                 }
                             </View>
                             {
