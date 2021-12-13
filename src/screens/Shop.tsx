@@ -101,7 +101,7 @@ export default function ProductDetail(props: any) {
     return (
 
         !isLoading ?
-            (<View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
+            (<View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
                 <Image source={require('../images/loader.gif')} />
             </View>) : (
                 <SafeAreaView style={styles.container}>
@@ -114,8 +114,8 @@ export default function ProductDetail(props: any) {
                         </View>
                         <View style={styles.actionAccount}>
                             {info && <Text style={styles.nameUser}>{info.shop_name}</Text>}
-                            {info?.shop_description && <Text style={{ fontSize: 18, color: '#333' }}>{SlugStr(info.shop_description,24)}</Text>}
-                            <TouchableOpacity style={{ marginTop: 10, marginBottom: 10 }} onPress={() => { navigate('Chat', { id_user: 'shop_' + shop_id }) }}>
+                            {info?.shop_description && <Text style={{ fontSize: 18, color: '#333' }}>{SlugStr(info.shop_description, 24)}</Text>}
+                            <TouchableOpacity style={{ marginTop: 10, marginBottom: 10 }} onPress={() => { navigate('Chat', { id_user: 'shop_' + shop_id, user_name: info.shop_name }) }}>
                                 <Text style={{ fontSize: 18, color: '#FFF' }}>Nhắn Tin</Text>
                             </TouchableOpacity>
                         </View>

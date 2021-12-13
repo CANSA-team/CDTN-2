@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Platform, TouchableOpacity, Alert } from 'react-native';
 import { Button, Text, Input, Avatar, Accessory } from 'react-native-elements';
 import moment from 'moment';
 
@@ -26,6 +26,8 @@ export default function EditProfile(props: any) {
     const [show, setShow] = useState(false);
     const [name, setName] = useState(userInfor.user_real_name);
     const [phone, setPhone] = useState(userInfor.user_phone);
+    const [nameErr, setNameErr] = useState<boolean>(true);
+    const [phoneErr, setPhoneErr] = useState<boolean>(true);
     const [image, setImage] = useState(userInfor.user_avatar_image);
     const [avatar, setavatar] = useState<number | undefined>(undefined);
     const [checkSave, setcheckSave] = useState<boolean>(false);
@@ -113,10 +115,17 @@ export default function EditProfile(props: any) {
                 })
             }
         }
+        else {
+            setNameErr(name == '' && name == null);
+            setPhoneErr(/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(phone));
+            Alert.alert('Thông báo', 'Các trường nhập không đúng định dạng, yêu cầu nhập lại!', [
+                { text: "OK" }
+            ])
+
+        }
     }
 
     let datePick = Number(date) - 86400000;
-
 
     return (
         <View style={styles.container}>
@@ -132,7 +141,7 @@ export default function EditProfile(props: any) {
 
                 <View style={styles.viewAvatar}>
                     <Avatar
-                        containerStyle={{ marginBottom: 20 }}
+                        containerStyle={{ marginBottom: 20, borderWidth: 1 }}
                         rounded
                         size={200}
                         source={{
@@ -155,13 +164,14 @@ export default function EditProfile(props: any) {
                         label="Họ và Tên"
                         onChangeText={setName}
                     />
-
+                    {!nameErr ? <Text style={styles.statusDes}>Họ và tên không được để trống</Text> : <></>}
                     <Input
                         value={phone}
                         keyboardType='numeric'
                         label="Số điện thoại"
                         onChangeText={setPhone}
                     />
+                    {!phoneErr ? <Text style={styles.statusDes}>Số điện thoại không được để trống và đúng định dạng</Text> : <></>}
                     <View style={styles.txtContainer}>
                         <Text style={styles.txtTitle}>Ngày sinh: {moment.utc(date).format('DD/MM/YYYY')}</Text>
                         <Button onPress={() => setShow(true)}
@@ -199,6 +209,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#E5E5E5',
+    },
+    statusDes: {
+        paddingBottom: 5,
+        marginBottom: 3,
+        marginHorizontal: 10,
+        color: '#dc3545',
     },
     viewAvatar: {
         backgroundColor: '#fff',

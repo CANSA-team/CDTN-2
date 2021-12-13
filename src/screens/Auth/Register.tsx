@@ -88,11 +88,11 @@ export default function Resgister() {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => { navigate('Login') }}>
-            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black"/>
+            <MaterialIcons style={styles.headerIcon} name="arrow-back" size={30} color="black" />
           </TouchableOpacity>
         </View>
         <View style={styles.up}>
-          <Image style={{width:150,height:150}} source={require('../../../assets/icon.png')} />
+          <Image style={{ width: 150, height: 150 }} source={require('../../../assets/icon.png')} />
         </View>
         <View style={styles.down}>
 
@@ -102,7 +102,7 @@ export default function Resgister() {
               textContentType='nickname'
               autoCapitalize="sentences"
               returnKeyType="next"
-              placeholder="Nhập Họ Tên"
+              placeholder="Nhập Tên Khác (NickName)"
               maxLength={20}
               onChangeText={(text) => valiDate(text, 'nickname')}
             >
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom:20
+    marginBottom: 20
   },
   down: {
     flex: 7,
@@ -215,9 +215,9 @@ const styles = StyleSheet.create({
   textInput: {
     width: 280,
     height: 50,
-    borderColor:COLORS.primary,
-    borderWidth:1,
-    borderRadius:5,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    borderRadius: 5,
     padding: 10
   },
 
