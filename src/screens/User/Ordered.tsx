@@ -18,7 +18,7 @@ export default function Ordered(props: any) {
     const userState: UserStage = useSelector((state: State) => state.userReducer);
     const { userInfor }: { userInfor: UserModel } = userState;
     const dispatch = useDispatch();
-    let [_oderList, setOderList] = useState<Array<any>>();
+    let [_oderList, setOderList] = useState<OderModel[]>([]);
 
     useEffect(() => {
         dispatch(getUserInfo());
@@ -52,13 +52,40 @@ export default function Ordered(props: any) {
     }
 
 
+    // const filterStatus = (data: number) => {
+    //     if (oderList) {
+    //         if (data != -1) {
+    //             let __oderList = oderList.filter((item: any) => item.status === data);
+    //             setOderList(__oderList);
+    //         } else {
+    //             setOderList(oderList);
+    //         }
+    //     }
+    // }
+
     const filterStatus = (data: number) => {
         if (oderList) {
-            if (data != -1) {
-                let __oderList = oderList.filter((item: any) => item.status === data);
-                setOderList(__oderList);
-            } else {
-                setOderList(oderList);
+            let result = [];
+            switch (data) {
+                case 0:
+                    result = oderList.filter((order: OderModel) => order.status === 0);
+                    setOderList(result)
+                    break;
+                case 1:
+                    result = oderList.filter((order: OderModel) => order.status === 1);
+                    setOderList(result)
+                    break;
+                case 2:
+                    result = oderList.filter((order: OderModel) => order.status === 2 || order.status === 3);
+                    setOderList(result)
+                    break;
+                case 3:
+                    result = oderList.filter((order: OderModel) => order.status === 4);
+                    setOderList(result)
+                    break;
+                default:
+                    setOderList(oderList)
+                    break;
             }
         }
     }
@@ -85,14 +112,13 @@ export default function Ordered(props: any) {
             </View>
             <View style={{ padding: 10, backgroundColor: 'white' }}>
                 <RNPickerSelect
-                    placeholder={{ label: "Filter", value: -1 }}
+                    placeholder={{ label: "Tất cả", value: -1 }}
                     style={{ ...pickerSelectStyles, placeholder: { color: '#555' } }}
                     onValueChange={(data) => filterStatus(data)}
                     items={[
-                        { label: 'Đang xử lý', value: 1 },
+                        { label: 'Đã đặt', value: 1 },
                         { label: 'Đang xử lý', value: 2 },
-                        { label: 'Đang xử lý', value: 3 },
-                        { label: 'Đã nhận', value: 4 },
+                        { label: 'Đã nhận', value: 3 },
                         { label: 'Đã hủy', value: 0 },
                     ]}
                 />
