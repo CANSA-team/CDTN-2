@@ -15,7 +15,7 @@ import { getCart, updateCart } from '../redux/actions/cartActions';
 const Cart = () => {
     const { navigate } = useNavigation();
     const cartState: CartState = useSelector((state: State) => state.cartReducer);
-    const { cart , status }: { cart: CartModel , status:any } = cartState;
+    const { cart, status }: { cart: CartModel, status: any } = cartState;
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
 
@@ -26,17 +26,17 @@ const Cart = () => {
     useEffect(() => {
         if (cart && !isLoading) {
             setIsLoading(true);
-        }   
-    }, [cartState])
+        }
+    }, [cart])
 
     useEffect(() => {
         dispatch(getCart());
     }, [status])
 
     useEffect(() => {
-       dispatch(getCart());
+        dispatch(getCart());
     }, [])
-   
+
 
     const onTap = (id: number, qty: number) => {
         setIsLoading(false);
@@ -54,7 +54,7 @@ const Cart = () => {
                                 <View style={{ flex: 1, marginBottom: 10 }}>
                                     <ScrollView>
                                         {
-                                            cart && cart.cart && cart.cart.map((cart: CartItemModel, index: number) => {
+                                            cart && cart?.cart && cart.cart.map((cart: CartItemModel, index: number) => {
                                                 return (
                                                     <View key={index} >
                                                         <CartCard isLoad={isLoading} qty={cart.qty} product={cart.product} onTap={onTap} />
@@ -67,15 +67,15 @@ const Cart = () => {
                                     <Text style={styles.txtTotal}>Đơn hàng</Text>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                                         <Text style={[styles.priceTitle, { fontSize: 23 }]}>Tổng tiền :</Text>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.sub_price && vnd(cart.sub_price)}đ</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart?.sub_price && vnd(cart?.sub_price)}đ</Text>
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between', borderBottomColor: 'gray', borderBottomWidth: 1, paddingBottom: 5 }}>
                                         <Text style={[styles.priceTitle, { fontSize: 23 }]}>Phí giao hàng :</Text>
-                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart.ship && vnd(cart.ship)}đ</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 23 }]}>{cart?.ship && vnd(cart?.ship)}đ</Text>
                                     </View>
                                     <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                                         <Text style={[styles.priceTitle, { fontSize: 25 }]}>Thành tiền :</Text>
-                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart.total_price && vnd(cart.total_price)}đ</Text>
+                                        <Text style={[styles.priceTitle, { fontSize: 25 }]}>{cart?.total_price && vnd(cart?.total_price)}đ</Text>
                                     </View>
                                     <Button
                                         onPress={onTapCheckout}

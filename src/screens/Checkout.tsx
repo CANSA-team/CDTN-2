@@ -87,7 +87,7 @@ export default function Checkout(props: any) {
                 "Thông báo!",
                 status,
                 [
-                    { text: "OK", onPress: () => { navigate('CheckoutSuccess'); dispatch(getCart()); check = false; } }
+                    { text: "OK", onPress: () => { dispatch(getCart()); check = false; navigate('CheckoutSuccess'); } }
                 ]
             );
         }
@@ -234,7 +234,7 @@ export default function Checkout(props: any) {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.txtPay}>Tổng tiền : </Text>
-                    <Text style={styles.txtPrice}>{vnd(cart.total_price)}đ</Text>
+                    <Text style={styles.txtPrice}>{cart?.total_price && vnd(cart.total_price)}đ</Text>
                 </View>
             </View>
             <View style={styles.viewTotal}>
